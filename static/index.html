@@ -3,38 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>出海避雷针 V2.0 - 跨境出海AI顾问</title>
+    <title>出海避雷针⚡ V5 - 跨境出海全链路AI顾问</title>
     <link rel="stylesheet" href="/static/style.css">
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
 </head>
 <body>
-    <!-- ========== 导航栏 ========== -->
+    <!-- ========== 顶部导航栏 ========== -->
     <nav class="navbar">
         <div class="navbar-inner">
-            <div class="navbar-brand" onclick="backToHome()">
-                <span class="logo">⚡</span>
-                <div>
-                    <h1>出海避雷针</h1>
-                    <p>跨境出海AI顾问</p>
+            <div class="navbar-brand" onclick="scrollToTop()">
+                <span class="logo-icon">⚡</span>
+                <div class="brand-text">
+                    <h1 class="brand-title">出海避雷针</h1>
+                    <p class="brand-subtitle" data-i18n="navSubtitle">跨境出海全链路AI顾问</p>
                 </div>
-            </div>
-            
-            <div class="navbar-tabs">
-                <button class="tab-btn active" data-tab="map" data-i18n="tabMap">🗺️ 风险地图</button>
-                <button class="tab-btn" data-tab="diagnosis" data-i18n="tabDiagnosis">🛡️ 合规诊断</button>
-                <button class="tab-btn" data-tab="advisor" data-i18n="tabAdvisor">💼 出海顾问</button>
-                <button class="tab-btn" data-tab="academy" data-i18n="tabAcademy">📚 新手学院</button>
+                <span class="version-badge">V5.0</span>
             </div>
             
             <div class="navbar-actions">
-                <div class="search-box">
-                    <input type="text" placeholder="搜索市场/品类/平台" data-i18n-placeholder="searchPlaceholder">
+                <div class="search-wrapper">
+                    <input type="text" class="search-input" placeholder="搜索市场/品类/平台..." data-i18n-placeholder="searchPlaceholder">
+                    <span class="search-icon">🔍</span>
                 </div>
-                <div class="lang-toggle">
-                    <button class="lang-btn active" data-lang="zh">中文</button>
-                    <button class="lang-btn" data-lang="en">EN</button>
+                
+                <div class="lang-switch">
+                    <button class="lang-btn active" data-lang="zh" onclick="switchLang('zh')">中文</button>
+                    <button class="lang-btn" data-lang="en" onclick="switchLang('en')">EN</button>
                 </div>
-                <button class="btn-nav" id="historyToggle" data-i18n="historyBtn">
+                
+                <button class="theme-toggle" onclick="toggleTheme()" title="切换主题">
+                    <span class="theme-icon" id="theme-icon">🌙</span>
+                </button>
+                
+                <button class="btn-history" onclick="toggleHistory()" data-i18n="historyBtn">
                     📋 历史记录
                 </button>
             </div>
@@ -44,683 +45,224 @@
     <!-- ========== 主容器 ========== -->
     <main class="main-container">
         
-        <!-- ========== Tab1: 风险地图 ========== -->
-        <section id="tab-map" class="tab-content active">
-            <div class="homepage">
-                <!-- 地图三栏布局 -->
-                <div class="map-layout">
-                    <!-- 左侧：行业速报 -->
-                    <div class="map-side-panel">
-                        <div class="panel-title">📰 行业速报</div>
-                        <div class="news-list" id="news-list">
-                            <!-- 行业速报 -->
-                            <div class="news-item" onclick="quickNews('欧盟', '通用')">
-                                <div class="news-title">欧盟新电池法规2026年8月生效，含钴/锂电池出口需关注</div>
-                                <div class="news-meta">
-                                    <span class="news-tag">法规</span>
-                                    2小时前
-                                </div>
-                            </div>
-                            <div class="news-item" onclick="quickNews('美国', '光伏/番茄/棉花')">
-                                <div class="news-title">美国UFLPA执法扩大，光伏/番茄/棉花品类被纳入扣押清单</div>
-                                <div class="news-meta">
-                                    <span class="news-tag">政策</span>
-                                    5小时前
-                                </div>
-                            </div>
-                            <div class="news-item" onclick="quickNews('印尼', '食品饮料')">
-                                <div class="news-title">印尼新规：所有进口商品需申请Postel认证方可清关</div>
-                                <div class="news-meta">
-                                    <span class="news-tag">认证</span>
-                                    1天前
-                                </div>
-                            </div>
-                            <div class="news-item" onclick="quickNews('沙特', '建材/汽车配件')">
-                                <div class="news-title">沙特SABER系统新增5个品类强制认证，建材/汽车配件在列</div>
-                                <div class="news-meta">
-                                    <span class="news-tag">认证</span>
-                                    2天前
-                                </div>
-                            </div>
-                            <div class="news-item" onclick="quickNews('日本', '食品饮料')">
-                                <div class="news-title">日本JCT消费税新规2025年全面执行，无JCT号难以企业采购</div>
-                                <div class="news-meta">
-                                    <span class="news-tag">税务</span>
-                                    3天前
-                                </div>
-                            </div>
-                            <div class="news-item" onclick="quickNews('美国', '服装/美妆')">
-                                <div class="news-title">TikTok Shop美国站开放本地小店招商，跨境卖家迎新机遇</div>
-                                <div class="news-meta">
-                                    <span class="news-tag">平台</span>
-                                    4天前
-                                </div>
-                            </div>
-                            <div class="news-item" onclick="quickNews('巴西', '服装/3C')">
-                                <div class="news-title">巴西Remessa Conforme新税政全面执行，跨境包裹50美元以上需缴税</div>
-                                <div class="news-meta">
-                                    <span class="news-tag">税务</span>
-                                    5天前
-                                </div>
-                            </div>
-                            <div class="news-item" onclick="quickNews('东南亚', '通用')">
-                                <div class="news-title">东盟原产地证电子化全面推进，FORM D在线签发</div>
-                                <div class="news-meta">
-                                    <span class="news-tag">政策</span>
-                                    6天前
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- 中央：地图 -->
-                    <div class="map-center">
-                        <div class="map-header">
-                            <h2 class="map-title" data-i18n="mapTitle">🗺️ 全球出海风险热力图</h2>
-                            <div class="map-legend">
-                                <div class="legend-item">
-                                    <span class="legend-dot" style="background:#EF4444"></span>
-                                    <span data-i18n="legendHigh">高风险</span>
-                                </div>
-                                <div class="legend-item">
-                                    <span class="legend-dot" style="background:#F59E0B"></span>
-                                    <span data-i18n="legendMedHigh">中高风险</span>
-                                </div>
-                                <div class="legend-item">
-                                    <span class="legend-dot" style="background:#10B981"></span>
-                                    <span data-i18n="legendLow">低风险</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="risk-map" class="risk-map"></div>
-                    </div>
-                    
-                    <!-- 右侧：踩雷案例 -->
-                    <div class="map-side-panel">
-                        <div class="panel-title">⚡ 踩雷案例</div>
-                        <div class="case-list" id="case-list">
-                            <!-- 踩雷案例 -->
-                            <div class="case-item" onclick="quickStory('墨西哥', '服装/快时尚')">
-                                <div class="case-title">Shein在墨西哥被查税务合规，2025年补缴税款超10亿比索</div>
-                                <div class="case-country">🇲🇽 墨西哥</div>
-                            </div>
-                            <div class="case-item" onclick="quickStory('沙特', '口腔护理')">
-                                <div class="case-title">某品牌牙膏在沙特因含氟成分被认定为不符合伊斯兰规范被强制下架</div>
-                                <div class="case-country">🇸🇦 沙特</div>
-                            </div>
-                            <div class="case-item" onclick="quickStory('日本', '食品饮料')">
-                                <div class="case-title">出口日本食品未贴JAS有机标签，整批货物被退回损失50万</div>
-                                <div class="case-country">🇯🇵 日本</div>
-                            </div>
-                            <div class="case-item" onclick="quickStory('欧盟', '3C配件')">
-                                <div class="case-title">3C配件卖家使用伪造CE标志，货物在荷兰海关被扣押销毁</div>
-                                <div class="case-country">🇪🇺 欧盟</div>
-                            </div>
-                            <div class="case-item" onclick="quickStory('印尼', '服装纺织')">
-                                <div class="case-title">服装品牌在印尼因清真认证缺失遭伊斯兰组织抵制，损失惨重</div>
-                                <div class="case-country">🇮🇩 印尼</div>
-                            </div>
-                            <div class="case-item" onclick="quickStory('美国', '玩具母婴')">
-                                <div class="case-title">玩具出口美国无CPC认证，被CPSC通报后在Amazon全站下架</div>
-                                <div class="case-country">🇺🇸 美国</div>
-                            </div>
-                            <div class="case-item" onclick="quickStory('韩国', '美妆个护')">
-                                <div class="case-title">化妆品出口韩国未做KFDA注册，4000件产品被海关退货</div>
-                                <div class="case-country">🇰🇷 韩国</div>
-                            </div>
-                            <div class="case-item" onclick="quickStory('印度', '通用')">
-                                <div class="case-title">某跨境电商公司因转移定价被印度税务局调查，补税罚款500万</div>
-                                <div class="case-country">🇮🇳 印度</div>
-                            </div>
-                        </div>
+        <!-- ========== Hero 区域 ========== -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h2 class="hero-title" data-i18n="heroTitle">
+                        跨境出海，先让AI帮你扫一遍雷区
+                    </h2>
+                    <p class="hero-desc" data-i18n="heroDesc">
+                        文化雷区 · 合规法规 · 本土化改造 · 关税物流 · 店铺体检 · 选品快检 · 实时新闻
+                    </p>
+                    <div class="hero-badges">
+                        <span class="hero-badge">🤖 中英双语</span>
+                        <span class="hero-badge">⚡ 实时检测</span>
+                        <span class="hero-badge">🌍 44+ 国家</span>
+                        <span class="hero-badge">📦 14大模块</span>
                     </div>
                 </div>
                 
-                <!-- 快捷入口 -->
-                <div class="quick-entrance">
-                    <div class="quick-grid">
-                        <div class="quick-item" onclick="navigateToTab('diagnosis'); document.getElementById('tariff-market').value = getSelectedMarket() || '美国'">
-                            <span class="quick-icon">💰</span>
-                            <span class="quick-text">关税估算</span>
-                        </div>
-                        <div class="quick-item" onclick="navigateToTab('diagnosis'); document.getElementById('cert-market').value = getSelectedMarket() || '欧盟'">
-                            <span class="quick-icon">✅</span>
-                            <span class="quick-text">准入认证</span>
-                        </div>
-                        <div class="quick-item" onclick="navigateToTab('advisor')">
-                            <span class="quick-icon">🏪</span>
-                            <span class="quick-text">平台入驻</span>
-                        </div>
-                        <div class="quick-item" onclick="navigateToTab('advisor')">
-                            <span class="quick-icon">🗺️</span>
-                            <span class="quick-text">出海路线</span>
-                        </div>
-                        <div class="quick-item" onclick="navigateToTab('diagnosis'); document.getElementById('cultural-market').value = getSelectedMarket() || '日本'">
-                            <span class="quick-icon">🔍</span>
-                            <span class="quick-text">文化检测</span>
-                        </div>
-                        <div class="quick-item" onclick="navigateToTab('diagnosis'); document.getElementById('compliance-market').value = getSelectedMarket() || '欧盟'">
-                            <span class="quick-icon">🛡️</span>
-                            <span class="quick-text">合规扫描</span>
-                        </div>
-                        <div class="quick-item" onclick="navigateToTab('diagnosis'); document.getElementById('localize-market').value = getSelectedMarket() || '东南亚'">
-                            <span class="quick-icon">💡</span>
-                            <span class="quick-text">本土改造</span>
-                        </div>
-                        <div class="quick-item" onclick="navigateToTab('diagnosis'); setTimeout(()=>document.getElementById('crisis-market')&&(document.getElementById('crisis-market').value=getSelectedMarket()||'美国'),100)">
-                            <span class="quick-icon">🆘</span>
-                            <span class="quick-text">危机处置</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ========== Tab2: 合规诊断 ========== -->
-        <section id="tab-diagnosis" class="tab-content">
-            <div class="diagnosis-layout">
-                <!-- 🔴 风险扫描列 -->
-                <div class="diagnosis-column">
-                    <div class="column-header danger">🔴 风险扫描</div>
-                    
-                    <!-- 文化雷区检测 -->
-                    <div class="func-card">
-                        <div class="func-title">
-                            <span class="func-icon">🎭</span>
-                            文化雷区检测
-                        </div>
-                        <p class="func-desc">输入产品信息和目标市场，AI帮你扫描7大文化维度的风险</p>
-                        <div class="form-group">
-                            <label>目标市场</label>
-                            <select id="cultural-market" class="form-select market-select">
-                                <!-- JS生成 -->
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>产品/品牌</label>
-                            <input type="text" id="cultural-product" class="form-input" placeholder="请输入产品或品牌名称">
-                        </div>
-                        <div class="form-group">
-                            <label>内容类型</label>
-                            <select id="cultural-type" class="form-select">
-                                <option value="产品">产品本身</option>
-                                <option value="包装">产品包装</option>
-                                <option value="营销文案">营销文案</option>
-                                <option value="广告素材">广告素材</option>
-                                <option value="品牌名称">品牌名称</option>
-                            </select>
-                        </div>
-                        <button class="btn-primary" onclick="submitCultural()" data-i18n="startScanBtn">
-                            ⚡ 开始扫描
-                        </button>
-                    </div>
-                    
-                    <!-- 合规雷达扫描 -->
-                    <div class="func-card">
-                        <div class="func-title">
-                            <span class="func-icon">📡</span>
-                            合规雷达扫描
-                        </div>
-                        <p class="func-desc">输入目标市场和产品品类，AI帮你扫描5大合规维度</p>
-                        <div class="form-group">
-                            <label>目标市场</label>
-                            <select id="compliance-market" class="form-select market-select">
-                                <!-- JS生成 -->
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>产品品类</label>
-                            <input type="text" id="compliance-product" class="form-input" placeholder="请输入产品品类">
-                        </div>
-                        <div class="form-group">
-                            <label>业务模式</label>
-                            <select id="compliance-model" class="form-select">
-                                <option value="跨境电商">跨境电商</option>
-                                <option value="本地仓发货">本地仓发货</option>
-                                <option value="线下零售">线下零售</option>
-                                <option value="OEM/ODM">OEM/ODM</option>
-                            </select>
-                        </div>
-                        <button class="btn-primary" onclick="submitCompliance()">
-                            ⚡ 开始扫描
-                        </button>
-                    </div>
-                    
-                    <!-- 踩雷故事 -->
-                    <div class="func-card">
-                        <div class="func-title">
-                            <span class="func-icon">💥</span>
-                            踩雷故事
-                        </div>
-                        <p class="func-desc">选择市场和品类，AI讲一个真实的踩雷案例给你听</p>
-                        <div class="form-group">
-                            <label>目标市场</label>
-                            <select id="stories-market" class="form-select market-select">
-                                <!-- JS生成 -->
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>产品品类</label>
-                            <input type="text" id="stories-product" class="form-input" placeholder="请输入品类">
-                        </div>
-                        <button class="btn-primary" onclick="submitStories()">
-                            ⚡ 讲个故事
-                        </button>
-                    </div>
-                    
-                    <!-- 危机处置 -->
-                    <div class="func-card pro">
-                        <span class="pro-badge">⭐ PRO</span>
-                        <div class="func-title">
-                            <span class="func-icon">🆘</span>
-                            危机处置
-                        </div>
-                        <p class="func-desc">遇到跨境突发危机？AI帮你生成紧急应对方案</p>
-                        <div class="form-group">
-                            <label>目标市场</label>
-                            <select id="crisis-market" class="form-select market-select">
-                                <!-- JS生成 -->
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>危机类型</label>
-                            <select id="crisis-type" class="form-select">
-                                <option value="customs_hold">海关扣货</option>
-                                <option value="platform_ban">平台下架/封店</option>
-                                <option value="legal_letter">收到律师函</option>
-                                <option value="negative_pr">负面舆情/媒体曝光</option>
-                                <option value="product_recall">产品召回</option>
-                                <option value="gov_investigation">政府调查</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>危机描述</label>
-                            <textarea id="crisis-desc" class="form-textarea" placeholder="简要描述你遇到的危机情况..."></textarea>
-                        </div>
-                        <button class="btn-primary btn-pro" onclick="submitCrisis()">
-                            🆘 紧急处置
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- ✅ 准入合规列 -->
-                <div class="diagnosis-column">
-                    <div class="column-header safe">✅ 准入合规</div>
-                    
-                    <!-- 产品准入认证 -->
-                    <div class="func-card pro">
-                        <span class="pro-badge">⭐ PRO</span>
-                        <div class="func-title">
-                            <span class="func-icon">✅</span>
-                            产品准入认证
-                        </div>
-                        <p class="func-desc">查询目标市场的产品认证要求与流程</p>
-                        <div class="form-group">
-                            <label>目标市场</label>
-                            <select id="cert-market" class="form-select market-select">
-                                <!-- JS生成 -->
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>产品名称</label>
-                            <input type="text" id="cert-product" class="form-input" placeholder="请输入产品名称">
-                        </div>
-                        <button class="btn-primary btn-pro" onclick="submitCert()">
-                            ⚡ 开始查询
-                        </button>
-                    </div>
-                    
-                    <!-- 关税税务估算 -->
-                    <div class="func-card pro">
-                        <span class="pro-badge">⭐ PRO</span>
-                        <div class="func-title">
-                            <span class="func-icon">💰</span>
-                            关税税务估算
-                        </div>
-                        <p class="func-desc">估算目标市场的进口关税与税费</p>
-                        <div class="form-group">
-                            <label>目标市场</label>
-                            <select id="tariff-market" class="form-select market-select">
-                                <!-- JS生成 -->
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>HS编码</label>
-                            <input type="text" id="tariff-hs" class="form-input" placeholder="请输入HS编码">
-                        </div>
-                        <button class="btn-primary btn-pro" onclick="submitTariff()">
-                            ⚡ 开始估算
-                        </button>
-                    </div>
-                    
-                    <!-- 报关助手 -->
-                    <div class="func-card pro">
-                        <span class="pro-badge">⭐ PRO</span>
-                        <div class="func-title">
-                            <span class="func-icon">🧾</span>
-                            报关助手
-                        </div>
-                        <p class="func-desc">生成出口报关所需的产品描述与申报要素</p>
-                        <div class="form-group">
-                            <label>目标市场</label>
-                            <select id="customs-market" class="form-select market-select">
-                                <!-- JS生成 -->
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>产品品名</label>
-                            <input type="text" id="customs-product" class="form-input" placeholder="请输入产品品名">
-                        </div>
-                        <button class="btn-primary btn-pro" onclick="submitCustoms()">
-                            ⚡ 生成申报
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- 💡 本土优化列 -->
-                <div class="diagnosis-column">
-                    <div class="column-header light">💡 本土优化</div>
-                    
-                    <!-- 本土化改造 -->
-                    <div class="func-card">
-                        <div class="func-title">
-                            <span class="func-icon">🔧</span>
-                            本土化改造
-                        </div>
-                        <p class="func-desc">输入中文内容和目标市场，AI提供深度本土化改造建议</p>
-                        <div class="form-group">
-                            <label>目标市场</label>
-                            <select id="localize-market" class="form-select market-select">
-                                <!-- JS生成 -->
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>原始中文内容</label>
-                            <textarea id="localize-content" class="form-textarea" placeholder="请输入需要本土化的内容"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>内容类型</label>
-                            <select id="localize-type" class="form-select">
-                                <option value="产品描述">产品描述</option>
-                                <option value="营销文案">营销文案</option>
-                                <option value="社交媒体">社交媒体内容</option>
-                                <option value="客服话术">客服话术</option>
-                            </select>
-                        </div>
-                        <button class="btn-primary" onclick="submitLocalize()">
-                            ⚡ 开始改造
-                        </button>
-                    </div>
-                    
-                    <!-- 品牌名称本土化 -->
-                    <div class="func-card pro">
-                        <span class="pro-badge">⭐ PRO</span>
-                        <div class="func-title">
-                            <span class="func-icon">📛</span>
-                            品牌名称本土化
-                        </div>
-                        <p class="func-desc">检测品牌名在各市场的文化适应性</p>
-                        <div class="form-group">
-                            <label>目标市场</label>
-                            <select id="brand-market" class="form-select market-select">
-                                <!-- JS生成 -->
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>品牌名称</label>
-                            <input type="text" id="brand-name" class="form-input" placeholder="请输入品牌名称">
-                        </div>
-                        <button class="btn-primary btn-pro" onclick="submitBrandName()">
-                            ⚡ 开始检测
+                <!-- 快速检测入口 -->
+                <div class="quick-scan-card">
+                    <div class="quick-scan-header" data-i18n="quickScanTitle">⚡ 快速检测</div>
+                    <div class="quick-scan-form">
+                        <select id="quick-market" class="form-select market-select">
+                            <option value="">选择目标市场...</option>
+                        </select>
+                        <input type="text" id="quick-product" class="form-input" placeholder="输入产品/品牌/选品..." data-i18n-placeholder="quickProductPlaceholder">
+                        <button class="btn-primary btn-scan" onclick="quickScan()" data-i18n="quickScanBtn">
+                            开始检测
                         </button>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- ========== Tab3: 出海顾问 ========== -->
-        <section id="tab-advisor" class="tab-content">
-            <!-- 平台入驻指南 -->
-            <div class="advisor-section">
-                <h2 class="advisor-title">🏪 平台入驻指南</h2>
-                <div class="platform-tabs" id="platform-tabs">
-                    <button class="platform-tab active" data-region="north-america">🇺🇸 北美</button>
-                    <button class="platform-tab" data-region="europe">🇪🇺 欧洲</button>
-                    <button class="platform-tab" data-region="southeast-asia">🌏 东南亚</button>
-                    <button class="platform-tab" data-region="east-asia">🇯🇵🇰🇷 日韩</button>
-                    <button class="platform-tab" data-region="russia-india">🇷🇺🇮🇳 俄印</button>
-                    <button class="platform-tab" data-region="middle-east">🏜️ 中东</button>
-                    <button class="platform-tab" data-region="latin-america">🌎 拉美</button>
-                    <button class="platform-tab" data-region="standalone">🛒 独立站</button>
+        <!-- ========== 今日新闻速览 ========== -->
+        <section class="news-section">
+            <div class="section-header">
+                <h3 class="section-title" data-i18n="todayNewsTitle">📰 今日外贸要闻</h3>
+                <div class="section-actions">
+                    <div class="news-tabs">
+                        <button class="news-tab active" data-news-type="policy" data-i18n="newsPolicy">政策</button>
+                        <button class="news-tab" data-news-type="tariff" data-i18n="newsTariff">关税</button>
+                        <button class="news-tab" data-news-type="platform" data-i18n="newsPlatform">平台</button>
+                        <button class="news-tab" data-news-type="market" data-i18n="newsMarket">市场</button>
+                    </div>
+                    <button class="link-btn" onclick="openModule('trade-news')" data-i18n="viewAllNews">查看全部 →</button>
                 </div>
-                <div class="platform-grid" id="platform-grid">
-                    <!-- 平台卡片由JS生成 -->
+            </div>
+            <div class="news-grid" id="news-grid">
+                <div class="news-card" onclick="openNewsDetail(1)">
+                    <div class="news-tag tag-policy">政策</div>
+                    <h4 class="news-card-title">欧盟新电池法规2026年8月生效，含钴/锂电池出口需关注</h4>
+                    <div class="news-meta">
+                        <span class="news-source">EU Trade</span>
+                        <span class="news-time">2小时前</span>
+                    </div>
+                    <div class="news-tags">
+                        <span class="mini-tag">欧盟</span>
+                        <span class="mini-tag">电池</span>
+                        <span class="mini-tag">认证</span>
+                    </div>
                 </div>
+                <div class="news-card" onclick="openNewsDetail(2)">
+                    <div class="news-tag tag-tariff">关税</div>
+                    <h4 class="news-card-title">美国UFLPA执法扩大，光伏/番茄/棉花品类被纳入扣押清单</h4>
+                    <div class="news-meta">
+                        <span class="news-source">Trade.gov</span>
+                        <span class="news-time">5小时前</span>
+                    </div>
+                    <div class="news-tags">
+                        <span class="mini-tag">美国</span>
+                        <span class="mini-tag">关税</span>
+                        <span class="mini-tag">UFLPA</span>
+                    </div>
+                </div>
+                <div class="news-card" onclick="openNewsDetail(3)">
+                    <div class="news-tag tag-platform">平台</div>
+                    <h4 class="news-card-title">TikTok Shop美国站开放本地小店招商，跨境卖家迎新机遇</h4>
+                    <div class="news-meta">
+                        <span class="news-source">雨果跨境</span>
+                        <span class="news-time">1天前</span>
+                    </div>
+                    <div class="news-tags">
+                        <span class="mini-tag">美国</span>
+                        <span class="mini-tag">TikTok</span>
+                        <span class="mini-tag">招商</span>
+                    </div>
+                </div>
+                <div class="news-card" onclick="openNewsDetail(4)">
+                    <div class="news-tag tag-market">市场</div>
+                    <h4 class="news-card-title">巴西Remessa Conforme新税政全面执行，跨境包裹50美元以上需缴税</h4>
+                    <div class="news-meta">
+                        <span class="news-source">亿邦动力</span>
+                        <span class="news-time">2天前</span>
+                    </div>
+                    <div class="news-tags">
+                        <span class="mini-tag">巴西</span>
+                        <span class="mini-tag">税务</span>
+                        <span class="mini-tag">新政</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== 14大功能模块 ========== -->
+        <section class="modules-section">
+            <div class="section-header">
+                <h3 class="section-title" data-i18n="modulesTitle">🛠️ 全链路功能模块</h3>
+                <p class="section-desc" data-i18n="modulesDesc">从文化合规到物流清关，一站式覆盖出海全流程</p>
             </div>
             
-            <!-- 新手出海路线图 -->
-            <div class="advisor-section">
-                <h2 class="advisor-title">🗺️ 新手出海路线图</h2>
-                <div class="roadmap" id="roadmap">
-                    <div class="roadmap-step" onclick="roadmapStep(1)">
-                        <div class="step-number">1</div>
-                        <div class="step-title">市场调研</div>
-                        <div class="step-desc">选择目标市场</div>
-                    </div>
-                    <div class="roadmap-step" onclick="roadmapStep(2)">
-                        <div class="step-number">2</div>
-                        <div class="step-title">合规准备</div>
-                        <div class="step-desc">完成产品认证</div>
-                    </div>
-                    <div class="roadmap-step" onclick="roadmapStep(3)">
-                        <div class="step-number">3</div>
-                        <div class="step-title">平台入驻</div>
-                        <div class="step-desc">选择销售渠道</div>
-                    </div>
-                    <div class="roadmap-step" onclick="roadmapStep(4)">
-                        <div class="step-number">4</div>
-                        <div class="step-title">物流仓储</div>
-                        <div class="step-desc">搭建供应链</div>
-                    </div>
-                    <div class="roadmap-step" onclick="roadmapStep(5)">
-                        <div class="step-number">5</div>
-                        <div class="step-title">本地化运营</div>
-                        <div class="step-desc">深度本土化</div>
-                    </div>
-                    <div class="roadmap-step" onclick="roadmapStep(6)">
-                        <div class="step-number">6</div>
-                        <div class="step-title">品牌建设</div>
-                        <div class="step-desc">长期价值沉淀</div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- 其他顾问服务 -->
-            <div class="advisor-section">
-                <h2 class="advisor-title">💼 其他顾问服务</h2>
-                <div class="service-grid">
-                    <div class="service-card" onclick="submitConsult('税务筹划')">
-                        <div class="service-icon">💰</div>
-                        <div class="service-name">税务筹划</div>
-                        <div class="service-desc">跨境税务合规方案</div>
-                    </div>
-                    <div class="service-card" onclick="submitConsult('物流规划')">
-                        <div class="service-icon">🚚</div>
-                        <div class="service-name">物流规划</div>
-                        <div class="service-desc">国际物流解决方案</div>
-                    </div>
-                    <div class="service-card" onclick="submitConsult('知识产权')">
-                        <div class="service-icon">🏛️</div>
-                        <div class="service-name">知识产权</div>
-                        <div class="service-desc">商标专利布局</div>
-                    </div>
-                    <div class="service-card" onclick="submitConsult('收款汇率')">
-                        <div class="service-icon">💳</div>
-                        <div class="service-name">收款汇率</div>
-                        <div class="service-desc">跨境支付优化</div>
-                    </div>
-                </div>
+            <div class="modules-grid" id="modules-grid">
+                <!-- 模块卡片由JS动态生成 -->
             </div>
         </section>
 
-        <!-- ========== Tab4: 新手学院 ========== -->
-        <section id="tab-academy" class="tab-content">
-            <div class="academy-layout">
-                <div class="academy-main">
-                    <!-- 热门课程 -->
-                    <div class="course-grid">
-                        <div class="course-card" onclick="openCourse('intro')">
-                            <div class="course-cover">🎓</div>
-                            <div class="course-info">
-                                <div class="course-title">跨境电商入门必修课</div>
-                                <div class="course-meta">
-                                    <span>12个课时</span>
-                                    <span>👥 2.3万人学习</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="course-card" onclick="openCourse('compliance')">
-                            <div class="course-cover">📋</div>
-                            <div class="course-info">
-                                <div class="course-title">全球主要市场合规指南</div>
-                                <div class="course-meta">
-                                    <span>8个课时</span>
-                                    <span>👥 1.8万人学习</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="course-card" onclick="openCourse('localize')">
-                            <div class="course-cover">💡</div>
-                            <div class="course-info">
-                                <div class="course-title">本土化运营实战手册</div>
-                                <div class="course-meta">
-                                    <span>15个课时</span>
-                                    <span>👥 1.5万人学习</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- AI问答 -->
-                    <div class="ai-qa-card">
-                        <div class="ai-qa-title">🤖 AI智能问答</div>
-                        <div class="ai-qa-input">
-                            <input type="text" id="ai-question" placeholder="输入你的出海问题...">
-                            <button onclick="submitAIQuestion()">提问</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="academy-sidebar">
-                    <!-- 实用清单 -->
-                    <div class="checklist-card">
-                        <div class="checklist-title">✅ 出海准备清单</div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="check-1">
-                            <label for="check-1">完成目标市场调研报告</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="check-2">
-                            <label for="check-2">获取产品必要认证</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="check-3">
-                            <label for="check-3">注册目标市场商标</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="check-4">
-                            <label for="check-4">完成平台入驻审核</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="check-5">
-                            <label for="check-5">搭建物流仓储体系</label>
-                        </div>
-                        <div class="checklist-item">
-                            <input type="checkbox" id="check-6">
-                            <label for="check-6">完成产品本土化改造</label>
-                        </div>
-                    </div>
-                    
-                    <!-- 政策速查 -->
-                    <div class="policy-links">
-                        <div class="policy-title">📚 政策速查</div>
-                        <div class="policy-item" onclick="quickNews('美国', '通用')">🇺🇸 美国FDA合规指南</div>
-                        <div class="policy-item" onclick="quickNews('欧盟', '通用')">🇪🇺 欧盟CE认证详解</div>
-                        <div class="policy-item" onclick="quickNews('日本', '通用')">🇯🇵 日本PSE认证</div>
-                        <div class="policy-item" onclick="quickNews('东南亚', '通用')">🌏 东南亚市场准入</div>
-                        <div class="policy-item" onclick="quickNews('中东', '通用')">🏜️ 中东清真认证</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ========== 结果展示区 ========== -->
-        <div id="result-area" class="result-area">
+        <!-- ========== 结果展示面板 ========== -->
+        <section id="result-panel" class="result-panel">
             <div class="result-header">
+                <button class="result-close" onclick="closeResult()">×</button>
                 <h3 id="result-title" class="result-title">检测报告</h3>
                 <span id="result-time" class="result-time"></span>
             </div>
-            <div id="score-panel" class="score-panel" style="display:none;">
-                <div class="gauge-container">
-                    <svg class="gauge-svg" viewBox="0 0 200 120">
-                        <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#E8EDFB" stroke-width="16" stroke-linecap="round"/>
-                        <path class="gauge-segment" d="M 20 100 A 80 80 0 0 1 67 30" fill="none" stroke="#EF4444" stroke-width="16" stroke-linecap="round"/>
-                        <path class="gauge-segment" d="M 67 30 A 80 80 0 0 1 133 30" fill="none" stroke="#F59E0B" stroke-width="16" stroke-linecap="round"/>
-                        <path class="gauge-segment" d="M 133 30 A 80 80 0 0 1 180 100" fill="none" stroke="#10B981" stroke-width="16" stroke-linecap="round"/>
-                        <g id="gauge-needle" transform="rotate(-90,100,100)">
-                            <line x1="100" y1="100" x2="100" y2="35" stroke="#002FA7" stroke-width="3" stroke-linecap="round"/>
-                            <circle cx="100" cy="100" r="8" fill="#002FA7"/>
-                        </g>
-                    </svg>
+            
+            <div class="result-body">
+                <!-- 评分面板 -->
+                <div id="score-panel" class="score-panel" style="display:none;">
+                    <div class="score-gauge-wrapper">
+                        <svg class="gauge-svg" viewBox="0 0 200 120">
+                            <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="var(--border-color)" stroke-width="16" stroke-linecap="round"/>
+                            <path class="gauge-segment" data-level="danger" d="M 20 100 A 80 80 0 0 1 67 30" fill="none" stroke="#EF4444" stroke-width="16" stroke-linecap="round"/>
+                            <path class="gauge-segment" data-level="warning" d="M 67 30 A 80 80 0 0 1 133 30" fill="none" stroke="#F59E0B" stroke-width="16" stroke-linecap="round"/>
+                            <path class="gauge-segment" data-level="safe" d="M 133 30 A 80 80 0 0 1 180 100" fill="none" stroke="#10B981" stroke-width="16" stroke-linecap="round"/>
+                            <g id="gauge-needle" transform="rotate(-90,100,100)">
+                                <line x1="100" y1="100" x2="100" y2="35" stroke="#1A56DB" stroke-width="3" stroke-linecap="round"/>
+                                <circle cx="100" cy="100" r="8" fill="#1A56DB"/>
+                            </g>
+                        </svg>
+                        <div class="score-value-wrapper">
+                            <span id="score-value" class="score-value">0</span>
+                            <span class="score-unit">/100</span>
+                        </div>
+                        <div id="score-level" class="score-level"></div>
+                    </div>
+                    <div id="score-breakdown" class="score-breakdown"></div>
                 </div>
-                <div id="score-value" class="score-value">0</div>
-                <div id="score-level" class="score-level"></div>
-                <div id="score-breakdown" class="score-breakdown"></div>
-            </div>
-            <div id="radar-panel" class="radar-panel" style="display:none;">
-                <div id="radar-chart"></div>
-                <div id="radar-gaps" class="radar-gaps"></div>
-            </div>
-            <div id="result-content" class="result-content"></div>
-            <div id="loading-indicator" class="loading-indicator">
-                <div class="loading-dots">
-                    <span class="loading-dot"></span>
-                    <span class="loading-dot"></span>
-                    <span class="loading-dot"></span>
+                
+                <!-- 雷达图 -->
+                <div id="radar-panel" class="radar-panel" style="display:none;">
+                    <div id="radar-chart" style="width:100%;height:300px;"></div>
+                    <div id="radar-gaps" class="radar-gaps"></div>
                 </div>
-                <span>AI正在分析中...</span>
+                
+                <!-- 报告内容 -->
+                <div id="result-content" class="result-content"></div>
+                
+                <!-- 加载动画 -->
+                <div id="loading-indicator" class="loading-indicator">
+                    <div class="loading-spinner"></div>
+                    <span class="loading-text" data-i18n="analyzing">AI正在分析中...</span>
+                </div>
             </div>
+            
             <div class="result-footer">
-                <button class="btn-back" onclick="backToHome()">← 返回风险地图</button>
-                <button class="btn-primary" style="width:auto;padding:8px 20px;" onclick="submitFullReport()">
-                    ⚡ 一键完整报告
+                <button class="btn-outline" onclick="closeResult()" data-i18n="closeBtn">关闭</button>
+                <button class="btn-primary" onclick="generateFullReport()" data-i18n="fullReportBtn">
+                    ⚡ 生成完整报告
                 </button>
             </div>
-        </div>
+        </section>
     </main>
 
-    <!-- ========== 国家弹窗 ========== -->
-    <div id="country-modal" class="country-modal">
-        <div class="modal-content" style="position:relative;">
-            <button class="modal-close" onclick="closeModal()">×</button>
+    <!-- ========== 模块表单弹窗 ========== -->
+    <div id="module-modal" class="modal-overlay" onclick="closeModalOnOverlay(event)">
+        <div class="modal-content module-modal">
+            <button class="modal-close" onclick="closeModuleModal()">×</button>
             <div id="modal-body"></div>
         </div>
     </div>
 
-    <!-- ========== 扫描动画 ========== -->
+    <!-- ========== 扫描动画覆盖层 ========== -->
     <div id="scan-overlay" class="scan-overlay">
-        <div class="scan-title">⚡ AI正在扫描中...</div>
-        <div id="scan-dimensions" class="scan-dimensions"></div>
+        <div class="scan-content">
+            <div class="scan-icon">⚡</div>
+            <div class="scan-title" data-i18n="scanningTitle">AI正在扫描中...</div>
+            <div id="scan-dimensions" class="scan-dimensions"></div>
+        </div>
     </div>
 
-    <!-- ========== 历史记录面板 ========== -->
+    <!-- ========== 历史记录侧边栏 ========== -->
     <aside id="history-panel" class="history-panel">
         <div class="history-header">
-            <h3>📋 历史记录</h3>
+            <h3 data-i18n="historyTitle">📋 历史记录</h3>
             <button class="history-close" onclick="toggleHistory()">×</button>
         </div>
         <div id="history-list" class="history-list"></div>
     </aside>
+
+    <!-- ========== 店铺体检iframe弹窗 ========== -->
+    <div id="store-modal" class="modal-overlay" onclick="closeStoreModal(event)">
+        <div class="modal-content store-modal-content">
+            <div class="store-modal-header">
+                <h3 id="store-modal-title">🏪 店铺AI体检</h3>
+                <button class="modal-close" onclick="closeStoreModal()">×</button>
+            </div>
+            <div class="store-modal-body">
+                <div class="store-iframe-container" id="store-iframe-container">
+                    <iframe id="store-iframe" src="" frameborder="0"></iframe>
+                </div>
+                <div class="store-analysis-panel" id="store-analysis-panel">
+                    <div class="store-analysis-header">
+                        <span class="store-analysis-title">AI分析中...</span>
+                    </div>
+                    <div id="store-analysis-content" class="store-analysis-content"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="/static/app.js"></script>
 </body>

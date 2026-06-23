@@ -14,7 +14,7 @@ from agent.prompts import MARKET_BEST_PRACTICE, DEFAULT_BEST_PRACTICE
 
 
 
-app = FastAPI(title="出海避雷针⚡", version="2.0.0")
+app = FastAPI(title="出海避雷针⚡ V5", version="5.0.0")
 
 
 # --- Pydantic 请求模型 ---
@@ -403,6 +403,84 @@ async def api_history_delete(record_id: int):
     if not success:
         return JSONResponse(status_code=404, content={"error": "记录不存在"})
     return JSONResponse(content={"success": True})
+
+
+# --- V5 新增模块路由 ---
+
+@app.post("/api/store-checkup")
+async def api_store_checkup(req: Request):
+    body = await req.json()
+    store_url = body.get("store_url", "")
+    platform = body.get("platform", "Amazon")
+    market = body.get("market", "美国")
+    category = body.get("category", "")
+    from agent.store_checkup import store_checkup
+    gen = store_checkup(store_url, platform, market, category)
+    input_data = f"店铺URL：{store_url}\n平台：{platform}\n市场：{market}"
+    return sse_response(gen, "store-checkup", market, store_url, input_data)
+
+
+@app.post("/api/product-quick-check")
+async def api_product_quick_check(req: Request):
+    body = await req.json()
+    product_name = body.get("product_name", "")
+    markets = body.get("markets", "美国")
+    category = body.get("category", "")
+    from agent.product_quick_check import product_quick_check
+    gen = product_quick_check(product_name, markets, category)
+    input_data = f"选品：{product_name}\n目标市场：{markets}"
+    return sse_response(gen, "product-quick-check", markets, product_name, input_data)
+
+
+@app.post("/api/trade-news")
+async def api_trade_news(req: Request):
+    body = await req.json()
+    market = body.get("market", "全球")
+    category = body.get("category", "")
+    news_type = body.get("news_type", "all")
+    from agent.trade_news import trade_news
+    gen = trade_news(market, category, news_type)
+    input_data = f"市场：{market}\n品类：{category}"
+    return sse_response(gen, "trade-news", market, category, input_data)
+
+
+@app.post("/api/trade-academy")
+async def api_trade_academy(req: Request):
+    body = await req.json()
+    topic = body.get("topic", "跨境电商入门")
+    level = body.get("level", "beginner")
+    question = body.get("question", "")
+    from agent.trade_academy import trade_academy
+    gen = trade_academy(topic, level, question)
+    input_data = f"主题：{topic}\n级别：{level}"
+    return sse_response(gen, "trade-academy", "全球", topic, input_data)
+
+
+@app.post("/api/intellectual-property")
+async def api_intellectual_property(req: Request):
+    body = await req.json()
+    brand_name = body.get("brand_name", "")
+    product_desc = body.get("product_desc", "")
+    market = body.get("market", "美国")
+    category = body.get("category", "")
+    from agent.intellectual_property import intellectual_property_check
+    gen = intellectual_property_check(brand_name, product_desc, market, category)
+    input_data = f"品牌：{brand_name}\n市场：{market}"
+    return sse_response(gen, "intellectual-property", market, brand_name, input_data)
+
+
+@app.post("/api/logistics-compliance")
+async def api_logistics_compliance(req: Request):
+    body = await req.json()
+    origin_country = body.get("origin_country", "中国")
+    destination_country = body.get("destination_country", "美国")
+    product_type = body.get("product_type", "")
+    shipping_method = body.get("shipping_method", "海运")
+    category = body.get("category", "")
+    from agent.logistics_compliance import logistics_compliance_check
+    gen = logistics_compliance_check(origin_country, destination_country, product_type, shipping_method, category)
+    input_data = f"发货国：{origin_country}\n目的国：{destination_country}\n产品：{product_type}"
+    return sse_response(gen, "logistics-compliance", destination_country, product_type, input_data)
 
 
 # --- 启动入口 ---
