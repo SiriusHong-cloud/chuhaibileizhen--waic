@@ -1295,7 +1295,7 @@ function showRadarPanel(scoreData) {
             indicator: dimLabels.map(d => ({ name: d, max: 100 })),
             radius: '65%',
             axisName: { color: 'var(--text-secondary)', fontSize: 12 },
-            splitArea: { areaStyle: { color: ['rgba(26,86,219,0.02)', 'rgba(26,86,219,0.05)'] },
+            splitArea: { areaStyle: { color: ['rgba(26,86,219,0.02)', 'rgba(26,86,219,0.05)'] } },
             splitLine: { lineStyle: { color: 'rgba(26,86,219,0.12)' } },
             axisLine: { lineStyle: { color: 'rgba(26,86,219,0.15)' } }
         },
