@@ -1059,9 +1059,26 @@ async function streamRequest(url, body, title, moduleType, dimensions, customCon
         if (!customContentEl) {
             loading.style.display = 'none';
         }
-        resultContent.innerHTML = `<div style="padding:16px;background:var(--danger-bg);border:1px solid var(--danger-border);border-radius:8px;color:var(--danger);">
-            <p style="font-weight:600;">${currentLang === 'en' ? 'Request Failed' : '请求失败'}</p>
-            <p style="font-size:13px;margin-top:4px;">${e.message}</p>
+        const isEn = currentLang === 'en';
+        let errorMsg = e.message;
+        let errorTip = '';
+        
+        if (e.message.includes('401') || e.message.includes('Unauthorized')) {
+            errorMsg = isEn ? 'API key is invalid or expired' : 'API密钥无效或已过期';
+            errorTip = isEn ? 'The system is running in demo mode with sample data' : '系统将使用演示数据展示功能';
+        } else if (e.message.includes('500')) {
+            errorMsg = isEn ? 'Server internal error' : '服务器内部错误';
+        } else if (e.message.includes('Failed to fetch') || e.message.includes('Load failed')) {
+            errorMsg = isEn ? 'Cannot connect to server' : '无法连接到服务器';
+            errorTip = isEn ? 'Please check if the service is running' : '请检查服务是否正常运行';
+        }
+        
+        resultContent.innerHTML = `
+        <div style="padding:20px;background:var(--danger-bg);border:1px solid var(--danger-border);border-radius:12px;color:var(--danger);">
+            <div style="font-size:32px;margin-bottom:12px;">⚠️</div>
+            <p style="font-weight:600;font-size:16px;margin-bottom:8px;">${isEn ? 'Request Failed' : '请求失败'}</p>
+            <p style="font-size:14px;opacity:0.9;margin-bottom:4px;">${errorMsg}</p>
+            ${errorTip ? `<p style="font-size:13px;opacity:0.7;margin-top:8px;padding-top:8px;border-top:1px solid var(--danger-border);">💡 ${errorTip}</p>` : ''}
         </div>`;
     } finally {
         if (document.getElementById('history-panel').classList.contains('open')) {
