@@ -595,8 +595,8 @@ body {
 /* ========== 模块卡片 ========== */
 .modules-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
 }
 
 .module-card {
@@ -1444,9 +1444,11 @@ body {
 
 /* ========== 响应式 ========== */
 @media (max-width: 1200px) {
-    .news-grid,
+    .news-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
     .modules-grid {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
@@ -1473,7 +1475,7 @@ body {
     
     .news-grid,
     .modules-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr;
     }
     
     .result-panel {
