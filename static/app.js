@@ -415,6 +415,11 @@ function openModule(moduleId) {
         return;
     }
     
+    if (moduleId === 'trade-tools') {
+        openTradeTools();
+        return;
+    }
+    
     // 普通模块：显示表单弹窗
     showModuleForm(module);
 }
@@ -965,6 +970,279 @@ function submitAcademy() {
     closeModuleModal();
     
     streamRequest('/api/trade-academy', { topic, level, question }, '📚 外贸学院', 'trade-academy', ['入门课程', '术语词典', '进阶内容', '实操要点', '常见误区']);
+}
+
+// ========== 外贸工具箱 ==========
+let currentToolTab = 'hs';
+
+function openTradeTools() {
+    const modal = document.getElementById('module-modal');
+    const body = document.getElementById('modal-body');
+    const isEn = currentLang === 'en';
+    
+    modal.classList.add('modal-large');
+    
+    body.innerHTML = `
+        <h2 class="modal-title">🧰 ${isEn ? 'Trade Toolbox' : '外贸工具箱'}</h2>
+        <p class="modal-subtitle">${isEn ? 'Essential tools for cross-border beginners' : '外贸小白必备实用工具'}</p>
+        
+        <div class="tool-tabs">
+            <div class="tool-tab ${currentToolTab === 'hs' ? 'active' : ''}" onclick="switchToolTab('hs')">
+                🔍 ${isEn ? 'HS Code Lookup' : 'HS编码查询'}
+            </div>
+            <div class="tool-tab ${currentToolTab === 'terms' ? 'active' : ''}" onclick="switchToolTab('terms')">
+                📖 ${isEn ? 'Trade Terms' : '术语词典'}
+            </div>
+            <div class="tool-tab ${currentToolTab === 'knowledge' ? 'active' : ''}" onclick="switchToolTab('knowledge')">
+                📚 ${isEn ? 'Knowledge Base' : '外贸知识库'}
+            </div>
+        </div>
+        
+        <div class="tool-content" id="tool-content">
+            ${renderToolTab(currentToolTab, isEn)}
+        </div>
+        
+        <div class="modal-footer">
+            <button class="btn-outline" onclick="closeToolModal()">${isEn ? 'Close' : '关闭'}</button>
+        </div>
+    `;
+    
+    document.getElementById('module-modal').style.display = 'flex';
+    
+    setTimeout(() => {
+        if (currentToolTab === 'knowledge') {
+            loadKnowledgeList();
+        } else if (currentToolTab === 'hs') {
+            searchHsCode('');
+        } else if (currentToolTab === 'terms') {
+            searchTerms('');
+        }
+    }, 50);
+}
+
+function switchToolTab(tab) {
+    currentToolTab = tab;
+    const isEn = currentLang === 'en';
+    
+    document.querySelectorAll('.tool-tab').forEach((el, i) => {
+        const tabs = ['hs', 'terms', 'knowledge'];
+        el.classList.toggle('active', tabs[i] === tab);
+    });
+    
+    document.getElementById('tool-content').innerHTML = renderToolTab(tab, isEn);
+    
+    setTimeout(() => {
+        if (tab === 'hs') searchHsCode('');
+        else if (tab === 'terms') searchTerms('');
+        else if (tab === 'knowledge') loadKnowledgeList();
+    }, 50);
+}
+
+function renderToolTab(tab, isEn) {
+    if (tab === 'hs') {
+        return `
+            <div class="tool-search-bar">
+                <input type="text" id="hs-search-input" class="form-input" 
+                    placeholder="${isEn ? 'Search HS code or product name...' : '输入HS编码或商品名称搜索...'}"
+                    oninput="searchHsCode(this.value)">
+                <select id="hs-category" class="form-select" onchange="searchHsCode(document.getElementById('hs-search-input').value)">
+                    <option value="">${isEn ? 'All Categories' : '全部品类'}</option>
+                    <option value="3C">3C电子</option>
+                    <option value="服装">服装鞋包</option>
+                    <option value="家居">家居用品</option>
+                    <option value="食品">食品饮料</option>
+                    <option value="美妆">美妆个护</option>
+                    <option value="玩具">母婴玩具</option>
+                </select>
+            </div>
+            <div class="tool-result-list" id="hs-result-list">
+                <div class="tool-loading">${isEn ? 'Loading...' : '加载中...'}</div>
+            </div>
+        `;
+    } else if (tab === 'terms') {
+        return `
+            <div class="tool-search-bar">
+                <input type="text" id="terms-search-input" class="form-input" 
+                    placeholder="${isEn ? 'Search trade terms...' : '输入术语缩写或中文搜索...'}"
+                    oninput="searchTerms(this.value)">
+                <select id="terms-category" class="form-select" onchange="searchTerms(document.getElementById('terms-search-input').value)">
+                    <option value="">${isEn ? 'All Categories' : '全部类别'}</option>
+                    <option value="贸易术语">贸易术语</option>
+                    <option value="付款方式">付款方式</option>
+                    <option value="海关编码">海关编码</option>
+                    <option value="采购术语">采购术语</option>
+                    <option value="生产方式">生产方式</option>
+                    <option value="商业模式">商业模式</option>
+                </select>
+            </div>
+            <div class="tool-result-list" id="terms-result-list">
+                <div class="tool-loading">${isEn ? 'Loading...' : '加载中...'}</div>
+            </div>
+        `;
+    } else {
+        return `
+            <div class="tool-search-bar">
+                <div class="tool-info-bar">
+                    📖 ${isEn ? 'Practical knowledge for cross-border beginners' : '跨境出海新手必备实用知识'}
+                </div>
+            </div>
+            <div class="tool-result-list" id="knowledge-list">
+                <div class="tool-loading">${isEn ? 'Loading...' : '加载中...'}</div>
+            </div>
+        `;
+    }
+}
+
+async function searchHsCode(keyword) {
+    const category = document.getElementById('hs-category')?.value || '';
+    const resultEl = document.getElementById('hs-result-list');
+    if (!resultEl) return;
+    
+    try {
+        const res = await fetch('/api/tools/hs-search', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ keyword, category })
+        });
+        const data = await res.json();
+        const results = data.results || [];
+        
+        if (results.length === 0) {
+            resultEl.innerHTML = `<div class="tool-empty">${currentLang === 'en' ? 'No results found' : '未找到相关结果'}</div>`;
+            return;
+        }
+        
+        resultEl.innerHTML = results.map(item => `
+            <div class="tool-item">
+                <div class="tool-item-header">
+                    <span class="tool-item-code">${item.code}</span>
+                    <span class="tool-item-category">${item.category}</span>
+                </div>
+                <div class="tool-item-title">${item.name}</div>
+                <div class="tool-item-desc">${item.description}</div>
+                <div class="tool-item-tariffs">
+                    <span class="tariff-tag">🇨🇳 ${currentLang === 'en' ? 'CN' : '中'}: ${item.tariff_cn}</span>
+                    <span class="tariff-tag">🇺🇸 ${currentLang === 'en' ? 'US' : '美'}: ${item.tariff_us}</span>
+                    <span class="tariff-tag">🇪🇺 ${currentLang === 'en' ? 'EU' : '欧'}: ${item.tariff_eu}</span>
+                </div>
+            </div>
+        `).join('');
+    } catch (e) {
+        resultEl.innerHTML = `<div class="tool-error">${currentLang === 'en' ? 'Search failed' : '搜索失败'}</div>`;
+    }
+}
+
+async function searchTerms(keyword) {
+    const category = document.getElementById('terms-category')?.value || '';
+    const resultEl = document.getElementById('terms-result-list');
+    if (!resultEl) return;
+    
+    try {
+        const res = await fetch('/api/tools/terms-search', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ keyword, category })
+        });
+        const data = await res.json();
+        const results = data.results || [];
+        
+        if (results.length === 0) {
+            resultEl.innerHTML = `<div class="tool-empty">${currentLang === 'en' ? 'No results found' : '未找到相关结果'}</div>`;
+            return;
+        }
+        
+        resultEl.innerHTML = results.map(item => `
+            <div class="tool-item">
+                <div class="tool-item-header">
+                    <span class="tool-item-en">${item.en}</span>
+                    <span class="tool-item-category">${item.category}</span>
+                </div>
+                <div class="tool-item-title">${item.cn}</div>
+                <div class="tool-item-full"><strong>${item.full}</strong></div>
+                <div class="tool-item-desc">${item.description}</div>
+                <div class="tool-item-section">
+                    <div class="tool-item-label">💡 ${currentLang === 'en' ? 'Scenario' : '使用场景'}:</div>
+                    <div>${item.scenario}</div>
+                </div>
+                <div class="tool-item-section">
+                    <div class="tool-item-label">⚠️ ${currentLang === 'en' ? 'Tips' : '注意事项'}:</div>
+                    <div>${item.tips}</div>
+                </div>
+            </div>
+        `).join('');
+    } catch (e) {
+        resultEl.innerHTML = `<div class="tool-error">${currentLang === 'en' ? 'Search failed' : '搜索失败'}</div>`;
+    }
+}
+
+async function loadKnowledgeList() {
+    const resultEl = document.getElementById('knowledge-list');
+    if (!resultEl) return;
+    
+    try {
+        const res = await fetch('/api/tools/knowledge');
+        const data = await res.json();
+        const results = data.results || [];
+        
+        if (results.length === 0) {
+            resultEl.innerHTML = `<div class="tool-empty">${currentLang === 'en' ? 'No content yet' : '暂无内容'}</div>`;
+            return;
+        }
+        
+        resultEl.innerHTML = results.map(item => `
+            <div class="tool-item knowledge-item" onclick="openKnowledgeDetail('${item.title}')">
+                <div class="tool-item-header">
+                    <span class="knowledge-icon">📖</span>
+                    <span class="tool-item-category">${item.category}</span>
+                </div>
+                <div class="tool-item-title">${item.title}</div>
+                <div class="knowledge-arrow">→</div>
+            </div>
+        `).join('');
+    } catch (e) {
+        resultEl.innerHTML = `<div class="tool-error">${currentLang === 'en' ? 'Load failed' : '加载失败'}</div>`;
+    }
+}
+
+async function openKnowledgeDetail(title) {
+    const isEn = currentLang === 'en';
+    const resultEl = document.getElementById('knowledge-list');
+    
+    try {
+        const res = await fetch('/api/tools/knowledge-detail', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title })
+        });
+        const data = await res.json();
+        const item = data.result;
+        
+        if (!item) {
+            alert(isEn ? 'Content not found' : '内容不存在');
+            return;
+        }
+        
+        document.getElementById('tool-content').innerHTML = `
+            <div class="knowledge-detail">
+                <button class="back-btn" onclick="switchToolTab('knowledge')">← ${isEn ? 'Back' : '返回列表'}</button>
+                <h3 class="knowledge-detail-title">${item.title}</h3>
+                <div class="knowledge-detail-category">${item.category}</div>
+                <div class="knowledge-detail-content" id="knowledge-detail-content">
+                    加载中...
+                </div>
+            </div>
+        `;
+        
+        setTimeout(() => {
+            document.getElementById('knowledge-detail-content').innerHTML = parseMd(item.content);
+        }, 50);
+    } catch (e) {
+        alert(isEn ? 'Load failed' : '加载失败');
+    }
+}
+
+function closeToolModal() {
+    closeModuleModal();
 }
 
 // ========== 快速检测 ==========
