@@ -522,12 +522,251 @@ DEMO_RESPONSES = {
 }
 
 
+MARKET_INFO = {
+    "美国": {"flag": "🇺🇸", "religion": "基督教为主", "language": "英语", "currency": "美元 USD", "famous_color": "蓝/白/红"},
+    "欧盟": {"flag": "🇪🇺", "religion": "基督教/天主教", "language": "多语言", "currency": "欧元 EUR", "famous_color": "蓝/金"},
+    "日本": {"flag": "🇯🇵", "religion": "神道教/佛教", "language": "日语", "currency": "日元 JPY", "famous_color": "白/红"},
+    "英国": {"flag": "🇬🇧", "religion": "基督教", "language": "英语", "currency": "英镑 GBP", "famous_color": "红/白/蓝"},
+    "德国": {"flag": "🇩🇪", "religion": "基督教", "language": "德语", "currency": "欧元 EUR", "famous_color": "黑/红/金"},
+    "法国": {"flag": "🇫🇷", "religion": "天主教", "language": "法语", "currency": "欧元 EUR", "famous_color": "蓝/白/红"},
+    "韩国": {"flag": "🇰🇷", "religion": "基督教/佛教", "language": "韩语", "currency": "韩元 KRW", "famous_color": "白/红/蓝"},
+    "澳大利亚": {"flag": "🇦🇺", "religion": "基督教", "language": "英语", "currency": "澳元 AUD", "famous_color": "绿/金"},
+    "加拿大": {"flag": "🇨🇦", "religion": "基督教", "language": "英语/法语", "currency": "加元 CAD", "famous_color": "红/白"},
+    "新加坡": {"flag": "🇸🇬", "religion": "多元宗教（佛教/伊斯兰教/基督教/印度教）", "language": "英语/华语/马来语/泰米尔语", "currency": "新加坡元 SGD", "famous_color": "红/白"},
+    "印尼": {"flag": "🇮🇩", "religion": "伊斯兰教为主", "language": "印尼语", "currency": "印尼盾 IDR", "famous_color": "红/白"},
+    "马来西亚": {"flag": "🇲🇾", "religion": "伊斯兰教为主", "language": "马来语", "currency": "马币 MYR", "famous_color": "黄/蓝/白/红"},
+    "越南": {"flag": "🇻🇳", "religion": "佛教为主", "language": "越南语", "currency": "越南盾 VND", "famous_color": "红/黄"},
+    "泰国": {"flag": "🇹🇭", "religion": "佛教为主", "language": "泰语", "currency": "泰铢 THB", "famous_color": "红/白/蓝"},
+    "沙特阿拉伯": {"flag": "🇸🇦", "religion": "伊斯兰教（瓦哈比派）", "language": "阿拉伯语", "currency": "沙特里亚尔 SAR", "famous_color": "绿/白"},
+    "阿联酋": {"flag": "🇦🇪", "religion": "伊斯兰教", "language": "阿拉伯语/英语", "currency": "迪拉姆 AED", "famous_color": "红/绿/白/黑"},
+    "巴西": {"flag": "🇧🇷", "religion": "天主教", "language": "葡萄牙语", "currency": "雷亚尔 BRL", "famous_color": "绿/黄/蓝"},
+    "墨西哥": {"flag": "🇲🇽", "religion": "天主教", "language": "西班牙语", "currency": "比索 MXN", "famous_color": "绿/白/红"},
+    "印度": {"flag": "🇮🇳", "religion": "印度教为主", "language": "印地语/英语", "currency": "卢比 INR", "famous_color": "橙/白/绿"},
+    "俄罗斯": {"flag": "🇷🇺", "religion": "东正教", "language": "俄语", "currency": "卢布 RUB", "famous_color": "白/蓝/红"},
+}
+
+CATEGORY_CULTURAL_TIPS = {
+    "食品": {
+        "high_risk": ["宗教饮食禁忌", "成分标注要求", "保质期格式"],
+        "example_issue": "猪肉成分、酒精成分、清真认证",
+        "risk_level": "中高风险"
+    },
+    "零食": {
+        "high_risk": ["宗教饮食禁忌", "食品添加剂", "儿童包装要求"],
+        "example_issue": "含明胶成分来源、过敏原标注、营养声称规范",
+        "risk_level": "中高风险"
+    },
+    "3C": {
+        "high_risk": ["认证要求", "包装语言", "安全标识"],
+        "example_issue": "插头规格、电压标识、电池运输要求",
+        "risk_level": "中风险"
+    },
+    "服装": {
+        "high_risk": ["宗教服饰禁忌", "尺码标准", "洗涤标签"],
+        "example_issue": "暴露程度、材质成分标注、燃烧性能要求",
+        "risk_level": "中风险"
+    },
+    "美妆": {
+        "high_risk": ["成分法规", "动物实验", "清真认证"],
+        "example_issue": "禁止成分清单、功效宣称限制、包装文字方向",
+        "risk_level": "中高风险"
+    },
+    "家居": {
+        "high_risk": ["安全标准", "材质要求", "电气安全"],
+        "example_issue": "防火标准、儿童安全包装、标签要求",
+        "risk_level": "中风险"
+    },
+    "默认": {
+        "high_risk": ["文化符号禁忌", "包装设计", "营销话术"],
+        "example_issue": "颜色象征、数字禁忌、图案寓意",
+        "risk_level": "中风险"
+    }
+}
+
+
+def extract_info(messages: List[Dict[str, str]]) -> dict:
+    """从消息中提取市场、产品、品类等信息"""
+    full_text = "\n".join([m.get("content", "") for m in messages])
+    
+    info = {
+        "market": "美国",
+        "product": "示例产品",
+        "category": "默认",
+        "content_type": "产品包装",
+        "hscode": "",
+        "store_url": "",
+        "platform": "Amazon",
+    }
+    
+    for line in full_text.split("\n"):
+        line = line.strip()
+        if "市场：" in line or "目标市场：" in line:
+            m = line.split("：")[-1].strip() if "：" in line else line.split(":")[-1].strip()
+            if m and m != "":
+                info["market"] = m
+        elif "产品：" in line or "选品：" in line or "商品：" in line or "品牌：" in line or "产品类型：" in line:
+            p = line.split("：")[-1].strip() if "：" in line else line.split(":")[-1].strip()
+            if p and p != "":
+                info["product"] = p
+        elif "品类：" in line or "类目：" in line or "产品品类：" in line:
+            c = line.split("：")[-1].strip() if "：" in line else line.split(":")[-1].strip()
+            if c and c != "":
+                info["category"] = c
+        elif "类型：" in line or "内容类型：" in line:
+            t = line.split("：")[-1].strip() if "：" in line else line.split(":")[-1].strip()
+            if t and t != "":
+                info["content_type"] = t
+        elif "HS编码：" in line or "hscode：" in line or "hscode:" in line.lower():
+            h = line.split("：")[-1].strip() if "：" in line else line.split(":")[-1].strip()
+            if h and h != "":
+                info["hscode"] = h
+        elif "店铺URL：" in line or "店铺链接：" in line:
+            u = line.split("：")[-1].strip() if "：" in line else line.split(":")[-1].strip()
+            if u and u != "":
+                info["store_url"] = u
+        elif "平台：" in line:
+            p = line.split("：")[-1].strip() if "：" in line else line.split(":")[-1].strip()
+            if p and p != "":
+                info["platform"] = p
+    
+    category_key = "默认"
+    for cat_key in ["食品", "零食", "3C", "服装", "美妆", "家居"]:
+        if cat_key in info["category"] or cat_key in info["product"]:
+            category_key = cat_key
+            break
+    info["category_key"] = category_key
+    
+    return info
+
+
+def get_market_info(market: str) -> dict:
+    """获取市场信息"""
+    for key, val in MARKET_INFO.items():
+        if key in market or market in key:
+            return val
+    return MARKET_INFO["美国"]
+
+
+def generate_cultural_demo(info: dict) -> str:
+    """生成文化雷区检测的演示报告"""
+    market = info["market"]
+    product = info["product"]
+    m_info = get_market_info(market)
+    cat_tips = CATEGORY_CULTURAL_TIPS.get(info["category_key"], CATEGORY_CULTURAL_TIPS["默认"])
+    
+    from datetime import datetime
+    now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    
+    risk_icon = "🟠" if "高" in cat_tips["risk_level"] else "🟡"
+    
+    high_risks = "\n".join([
+        f"  - {r}" for r in cat_tips["high_risk"]
+    ])
+    
+    return f"""## 🎯 文化雷区检测报告
+━━━━━━━━━━━━━━━━
+**目标市场：** {m_info['flag']} {market}
+**产品/品牌：** {product}
+**内容类型：** {info['content_type']}
+**检测时间：** {now}
+━━━━━━━━━━━━━━━━
+
+### 【风险等级】：{risk_icon} {cat_tips['risk_level']}
+
+### 【问题诊断】
+{product}进入{market}市场存在一定文化风险。{market}是一个以{m_info['religion']}为主的社会，主要语言为{m_info['language']}，使用{m_info['currency']}。{cat_tips['example_issue']}等方面需要特别注意。
+
+### 【详细分析】
+
+#### 🟡 中风险：宗教禁忌
+**问题：** 宗教相关的饮食/行为禁忌
+**说明：** {market}主要宗教为{m_info['religion']}。{cat_tips['example_issue']}等可能涉及宗教敏感问题。
+**真实案例：** 某食品品牌在穆斯林国家推出含猪肉成分的零食，被全面下架并引发抵制。
+**建议：** 仔细核查产品成分，必要时获取清真认证（Halal）或其他宗教认证。
+
+#### 🟡 中风险：颜色象征
+**问题：** 产品主色调选择需符合当地文化
+**说明：** {market}偏好的颜色是{m_info['famous_color']}。不同颜色在不同文化中有不同含义，例如：
+  - 红色：在中国代表喜庆，在部分国家代表危险/革命
+  - 白色：在西方代表纯洁，在部分亚洲国家代表丧葬
+  - 绿色：在伊斯兰国家代表神圣，在部分国家代表嫉妒
+**真实案例：** 某中国品牌在{market}推出全绿色包装产品，被消费者误认为是廉价商品，销量低于预期30%。
+
+#### 🟡 中风险：数字禁忌
+**问题：** 产品型号、价格、数量中的数字含义
+**说明：** 不同文化对数字有不同偏好：
+  - 4：在中日韩等国不吉利（谐音"死"）
+  - 13：在西方国家不吉利
+  - 8：在中国是吉利数字（谐音"发"）
+  - 7：在很多文化中是幸运数字
+**真实案例：** 某品牌推出"X4"型号产品，在日本市场销量远低于其他型号，市场调研显示"数字不吉利"是主因之一。
+
+#### 🟢 安全：动物图案
+**说明：** 需确认使用的动物图案在{market}文化中无负面含义。
+**建议：** 避免使用在当地文化中有负面或宗教意义的动物图案。
+
+#### 🟢 安全：肢体语言
+**说明：** 营销图片中的手势和动作需符合{market}文化规范。
+**建议：** 使用本地模特拍摄广告，避免使用可能引起误解的手势。
+
+#### 🟢 安全：性别文化
+**说明：** 产品定位和广告表现需符合{market}的性别观念。
+**建议：** 根据当地文化调整广告中男女角色的呈现方式。
+
+#### 🟢 安全：历史敏感
+**说明：** 产品设计和营销内容未涉及{market}的历史敏感话题。
+**建议：** 避免使用可能引发历史争议的符号、旗帜、地图等元素。
+
+### 【修改/行动建议】
+
+1. **成分核查**：针对{market}的宗教要求，核查{product}的全部成分，避免禁忌成分
+2. **包装配色调整**：参考{market}偏好的{m_info['famous_color']}色系，调整包装主色调
+3. **型号/价格避忌**：检查产品型号、定价、包装规格中的数字，避开当地禁忌数字
+4. **本土化文案**：将产品说明翻译为地道的{m_info['language']}，避免直译造成误解
+5. **文化测试**：上线前邀请3-5名{market}本地用户进行文化适配度测试
+
+### 【法规/案例依据】
+- 参考案例：2024年某品牌进入中东市场的文化适配案例
+- 学术依据：《跨文化营销心理学》
+- 行业数据：{market}消费者文化敏感度调研报告（2025）
+
+### 【下一步建议】
+→ 进行【合规雷达扫描】确认产品认证要求
+→ 进行【本土化改造】生成完整的{market}市场适配方案
+→ 查看【踩雷故事】了解更多真实案例
+
+---
+出海没有100%零风险，但我们可以帮你把雷区画出来、绕过去。如果需要更具体的文件模板或下一步操作指引，随时告诉我。
+
+```json
+{{
+  "score": 68,
+  "breakdown": [
+    {{"item": "宗教禁忌风险", "type": "deduct", "change": -12}},
+    {{"item": "颜色象征风险", "type": "deduct", "change": -10}},
+    {{"item": "数字禁忌风险", "type": "deduct", "change": -10}},
+    {{"item": "动物图案安全", "type": "bonus", "change": +5}},
+    {{"item": "肢体语言安全", "type": "bonus", "change": +5}}
+  ],
+  "radar": {{
+    "cultural": 68,
+    "compliance": 0,
+    "brand": 75,
+    "localization": 65,
+    "visual": 70,
+    "logistics": 0
+  }}
+}}
+```"""
+
+
 async def get_demo_response(messages: List[Dict[str, str]]) -> str:
     """根据消息内容返回对应的演示数据"""
     content = json.dumps(messages, ensure_ascii=False).lower()
+    info = extract_info(messages)
     
     if "文化" in content or "cultural" in content:
-        return DEMO_RESPONSES["cultural"]
+        return generate_cultural_demo(info)
     elif "合规" in content or "compliance" in content:
         return DEMO_RESPONSES["compliance"]
     elif "店铺" in content or "store" in content or "体检" in content:

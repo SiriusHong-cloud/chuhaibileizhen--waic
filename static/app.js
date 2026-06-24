@@ -1017,6 +1017,7 @@ async function streamRequest(url, body, title, moduleType, dimensions, customCon
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
         let buffer = '';
+        let eventBuffer = [];
         
         while (true) {
             const { done, value } = await reader.read();
@@ -1027,21 +1028,30 @@ async function streamRequest(url, body, title, moduleType, dimensions, customCon
             buffer = lines.pop();
             
             for (const line of lines) {
-                if (!line.startsWith('data: ')) continue;
-                const data = line.slice(6);
-                if (data === '[DONE]') break;
-                if (!data) continue;
-                
-                if (firstChunk) {
-                    hideScanAnimation();
-                    firstChunk = false;
-                    if (!customContentEl) {
-                        loading.style.display = 'none';
+                if (line.startsWith('data: ')) {
+                    const data = line.slice(6);
+                    if (data === '[DONE]') {
+                        eventBuffer = [];
+                        break;
+                    }
+                    eventBuffer.push(data);
+                } else if (line === '') {
+                    if (eventBuffer.length > 0) {
+                        const data = eventBuffer.join('\n');
+                        eventBuffer = [];
+                        
+                        if (firstChunk && data) {
+                            hideScanAnimation();
+                            firstChunk = false;
+                            if (!customContentEl) {
+                                loading.style.display = 'none';
+                            }
+                        }
+                        
+                        fullText += data;
+                        renderMarkdownDebounced(resultContent, removeScoreJson(fullText), 100);
                     }
                 }
-                
-                fullText += data;
-                renderMarkdownDebounced(resultContent, removeScoreJson(fullText), 100);
             }
         }
         
@@ -1103,6 +1113,7 @@ async function streamRequestStore(url, body, title, moduleType, dimensions, cont
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
         let buffer = '';
+        let eventBuffer = [];
         
         while (true) {
             const { done, value } = await reader.read();
@@ -1113,20 +1124,29 @@ async function streamRequestStore(url, body, title, moduleType, dimensions, cont
             buffer = lines.pop();
             
             for (const line of lines) {
-                if (!line.startsWith('data: ')) continue;
-                const data = line.slice(6);
-                if (data === '[DONE]') break;
-                if (!data) continue;
-                
-                if (firstChunk) {
-                    hideScanAnimation();
-                    firstChunk = false;
-                    document.querySelector('.store-analysis-title').textContent = 
-                        currentLang === 'en' ? 'AI Analysis Result' : 'AI分析结果';
+                if (line.startsWith('data: ')) {
+                    const data = line.slice(6);
+                    if (data === '[DONE]') {
+                        eventBuffer = [];
+                        break;
+                    }
+                    eventBuffer.push(data);
+                } else if (line === '') {
+                    if (eventBuffer.length > 0) {
+                        const data = eventBuffer.join('\n');
+                        eventBuffer = [];
+                        
+                        if (firstChunk && data) {
+                            hideScanAnimation();
+                            firstChunk = false;
+                            document.querySelector('.store-analysis-title').textContent = 
+                                currentLang === 'en' ? 'AI Analysis Result' : 'AI分析结果';
+                        }
+                        
+                        fullText += data;
+                        renderMarkdownDebounced(contentEl, removeScoreJson(fullText), 100);
+                    }
                 }
-                
-                fullText += data;
-                renderMarkdownDebounced(contentEl, removeScoreJson(fullText), 100);
             }
         }
         

@@ -73,8 +73,10 @@ def sse_response(generator, module_type: str, market: str, product: str, input_d
         full_output = []
         async for chunk in generator:
             full_output.append(chunk)
-            yield f"data: {chunk}\n\n"
-        # 保存到历史记录
+            lines = chunk.split('\n')
+            for line in lines:
+                yield f"data: {line}\n"
+            yield "\n"
         output_text = "".join(full_output)
         await save_history(module_type, market, product, input_data, output_text)
         yield "data: [DONE]\n\n"
