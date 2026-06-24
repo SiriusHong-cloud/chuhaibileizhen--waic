@@ -170,6 +170,23 @@
             </div>
             
             <div class="result-body">
+                <!-- 筛选栏 -->
+                <div id="result-filter" class="result-filter" style="display:none;">
+                    <div class="filter-row">
+                        <div class="filter-item">
+                            <label id="filter-market-label">关注市场</label>
+                            <select id="filter-market" class="form-select market-select small"></select>
+                        </div>
+                        <div class="filter-item">
+                            <label id="filter-category-label">关注品类</label>
+                            <input type="text" id="filter-category" class="form-input small" placeholder="请输入品类（可选）">
+                        </div>
+                        <div class="filter-item filter-btn">
+                            <button class="btn-primary small" onclick="applyFilter()">🔍 筛选</button>
+                        </div>
+                    </div>
+                    <div id="filter-extra" class="filter-extra"></div>
+                </div>
                 <!-- 评分面板 -->
                 <div id="score-panel" class="score-panel" style="display:none;">
                     <div class="score-gauge-wrapper">

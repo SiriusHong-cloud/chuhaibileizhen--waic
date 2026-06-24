@@ -298,6 +298,8 @@ const i18n = {
 };
 
 let currentLang = localStorage.getItem('lang') || 'zh';
+let currentModuleType = '';
+let currentFilterParams = {};
 let currentTheme = localStorage.getItem('theme') || 'light';
 
 function t(key) { return i18n[currentLang][key] || key; }
@@ -399,6 +401,8 @@ function openModule(moduleId) {
     const module = MODULES.find(m => m.id === moduleId);
     if (!module) return;
     
+    currentModuleType = moduleId;
+    
     // 特殊模块处理
     if (moduleId === 'store-checkup') {
         openStoreCheckup();
@@ -420,8 +424,152 @@ function openModule(moduleId) {
         return;
     }
     
-    // 普通模块：显示表单弹窗
-    showModuleForm(module);
+    // 普通模块：先展示默认内容，再显示筛选栏
+    openModuleWithContent(moduleId);
+}
+
+function openModuleWithContent(moduleId) {
+    const module = MODULES.find(m => m.id === moduleId);
+    if (!module) return;
+    
+    const isEn = currentLang === 'en';
+    const title = isEn ? module.titleEn : module.title;
+    const defaultMarket = '美国';
+    const defaultProduct = '电子产品';
+    
+    showResultFilter(true);
+    document.getElementById('filter-market-label').textContent = t('targetMarket');
+    document.getElementById('filter-category-label').textContent = t('productCategory');
+    
+    let extraHtml = '';
+    let body = {};
+    
+    switch(moduleId) {
+        case 'cultural':
+            extraHtml = `
+                <div class="filter-item">
+                    <label>${isEn ? 'Content Type' : '内容类型'}</label>
+                    <select id="filter-type" class="form-select small">
+                        <option value="产品包装">${isEn ? 'Product Packaging' : '产品包装'}</option>
+                        <option value="广告营销">${isEn ? 'Advertising' : '广告营销'}</option>
+                        <option value="产品设计">${isEn ? 'Product Design' : '产品设计'}</option>
+                        <option value="社交媒体">${isEn ? 'Social Media' : '社交媒体'}</option>
+                    </select>
+                </div>
+            `;
+            body = { product: defaultProduct, market: defaultMarket, content_type: '产品包装', category: '' };
+            break;
+        case 'compliance':
+            extraHtml = `
+                <div class="filter-item">
+                    <label>${isEn ? 'Business Model' : '业务模式'}</label>
+                    <select id="filter-type" class="form-select small">
+                        <option value="B2C">B2C (跨境电商)</option>
+                        <option value="B2B">B2B (传统外贸)</option>
+                        <option value="D2C">D2C (独立站)</option>
+                    </select>
+                </div>
+            `;
+            body = { product: defaultProduct, market: defaultMarket, business_model: 'B2C', category: '' };
+            break;
+        case 'localize':
+            extraHtml = `
+                <div class="filter-item">
+                    <label>${isEn ? 'Content Type' : '内容类型'}</label>
+                    <select id="filter-type" class="form-select small">
+                        <option value="产品命名">${isEn ? 'Product Naming' : '产品命名'}</option>
+                        <option value="营销话术">${isEn ? 'Marketing Copy' : '营销话术'}</option>
+                        <option value="视觉建议">${isEn ? 'Visual Design' : '视觉建议'}</option>
+                        <option value="节日日历">${isEn ? 'Holiday Calendar' : '节日日历'}</option>
+                    </select>
+                </div>
+            `;
+            body = { content: defaultProduct, market: defaultMarket, content_type: '产品命名', category: '' };
+            break;
+        case 'tariff':
+            extraHtml = `
+                <div class="filter-item">
+                    <label>${isEn ? 'HS Code' : 'HS编码'}</label>
+                    <input type="text" id="filter-hscode" class="form-input small" placeholder="8517.62.0000">
+                </div>
+            `;
+            body = { market: defaultMarket, hscode: '8517.62.0000', origin: '中国', declared_value: '1000', incoterm: 'FOB', category: '' };
+            break;
+        case 'cert':
+            extraHtml = '';
+            body = { product: defaultProduct, market: defaultMarket, market2: '', category: '' };
+            break;
+        case 'platform':
+            extraHtml = `
+                <div class="filter-item">
+                    <label>${isEn ? 'Platform' : '平台'}</label>
+                    <select id="filter-type" class="form-select small">
+                        <option value="Amazon">Amazon</option>
+                        <option value="TikTok Shop">TikTok Shop</option>
+                        <option value="eBay">eBay</option>
+                        <option value="Wish">Wish</option>
+                    </select>
+                </div>
+            `;
+            body = { platform: 'Amazon', market: defaultMarket, question: '', category: '' };
+            break;
+        case 'intellectual-property':
+            extraHtml = `
+                <div class="filter-item">
+                    <label>${isEn ? 'Search Type' : '检索类型'}</label>
+                    <select id="filter-type" class="form-select small">
+                        <option value="商标">${isEn ? 'Trademark' : '商标'}</option>
+                        <option value="专利">${isEn ? 'Patent' : '专利'}</option>
+                        <option value="版权">${isEn ? 'Copyright' : '版权'}</option>
+                    </select>
+                </div>
+            `;
+            body = { brand_name: '示例品牌', product_desc: defaultProduct, market: defaultMarket, category: '' };
+            break;
+        case 'logistics-compliance':
+            extraHtml = `
+                <div class="filter-item">
+                    <label>${isEn ? 'Shipping Method' : '运输方式'}</label>
+                    <select id="filter-type" class="form-select small">
+                        <option value="海运">${isEn ? 'Sea Freight' : '海运'}</option>
+                        <option value="空运">${isEn ? 'Air Freight' : '空运'}</option>
+                        <option value="快递">${isEn ? 'Express' : '快递'}</option>
+                    </select>
+                </div>
+            `;
+            body = { origin_country: '中国', destination_country: defaultMarket, product_type: defaultProduct, shipping_method: '海运', category: '' };
+            break;
+        case 'crisis':
+            extraHtml = `
+                <div class="filter-item">
+                    <label>${isEn ? 'Crisis Type' : '危机类型'}</label>
+                    <select id="filter-type" class="form-select small">
+                        <option value="customs_hold">${isEn ? 'Customs Hold' : '海关扣货'}</option>
+                        <option value="platform_ban">${isEn ? 'Platform Ban' : '平台下架/封店'}</option>
+                        <option value="legal_letter">${isEn ? 'Legal Letter' : '收到律师函'}</option>
+                        <option value="product_recall">${isEn ? 'Product Recall' : '产品召回'}</option>
+                    </select>
+                </div>
+            `;
+            body = { crisis_type: 'customs_hold', market: defaultMarket, description: '', category: '' };
+            break;
+        case 'stories':
+            extraHtml = '';
+            body = { market: defaultMarket, product: defaultProduct, category: '' };
+            break;
+        case 'product-quick-check':
+            extraHtml = '';
+            body = { product_name: defaultProduct, markets: defaultMarket, category: '' };
+            break;
+        default:
+            extraHtml = '';
+            body = { market: defaultMarket, product: defaultProduct };
+    }
+    
+    document.getElementById('filter-extra').innerHTML = extraHtml;
+    currentFilterParams = body;
+    
+    streamRequest(module.api, body, `${module.icon} ${title}`, moduleId, module.dimensions);
 }
 
 // ========== 显示模块表单弹窗 ==========
@@ -873,37 +1021,26 @@ function closeStoreModal(event) {
 
 // ========== 外贸新闻 ==========
 function openTradeNews() {
-    const module = MODULES.find(m => m.id === 'trade-news');
-    showModuleForm({
-        id: 'trade-news',
-        icon: '📰',
-        title: currentLang === 'en' ? 'Trade News' : '外贸新闻',
-        titleEn: 'Trade News',
-        desc: currentLang === 'en' ? 'Latest trade news with bilingual support' : '最新外贸新闻，双语阅读',
-        descEn: 'Latest trade news with bilingual support'
-    });
+    currentModuleType = 'trade-news';
+    const isEn = currentLang === 'en';
     
-    setTimeout(() => {
-        const modalBody = document.getElementById('modal-body');
-        const isEn = currentLang === 'en';
-        modalBody.innerHTML = `
-            <h2 class="modal-title">📰 ${isEn ? 'Trade News' : '外贸新闻'}</h2>
-            <p class="modal-subtitle">${isEn ? 'Select market and category for personalized news' : '选择市场和品类，获取个性化新闻'}</p>
-            <div class="form-group">
-                <label>${isEn ? 'Market' : '关注市场'}</label>
-                <select id="form-market" class="form-select market-select"></select>
-            </div>
-            <div class="form-group">
-                <label>${isEn ? 'Category' : '关注品类'}</label>
-                <input type="text" id="form-category" class="form-input" placeholder="${isEn ? 'Enter category (optional)' : '请输入品类（可选）'}">
-            </div>
-            <div class="modal-footer">
-                <button class="btn-outline" onclick="closeModuleModal()">${isEn ? 'Cancel' : '取消'}</button>
-                <button class="btn-primary" onclick="submitNews()">⚡ ${isEn ? 'Get News' : '获取新闻'}</button>
-            </div>
-        `;
-        initMarketSelects();
-    }, 10);
+    showResultFilter(true);
+    document.getElementById('filter-market-label').textContent = isEn ? 'Market' : '关注市场';
+    document.getElementById('filter-category-label').textContent = isEn ? 'Category' : '关注品类';
+    document.getElementById('filter-category').placeholder = isEn ? 'Enter category (optional)' : '请输入品类（可选）';
+    document.getElementById('filter-extra').innerHTML = '';
+    
+    const defaultMarket = '全球';
+    const defaultCategory = '';
+    currentFilterParams = { market: defaultMarket, category: defaultCategory, news_type: 'all' };
+    
+    streamRequest(
+        '/api/trade-news', 
+        currentFilterParams, 
+        '📰 外贸新闻', 
+        'trade-news', 
+        ['政策法规', '关税税务', '平台动态', '市场趋势']
+    );
 }
 
 function submitNews() {
@@ -916,51 +1053,46 @@ function submitNews() {
 
 // ========== 外贸学院 ==========
 function openTradeAcademy() {
-    const module = MODULES.find(m => m.id === 'trade-academy');
-    showModuleForm({
-        id: 'trade-academy',
-        icon: '📚',
-        title: currentLang === 'en' ? 'Trade Academy' : '外贸学院',
-        titleEn: 'Trade Academy',
-        desc: currentLang === 'en' ? 'Learn cross-border trade step by step' : '从零开始学跨境出海',
-        descEn: 'Learn cross-border trade step by step'
-    });
+    currentModuleType = 'trade-academy';
+    const isEn = currentLang === 'en';
     
-    setTimeout(() => {
-        const modalBody = document.getElementById('modal-body');
-        const isEn = currentLang === 'en';
-        modalBody.innerHTML = `
-            <h2 class="modal-title">📚 ${isEn ? 'Trade Academy' : '外贸学院'}</h2>
-            <p class="modal-subtitle">${isEn ? 'Choose a topic to start learning' : '选择学习主题，开始学习'}</p>
-            <div class="form-group">
-                <label>${isEn ? 'Topic' : '学习主题'}</label>
-                <select id="form-topic" class="form-select">
-                    <option value="跨境电商入门">${isEn ? 'Cross-border E-commerce Intro' : '跨境电商入门'}</option>
-                    <option value="外贸术语词典">${isEn ? 'Trade Terminology' : '外贸术语词典'}</option>
-                    <option value="平台入驻指南">${isEn ? 'Platform Entry Guide' : '平台入驻指南'}</option>
-                    <option value="合规专题">${isEn ? 'Compliance Topics' : '合规专题'}</option>
-                    <option value="运营技巧">${isEn ? 'Operations Tips' : '运营技巧'}</option>
-                    <option value="品牌建设">${isEn ? 'Brand Building' : '品牌建设'}</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>${isEn ? 'Level' : '学习级别'}</label>
-                <select id="form-level" class="form-select">
-                    <option value="beginner">${isEn ? 'Beginner' : '入门级'}</option>
-                    <option value="intermediate">${isEn ? 'Intermediate' : '进阶级'}</option>
-                    <option value="advanced">${isEn ? 'Advanced' : '高级'}</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>${isEn ? 'Question (optional)' : '具体问题（可选）'}</label>
-                <input type="text" id="form-question" class="form-input" placeholder="${isEn ? 'Your question' : '您的问题'}">
-            </div>
-            <div class="modal-footer">
-                <button class="btn-outline" onclick="closeModuleModal()">${isEn ? 'Cancel' : '取消'}</button>
-                <button class="btn-primary" onclick="submitAcademy()">⚡ ${isEn ? 'Start Learning' : '开始学习'}</button>
-            </div>
-        `;
-    }, 10);
+    showResultFilter(true);
+    document.getElementById('filter-market-label').textContent = isEn ? 'Topic' : '学习主题';
+    document.getElementById('filter-category-label').textContent = isEn ? 'Level' : '学习级别';
+    
+    const extraHtml = `
+        <div class="filter-item">
+            <label>${isEn ? 'Level' : '学习级别'}</label>
+            <select id="filter-level" class="form-select small">
+                <option value="beginner">${isEn ? 'Beginner' : '入门级'}</option>
+                <option value="intermediate">${isEn ? 'Intermediate' : '进阶级'}</option>
+                <option value="advanced">${isEn ? 'Advanced' : '高级'}</option>
+            </select>
+        </div>
+    `;
+    document.getElementById('filter-extra').innerHTML = extraHtml;
+    
+    const topicSelect = document.getElementById('filter-market');
+    topicSelect.innerHTML = `
+        <option value="跨境电商入门">${isEn ? 'Cross-border E-commerce Intro' : '跨境电商入门'}</option>
+        <option value="外贸术语词典">${isEn ? 'Trade Terminology' : '外贸术语词典'}</option>
+        <option value="平台入驻指南">${isEn ? 'Platform Entry Guide' : '平台入驻指南'}</option>
+        <option value="合规专题">${isEn ? 'Compliance Topics' : '合规专题'}</option>
+        <option value="运营技巧">${isEn ? 'Operations Tips' : '运营技巧'}</option>
+        <option value="品牌建设">${isEn ? 'Brand Building' : '品牌建设'}</option>
+    `;
+    
+    const defaultTopic = '跨境电商入门';
+    const defaultLevel = 'beginner';
+    currentFilterParams = { topic: defaultTopic, level: defaultLevel, question: '' };
+    
+    streamRequest(
+        '/api/trade-academy', 
+        currentFilterParams, 
+        '📚 外贸学院', 
+        'trade-academy', 
+        ['入门课程', '术语词典', '进阶内容', '实操要点', '常见误区']
+    );
 }
 
 function submitAcademy() {
@@ -1269,6 +1401,95 @@ function openNewsDetail(id) {
 }
 
 // ========== SSE 流式请求 ==========
+function showResultFilter(show) {
+    const filter = document.getElementById('result-filter');
+    if (show) {
+        filter.style.display = 'block';
+        setTimeout(() => initFilterMarketSelect(), 50);
+    } else {
+        filter.style.display = 'none';
+    }
+}
+
+function initFilterMarketSelect() {
+    const select = document.getElementById('filter-market');
+    if (!select || select.options.length > 1) return;
+    
+    const sourceSelect = document.getElementById('market-select');
+    if (sourceSelect) {
+        select.innerHTML = sourceSelect.innerHTML;
+    } else {
+        initMarketSelects();
+        if (sourceSelect) {
+            select.innerHTML = sourceSelect.innerHTML;
+        }
+    }
+}
+
+function applyFilter() {
+    const market = document.getElementById('filter-market')?.value || '美国';
+    const category = document.getElementById('filter-category')?.value || '';
+    const filterType = document.getElementById('filter-type')?.value || '';
+    const filterHsCode = document.getElementById('filter-hscode')?.value || '';
+    const filterLevel = document.getElementById('filter-level')?.value || '';
+    
+    const module = MODULES.find(m => m.id === currentModuleType);
+    if (!module) return;
+    
+    const isEn = currentLang === 'en';
+    const title = isEn ? module.titleEn : module.title;
+    let body = {};
+    
+    switch(currentModuleType) {
+        case 'trade-news':
+            body = { market, category, news_type: 'all' };
+            break;
+        case 'trade-academy':
+            const topic = document.getElementById('filter-market')?.value || '跨境电商入门';
+            const level = filterLevel || 'beginner';
+            body = { topic, level, question: '' };
+            break;
+        case 'cultural':
+            body = { product: category || '示例产品', market, content_type: filterType || '产品包装', category: '' };
+            break;
+        case 'compliance':
+            body = { product: category || '电子产品', market, business_model: filterType || 'B2C', category: '' };
+            break;
+        case 'localize':
+            body = { content: category || '示例产品', market, content_type: filterType || '产品命名', category: '' };
+            break;
+        case 'tariff':
+            body = { market, hscode: filterHsCode || '8517.62.0000', origin: '中国', declared_value: '1000', incoterm: 'FOB', category: '' };
+            break;
+        case 'cert':
+            body = { product: category || '电子产品', market, market2: '', category: '' };
+            break;
+        case 'platform':
+            body = { platform: filterType || 'Amazon', market, question: '', category: '' };
+            break;
+        case 'intellectual-property':
+            body = { brand_name: category || '示例品牌', product_desc: '电子产品', market, category: '' };
+            break;
+        case 'logistics-compliance':
+            body = { origin_country: '中国', destination_country: market, product_type: category || '电子产品', shipping_method: filterType || '海运', category: '' };
+            break;
+        case 'crisis':
+            body = { crisis_type: filterType || 'customs_hold', market, description: '', category: '' };
+            break;
+        case 'stories':
+            body = { market, product: category || '电子产品', category: '' };
+            break;
+        case 'product-quick-check':
+            body = { product_name: category || '电子产品', markets: market, category: '' };
+            break;
+        default:
+            body = { market, product: category || '电子产品' };
+    }
+    
+    currentFilterParams = body;
+    streamRequest(module.api, body, `${module.icon} ${title}`, currentModuleType, module.dimensions);
+}
+
 async function streamRequest(url, body, title, moduleType, dimensions, customContentEl) {
     const resultPanel = document.getElementById('result-panel');
     const resultContent = customContentEl || document.getElementById('result-content');
@@ -1704,6 +1925,9 @@ function renderMarkdownDebounced(el, md, delay) {
 // ========== 结果面板控制 ==========
 function closeResult() {
     document.getElementById('result-panel').classList.remove('show');
+    showResultFilter(false);
+    currentModuleType = '';
+    currentFilterParams = {};
 }
 
 function generateFullReport() {
