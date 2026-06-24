@@ -593,34 +593,40 @@ def extract_info(messages: List[Dict[str, str]]) -> dict:
         "product": "示例产品",
         "category": "默认",
         "content_type": "产品包装",
-        "hscode": "",
+        "hscode": "8517.62.0000",
         "store_url": "",
         "platform": "Amazon",
+        "origin": "中国",
+        "declared_value": "1,000",
+        "incoterm": "FOB",
+        "business_model": "B2C跨境电商",
+        "markets": "美国",
     }
     
     for line in full_text.split("\n"):
         line = line.strip()
-        if "市场：" in line or "目标市场：" in line:
+        if "目标市场：" in line or "市场：" in line:
             m = line.split("：")[-1].strip() if "：" in line else line.split(":")[-1].strip()
             if m and m != "":
                 info["market"] = m
-        elif "产品：" in line or "选品：" in line or "商品：" in line or "品牌：" in line or "产品类型：" in line:
-            p = line.split("：")[-1].strip() if "：" in line else line.split(":")[-1].strip()
-            if p and p != "":
-                info["product"] = p
-        elif "品类：" in line or "类目：" in line or "产品品类：" in line:
+        elif "产品品类：" in line or "品类：" in line or "类目：" in line:
             c = line.split("：")[-1].strip() if "：" in line else line.split(":")[-1].strip()
             if c and c != "":
                 info["category"] = c
-        elif "类型：" in line or "内容类型：" in line:
+                info["product"] = c
+        elif "产品：" in line or "产品类型：" in line or "选品：" in line or "选品名称" in line or "商品：" in line or "品牌：" in line:
+            p = line.split("：")[-1].strip() if "：" in line else line.split(":")[-1].strip()
+            if p and p != "":
+                info["product"] = p
+        elif "类型：" in line or "内容类型：" in line or "检测类型：" in line:
             t = line.split("：")[-1].strip() if "：" in line else line.split(":")[-1].strip()
             if t and t != "":
                 info["content_type"] = t
-        elif "HS编码：" in line or "hscode：" in line or "hscode:" in line.lower():
+        elif "HS编码：" in line or "hscode：" in line.lower() or "hs code" in line.lower():
             h = line.split("：")[-1].strip() if "：" in line else line.split(":")[-1].strip()
             if h and h != "":
                 info["hscode"] = h
-        elif "店铺URL：" in line or "店铺链接：" in line:
+        elif "店铺URL：" in line or "店铺链接：" in line or "选品名称/URL：" in line:
             u = line.split("：")[-1].strip() if "：" in line else line.split(":")[-1].strip()
             if u and u != "":
                 info["store_url"] = u
@@ -628,6 +634,30 @@ def extract_info(messages: List[Dict[str, str]]) -> dict:
             p = line.split("：")[-1].strip() if "：" in line else line.split(":")[-1].strip()
             if p and p != "":
                 info["platform"] = p
+        elif "出口国：" in line or "发货国：" in line or "原产国：" in line:
+            o = line.split("：")[-1].strip() if "：" in line else line.split(":")[-1].strip()
+            if o and o != "":
+                info["origin"] = o
+        elif "申报价值：" in line or "货值：" in line:
+            v = line.split("：")[-1].strip() if "：" in line else line.split(":")[-1].strip()
+            v = v.replace(" USD", "").replace("USD", "").replace("$", "").strip()
+            if v and v != "0" and v != "":
+                info["declared_value"] = v
+        elif "贸易方式：" in line or "成交方式：" in line or "incoterm" in line.lower():
+            i = line.split("：")[-1].strip() if "：" in line else line.split(":")[-1].strip()
+            if i and i != "":
+                info["incoterm"] = i
+        elif "业务模式：" in line:
+            b = line.split("：")[-1].strip() if "：" in line else line.split(":")[-1].strip()
+            if b and b != "":
+                info["business_model"] = b
+        elif "目标市场：" in line and "," in line:
+            m = line.split("：")[-1].strip() if "：" in line else line.split(":")[-1].strip()
+            if m and m != "":
+                info["markets"] = m
+                first_market = m.split(",")[0].split("、")[0].split(" ")[0].strip()
+                if first_market:
+                    info["market"] = first_market
     
     category_key = "默认"
     for cat_key in ["食品", "零食", "3C", "服装", "美妆", "家居"]:
@@ -760,6 +790,411 @@ def generate_cultural_demo(info: dict) -> str:
 ```"""
 
 
+def generate_compliance_demo(info: dict) -> str:
+    """生成合规雷达扫描的演示报告"""
+    market = info["market"]
+    product = info["product"]
+    m_info = get_market_info(market)
+    cat_tips = CATEGORY_CULTURAL_TIPS.get(info["category_key"], CATEGORY_CULTURAL_TIPS["默认"])
+    
+    from datetime import datetime
+    now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    
+    biz_model = info.get("business_model", "B2C跨境电商")
+    if "业务模式：" in "".join([f"{k}:{v}" for k,v in info.items()]):
+        pass
+    
+    return f"""## 📡 合规雷达扫描报告
+━━━━━━━━━━━━━━━━
+**目标市场：** {m_info['flag']} {market}
+**产品品类：** {product}
+**业务模式：** {biz_model}
+**检测时间：** {now}
+━━━━━━━━━━━━━━━━
+
+### 【风险等级】：🟠 中高风险
+
+### 【问题诊断】
+{product}进入{market}市场需要完成多项强制合规事项，涉及产品认证、数据隐私和电商合规三大领域，预计周期6-10周，费用约$5,000-$15,000。{cat_tips['example_issue']}等方面需要特别注意。
+
+### 【详细分析】
+
+#### 🔴 高风险：产品认证
+**必须完成：**
+- 安全认证：{market}市场强制安全认证（如CE/FCC/PSE等）
+- 环保认证：RoHS / REACH等有害物质限制
+- 标签要求：当地语言的产品标签、警示语
+- 说明书：当地语言的使用手册和安全说明
+**难度：** ★★★★☆
+**成本：** $3,000 - $10,000
+**周期：** 4-8周
+
+#### 🔴 高风险：数据隐私
+**必须完成：**
+- 隐私政策：符合{market}当地数据保护法规
+- Cookie同意：需获得用户明确同意
+- 用户数据权利：支持访问、更正、删除个人数据
+- 数据存储：符合当地数据存储和传输要求
+**难度：** ★★★☆☆
+**成本：** $500 - $2,000
+**周期：** 1-2周
+
+#### 🟡 中风险：广告法规
+**注意事项：**
+- 禁止虚假宣传：所有产品宣称需有科学依据
+- 价格标注：需显示含税总价，不得隐藏费用
+- 用户评价：不得购买或操纵用户评论
+- 比较广告：需客观、真实，不得贬低竞争对手
+**难度：** ★★☆☆☆
+**成本：** $300 - $1,000
+**周期：** 1周
+
+#### 🟡 中风险：电商合规
+**必须完成：**
+- 平台入驻：主流平台需提交合规文件
+- 进口商标识：产品和包装上需标注进口商信息
+- 退货政策：需符合当地消费者权益保护法
+- 语言要求：产品说明和客服需支持当地语言
+**难度：** ★★★☆☆
+**成本：** $500 - $2,000
+**周期：** 2-4周
+
+#### 🟢 低风险：知识产权
+**建议完成：**
+- 商标注册：保护品牌在{market}的权益
+- 外观设计：如产品外观有独特性
+**难度：** ★★☆☆☆
+**成本：** $500 - $3,000
+**周期：** 4-8个月
+
+### 【修改/行动建议】
+
+1. **立即启动（本周）**：联系认证机构，提交产品资料开始认证流程
+2. **第1-2周**：完成隐私政策和数据合规文件
+3. **第2-4周**：准备平台入驻资料，完成电商合规改造
+4. **第4-8周**：等待产品认证，同步进行商标注册
+5. **第8-10周**：认证完成后，开始小批量试销
+
+### 【法规/案例依据】
+- 参考案例：2024年某品牌进入{market}市场的合规案例
+- 行业数据：{market}市场合规成本调研报告（2025）
+- 案例：某跨境电商因不合规被罚款$20万
+
+### 【下一步建议】
+→ 进行【关税估算】计算进口成本
+→ 进行【产品准入】获取详细认证清单
+→ 查看【危机处置】了解合规风险应对方案
+
+---
+出海没有100%零风险，但我们可以帮你把雷区画出来、绕过去。如果需要更具体的文件模板或下一步操作指引，随时告诉我。
+
+```json
+{{
+  "score": 58,
+  "breakdown": [
+    {{"item": "产品认证高风险", "type": "deduct", "change": -20}},
+    {{"item": "数据隐私高风险", "type": "deduct", "change": -12}},
+    {{"item": "广告法规中风险", "type": "deduct", "change": -5}},
+    {{"item": "电商合规中风险", "type": "deduct", "change": -5}}
+  ],
+  "radar": {{
+    "cultural": 0,
+    "compliance": 58,
+    "brand": 70,
+    "localization": 60,
+    "visual": 0,
+    "logistics": 65
+  }}
+}}
+```"""
+
+
+def generate_product_quick_check_demo(info: dict) -> str:
+    """生成选品快检的演示报告"""
+    product = info["product"]
+    market_str = info.get("markets", info["market"])
+    m_info = get_market_info(info["market"])
+    
+    from datetime import datetime
+    now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    
+    return f"""## 📦 选品快检报告
+━━━━━━━━━━━━━━━━
+**选品：** {product}
+**目标市场：** {market_str}
+**检测时间：** {now}
+━━━━━━━━━━━━━━━━
+
+### ✅ 能否销售：可以销售（需完成合规认证）
+
+### 📋 所需认证：
+- **{info['market']}**：当地强制安全认证、环保认证
+- **其他**：质检报告、产品测试报告
+
+### 💰 预估关税：
+- **{info['market']}**：约 2-5% 关税税率
+  - 具体税率需确认HS编码
+
+### ⚠️ 文化风险：低
+- 产品设计中性，无明显文化禁忌元素
+- 建议进行本土化包装和文案适配
+- 注意颜色和图案的文化含义
+
+### 📊 竞争指数：7/10（竞争较激烈）
+- 同类产品数量较多
+- 头部品牌占据一定市场份额
+- 建议寻找差异化定位
+
+### 💵 预估利润率：25-35%
+- 产品成本：约 30%
+- 关税+物流：约 15%
+- 平台佣金+广告：约 20-25%
+- 净利润率：约 25-35%
+
+---
+
+### 【风险等级】：🟡 中风险
+### 【综合建议】：
+
+**可以出海，但需做好准备。**
+
+**关键注意事项：**
+1. **合规先行**：务必在发货前完成所有强制认证，避免被扣货
+2. **差异化竞争**：建议走细分市场，避开正面价格战
+3. **品牌建设**：尽早注册商标，做品牌备案
+4. **库存策略**：初期小批量试销，验证市场后再放大
+5. **专利排查**：务必做专利检索，避免侵权风险
+
+**建议下一步：**
+→ 进行【文化雷区检测】获取详细文化适配建议
+→ 进行【合规雷达扫描】获取完整合规清单
+→ 进行【知识产权预检】排查专利侵权风险
+
+---
+出海没有100%零风险，但我们可以帮你把雷区画出来、绕过去。如果需要更具体的文件模板或下一步操作指引，随时告诉我。
+
+```json
+{{
+  "score": 65,
+  "breakdown": [
+    {{"item": "竞争激烈扣分项", "type": "deduct", "change": -15}},
+    {{"item": "合规要求较多", "type": "deduct", "change": -10}},
+    {{"item": "利润率健康", "type": "bonus", "change": +5}},
+    {{"item": "市场需求大", "type": "bonus", "change": +5}}
+  ],
+  "radar": {{
+    "cultural": 80,
+    "compliance": 60,
+    "brand": 55,
+    "localization": 70,
+    "visual": 75,
+    "logistics": 70
+  }}
+}}
+```"""
+
+
+def generate_tariff_demo(info: dict) -> str:
+    """生成关税估算的演示报告"""
+    market = info["market"]
+    m_info = get_market_info(market)
+    hscode = info.get("hscode", "8517.62.0000")
+    origin = info.get("origin", "中国")
+    declared_value = info.get("declared_value", "1,000")
+    incoterm = info.get("incoterm", "FOB")
+    
+    from datetime import datetime
+    now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    
+    tariff_rate = 2.5
+    tariff_amount = float(declared_value.replace(",", "")) * tariff_rate / 100
+    
+    return f"""## 💰 关税与税务估算报告
+━━━━━━━━━━━━━━━━
+**HS编码：** {hscode}
+**出口国：** {origin}
+**目的国：** {m_info['flag']} {market}
+**申报价值：** ${declared_value} USD
+**贸易方式：** {incoterm}
+**检测时间：** {now}
+━━━━━━━━━━━━━━━━
+
+### 【风险等级】：🟢 低风险
+
+### 【问题诊断】
+该产品出口{market}关税较低（{tariff_rate}%），整体税负可控。需注意额外税种和清关费用，以及当地销售税合规要求。
+
+### 【详细分析】
+
+#### 💰 基础关税
+- **关税税率**：{tariff_rate}%（最惠国税率 MFN Rate）
+- **关税金额**：${tariff_amount:.2f} USD
+- **税则号列**：{hscode}
+
+#### 💰 额外税种
+- **特殊关税**：无（当前无加征关税）
+- **反倾销/反补贴税**：无
+- **关税配额**：不适用
+
+#### 💰 流转税
+- **{market}销售税/增值税**：由当地税务机构征收
+  - 进口环节一般不征收，销售环节向消费者收取
+  - 达到销售门槛后需注册税号并申报
+
+#### 💰 其他费用
+- **清关费**：约 $100 - $200 / 票
+- **港口处理费**：货值的0.3-0.5%
+- **海关债券费**：约 $50 - $100 / 票
+- **仓储费**：约 $30 - $80 / 立方米 / 月
+- **送货费**：根据目的地不同
+
+#### 💰 FTA优惠（自由贸易协定）
+- **中{market}FTA**：暂无或部分产品适用
+- **其他**：可考虑通过第三国转口（需满足原产地规则）
+
+#### 💰 综合到岸成本估算
+| 项目 | 金额 | 占比 |
+|------|------|------|
+| 采购成本 | ${declared_value}.00 | 70-75% |
+| 国际运费 | $100 - $300 | 8-15% |
+| 基础关税 | ${tariff_amount:.2f} | 2-3% |
+| 清关杂费 | $150 - $300 | 8-12% |
+| **到岸总成本** | **${float(declared_value.replace(',', '')) * 1.25:.2f}** | **100%** |
+
+### 【修改/行动建议】
+
+1. **关税筹划**：关注关税政策变化，必要时考虑转口贸易
+2. **物流优化**：发货量稳定后签订年框合同，降低10-20%成本
+3. **海关合规**：确保HS编码归类准确，申报价值真实
+4. **税务合规**：销售额达到门槛后及时注册税号
+5. **保险建议**：建议购买货运保险，降低运输风险
+
+### 【法规/案例依据】
+- 参考{market}海关税则：{hscode}
+- 案例：某卖家因HS编码归类错误被补税+罚款
+- 行业数据：{market}进口清关费用调研报告（2025）
+
+### 【下一步建议】
+→ 进行【产品准入】获取{market}市场认证清单
+→ 进行【物流合规】确认运输和清关要求
+→ 查看【踩雷故事】了解关税合规案例
+
+---
+出海没有100%零风险，但我们可以帮你把雷区画出来、绕过去。如果需要更具体的文件模板或下一步操作指引，随时告诉我。
+
+```json
+{{
+  "score": 82,
+  "breakdown": [
+    {{"item": "基础关税低", "type": "bonus", "change": +10}},
+    {{"item": "无反倾销税", "type": "bonus", "change": +5}},
+    {{"item": "销售税合规要求", "type": "deduct", "change": -8}},
+    {{"item": "清关复杂度", "type": "deduct", "change": -5}}
+  ],
+  "radar": {{
+    "cultural": 0,
+    "compliance": 75,
+    "brand": 0,
+    "localization": 0,
+    "visual": 0,
+    "logistics": 82
+  }}
+}}
+```"""
+
+
+def generate_store_checkup_demo(info: dict) -> str:
+    """生成店铺体检的演示报告"""
+    store_url = info.get("store_url", "https://example-store.com")
+    platform = info.get("platform", "Amazon")
+    market = info["market"]
+    m_info = get_market_info(market)
+    product = info.get("product", "电子产品")
+    
+    from datetime import datetime
+    now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    
+    return f"""## 🏪 店铺AI体检报告
+━━━━━━━━━━━━━━━━
+**店铺名称：** {platform} {market} 示例店铺
+**平台：** {platform} {m_info['flag']}
+**店铺URL：** {store_url}
+**主营品类：** {product}
+**检测时间：** {now}
+━━━━━━━━━━━━━━━━
+
+### 📊 店铺健康度评分：74/100
+
+### 🔴 高危问题（立即处理）：
+
+1. **Listing标题含绝对化用语** — 违反广告法规 — 建议修改为客观描述
+   - 风险说明：{market}广告法禁止使用"best"、"#1"等无法证实的绝对化用语
+   - 涉及商品：3个SKU
+
+2. **产品图片缺少合规标识** — 可能被下架 — 建议添加认证标志和警示语
+   - 风险说明：{product}需在详情页展示合规认证信息
+   - 涉及商品：5个SKU
+
+3. **缺少当地语言支持** — 消费者体验差 — 建议添加{m_info['language']}客服和说明
+   - 风险说明：当地语言支持不足会影响转化率和用户评价
+
+### 🟡 需优化项：
+
+1. **关键词覆盖率不足** → 建议增加当地语言的高搜索量关键词
+2. **产品描述A+页面缺失** → 建议制作品牌详情页，提升转化率
+3. **部分图片分辨率偏低** → 建议所有图片至少1000x1000像素
+4. **问答（Q&A）数量偏少** → 建议主动补充常见问题及解答
+5. **差评回复不够及时** → 建议48小时内回复所有差评
+
+### 🟢 表现良好：
+
+1. **店铺评分4.4/5.0**：高于同类目平均水平
+2. **好评率91%**：用户满意度较高
+3. **定价策略合理**：价格处于同类产品中间位置
+4. **物流时效达标**：配送时效稳定
+5. **商品分类清晰**：店铺导航和分类结构合理
+
+### 💡 AI改进建议：
+
+- **第1优先级（本周）**：修改所有Listing中的绝对化用语，补充认证标识
+- **第2优先级（2周内）**：优化主图和附图，完善产品描述
+- **第3优先级（1个月内）**：完善Q&A板块，建立差评回复SOP
+- **长期建议**：每周监测竞品动态，每月进行关键词优化
+
+### 📈 竞品对比分析：
+
+| 指标 | 你的店铺 | 类目Top 10平均 | 差距 |
+|------|----------|---------------|------|
+| 评分 | 4.4 | 4.5 | -0.1 |
+| 好评率 | 91% | 93% | -2% |
+| 均价 | $$ | 中等 | 持平 |
+| Review数 | 中等 | 较多 | 待提升 |
+
+---
+出海没有100%零风险，但我们可以帮你把雷区画出来、绕过去。如果需要更具体的文件模板或下一步操作指引，随时告诉我。
+
+```json
+{{
+  "score": 74,
+  "breakdown": [
+    {{"item": "绝对化用语风险", "type": "deduct", "change": -10}},
+    {{"item": "合规标识缺失", "type": "deduct", "change": -8}},
+    {{"item": "语言支持不足", "type": "deduct", "change": -8}},
+    {{"item": "店铺评分良好", "type": "bonus", "change": +5}},
+    {{"item": "定价合理", "type": "bonus", "change": +3}}
+  ],
+  "radar": {{
+    "cultural": 70,
+    "compliance": 60,
+    "brand": 75,
+    "localization": 65,
+    "visual": 75,
+    "logistics": 85
+  }}
+}}
+```"""
+
+
 async def get_demo_response(messages: List[Dict[str, str]]) -> str:
     """根据消息内容返回对应的演示数据"""
     content = json.dumps(messages, ensure_ascii=False).lower()
@@ -768,13 +1203,13 @@ async def get_demo_response(messages: List[Dict[str, str]]) -> str:
     if "文化" in content or "cultural" in content:
         return generate_cultural_demo(info)
     elif "合规" in content or "compliance" in content:
-        return DEMO_RESPONSES["compliance"]
+        return generate_compliance_demo(info)
     elif "店铺" in content or "store" in content or "体检" in content:
-        return DEMO_RESPONSES["store_checkup"]
+        return generate_store_checkup_demo(info)
     elif "选品" in content or "product" in content or "quick" in content:
-        return DEMO_RESPONSES["product_quick_check"]
+        return generate_product_quick_check_demo(info)
     elif "关税" in content or "tariff" in content:
-        return DEMO_RESPONSES["tariff"]
+        return generate_tariff_demo(info)
     else:
         return DEMO_RESPONSES["default"]
 

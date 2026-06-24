@@ -160,6 +160,19 @@ const MODULES = [
         dimensions: ['入门课程', '术语词典', '进阶内容', '实操要点', '常见误区']
     },
     {
+        id: 'trade-tools',
+        icon: '🧰',
+        title: '外贸工具箱',
+        titleEn: 'Trade Toolbox',
+        desc: '🆕外贸小白必备工具：HS编码查询、外贸术语词典、外贸知识普及',
+        descEn: '🆕Essential tools for newbies: HS code lookup, trade terms dictionary, knowledge base',
+        riskLevel: 'safe',
+        isNew: true,
+        api: '',
+        isTool: true,
+        dimensions: ['HS编码查询', '外贸术语词典', '外贸知识库']
+    },
+    {
         id: 'stories',
         icon: '💥',
         title: '踩雷故事',

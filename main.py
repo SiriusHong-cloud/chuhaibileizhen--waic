@@ -485,6 +485,44 @@ async def api_logistics_compliance(req: Request):
     return sse_response(gen, "logistics-compliance", destination_country, product_type, input_data)
 
 
+# --- 外贸工具 API ---
+
+@app.post("/api/tools/hs-search")
+async def api_hs_search(req: Request):
+    body = await req.json()
+    keyword = body.get("keyword", "")
+    category = body.get("category", "")
+    from agent.trade_tools import search_hs_code
+    results = search_hs_code(keyword, category)
+    return JSONResponse(content={"results": results, "total": len(results)})
+
+
+@app.post("/api/tools/terms-search")
+async def api_terms_search(req: Request):
+    body = await req.json()
+    keyword = body.get("keyword", "")
+    category = body.get("category", "")
+    from agent.trade_tools import search_terms
+    results = search_terms(keyword, category)
+    return JSONResponse(content={"results": results, "total": len(results)})
+
+
+@app.get("/api/tools/knowledge")
+async def api_knowledge_list():
+    from agent.trade_tools import get_knowledge_list
+    results = get_knowledge_list()
+    return JSONResponse(content={"results": results, "total": len(results)})
+
+
+@app.post("/api/tools/knowledge-detail")
+async def api_knowledge_detail(req: Request):
+    body = await req.json()
+    title = body.get("title", "")
+    from agent.trade_tools import get_knowledge_detail
+    result = get_knowledge_detail(title)
+    return JSONResponse(content={"result": result})
+
+
 # --- 启动入口 ---
 
 if __name__ == "__main__":
