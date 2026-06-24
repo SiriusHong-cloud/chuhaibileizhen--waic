@@ -14,5 +14,5 @@ async def trade_news(market: str, category: str = "", news_type: str = "all"):
 请生成最新的外贸新闻聚合与解读报告。
 """}
     ]
-    async for chunk in chat_stream(messages):
+    async for chunk in chat_stream(messages, "trade-news"):
         yield chunk

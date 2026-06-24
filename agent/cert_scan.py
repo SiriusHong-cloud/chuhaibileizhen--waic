@@ -13,5 +13,5 @@ async def cert_scan(market: str, product: str, market2: str = "", category: str 
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": user_msg},
     ]
-    async for chunk in chat_stream(messages):
+    async for chunk in chat_stream(messages, "cert"):
         yield chunk

@@ -1118,6 +1118,781 @@ def generate_tariff_demo(info: dict) -> str:
 ```"""
 
 
+def generate_localize_demo(info: dict) -> str:
+    """生成本土化改造的演示报告"""
+    market = info["market"]
+    content = info.get("product", "示例产品")
+    content_type = info.get("content_type", "产品命名")
+    product = info.get("product", content)
+    m_info = get_market_info(market)
+    category_key = info.get("category_key", "默认")
+    
+    from datetime import datetime
+    now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    
+    type_text = {
+        "产品命名": "产品命名",
+        "营销话术": "营销文案",
+        "视觉建议": "视觉设计",
+        "节日日历": "节日营销",
+        "支付物流": "支付物流"
+    }.get(content_type, content_type)
+    
+    return f"""## 🔧 本土化改造方案
+━━━━━━━━━━━━━━━━
+**目标市场：** {m_info['flag']} {market}
+**改造类型：** {type_text}
+**产品/品牌：** {product}
+**生成时间：** {now}
+━━━━━━━━━━━━━━━━
+
+### 🎯 改造总评：🟡 中等适配度
+
+您的产品/内容在{market}市场需要进行本土化调整，主要涉及语言表达、文化符号和消费习惯三个方面。
+
+### 📝 具体改造建议
+
+#### 1️⃣ 产品命名本地化
+**原名称：** {product}
+**建议译名：**
+- 直译版：{product} {m_info['language']}版
+- 本地化版：{product} Pro（符合当地命名习惯）
+- 品牌化版：{market} {product} 系列
+
+**命名原则：**
+- 避免使用在当地文化中有负面含义的词汇
+- 发音要简单易记，符合当地语言习惯
+- 长度控制在2-3个单词最佳
+
+#### 2️⃣ 营销话术优化
+**原话术（直译）：** "最优质的产品，最便宜的价格"
+**优化后：** "Premium Quality, Great Value for Money"
+
+**调整要点：**
+- 避免使用"最"、"第一"等绝对化用语（违反广告法）
+- 强调"品质"、"价值"而非"便宜"（{market}消费者更看重品质）
+- 增加社会证明："Trusted by 10,000+ customers"
+
+#### 3️⃣ 视觉设计建议
+- **主色调调整**：搭配{m_info.get('preferred_color', '蓝色系')}作为主色调，增加信任感
+- **图片风格**：使用当地模特和场景，增强代入感
+- **排版布局**：遵循{market}消费者阅读习惯，重要信息前置
+- **图标符号**：检查所有图标和符号在当地文化中的含义
+
+#### 4️⃣ 节日营销日历
+**{market}市场重点营销节点：**
+| 时间 | 节日/活动 | 营销建议 |
+|------|----------|----------|
+| 1月 | 新年促销 | 年初清仓+新品预告 |
+| 2月 | 情人节 | 礼品套装+情感营销 |
+| 5月 | 母亲节 | 女性向产品推广 |
+| 11月 | 黑五/网一 | 年度最大促销 |
+| 12月 | 圣诞节 | 节日礼品+年终大促 |
+
+#### 5️⃣ 支付与物流适配
+- **推荐支付方式**：{m_info.get('payment', '信用卡、PayPal')}
+- **物流时效承诺**：{m_info.get('shipping', '5-7个工作日')}
+- **退换货政策**：提供30天无理由退换（当地标准）
+- **本地客服**：提供{m_info['language']}客服支持
+
+### 💡 本土化优先级
+1. **高优先级**：产品命名、营销话术（直接影响转化率）
+2. **中优先级**：视觉设计、节日营销（提升品牌感知）
+3. **低优先级**：支付物流、客服支持（基础体验保障）
+
+### 📊 预期效果
+- 转化率提升：20-35%
+- 退货率降低：15-25%
+- 用户好评率提升：10-15%
+- 品牌记忆度提升：30%+
+
+---
+出海没有100%零风险，但我们可以帮你把雷区画出来、绕过去。如果需要更具体的文件模板或下一步操作指引，随时告诉我。
+
+```json
+{{
+  "score": 70,
+  "breakdown": [
+    {{"item": "命名适配度", "type": "deduct", "change": -10}},
+    {{"item": "话术本地化", "type": "deduct", "change": -10}},
+    {{"item": "视觉适配", "type": "deduct", "change": -8}},
+    {{"item": "支付物流", "type": "bonus", "change": +3}}
+  ],
+  "radar": {{
+    "cultural": 65,
+    "compliance": 70,
+    "brand": 60,
+    "localization": 70,
+    "visual": 65,
+    "logistics": 75
+  }}
+}}
+```"""
+
+
+def generate_cert_demo(info: dict) -> str:
+    """生成产品准入的演示报告"""
+    market = info["market"]
+    product = info.get("product", "示例产品")
+    m_info = get_market_info(market)
+    category_key = info.get("category_key", "默认")
+    
+    from datetime import datetime
+    now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    
+    cert_list = {
+        "美国": ["FCC认证", "FDA认证", "UL认证", "CEC能效"],
+        "欧盟": ["CE认证", "RoHS指令", "REACH法规", "WEEE指令"],
+        "日本": ["PSE认证", "MIC认证", "SC认证", "JIS标准"],
+        "英国": ["UKCA认证", "CE认证", "RoHS", "WEEE"],
+    }.get(market, ["CE认证", "FCC认证", "RoHS指令", "ISO体系"])
+    
+    return f"""## ✅ 产品准入认证清单
+━━━━━━━━━━━━━━━━
+**目标市场：** {m_info['flag']} {market}
+**产品名称：** {product}
+**产品品类：** {category_key}
+**查询时间：** {now}
+━━━━━━━━━━━━━━━━
+
+### 📋 强制认证清单（必须）
+
+以下是{market}市场针对{category_key}类产品的强制认证要求：
+
+| 认证名称 | 适用范围 | 认证周期 | 预估费用 | 优先级 |
+|----------|----------|----------|----------|--------|
+| {cert_list[0]} | 电子产品/无线设备 | 4-6周 | $3,000-5,000 | 🔴 必须 |
+| {cert_list[1]} | 安全/环保/健康 | 6-8周 | $5,000-8,000 | 🔴 必须 |
+| {cert_list[2]} | 特定品类准入 | 8-12周 | $8,000-15,000 | 🟡 按需 |
+| {cert_list[3]} | 能效/标签要求 | 2-4周 | $1,000-3,000 | 🟡 按需 |
+
+### 📝 认证申请流程
+
+```
+第1步：产品检测 → 第2步：资料准备 → 第3步：提交申请 → 第4步：工厂审核 → 第5步：拿证
+   ↓              ↓               ↓               ↓             ↓
+ 2-3周         1-2周          2-4周          1-2周        1周
+```
+
+### 📦 所需材料清单
+
+1. **产品技术文件**
+   - 产品规格书、电路图、PCB Layout
+   - 产品说明书、标签样张
+   - 零部件清单（BOM表）
+
+2. **企业资质文件**
+   - 营业执照、组织机构代码
+   - 商标注册证明
+   - ISO体系证书（如有）
+
+3. **测试样品**
+   - 成品样品：2-5台
+   - 关键零部件样品：各2-3个
+
+### 💡 认证策略建议
+
+#### 快速入市方案（30天内）
+- 先申请周期最短的认证：{cert_list[0]}
+- 同时启动其他认证的资料准备
+- 利用认证过渡期提前布局市场
+
+#### 成本优化方案
+- 选择有资质的国内实验室进行预测试
+- 系列产品打包申请，降低单款成本
+- 利用互认协议（如CB转证）减少重复测试
+
+### ⚠️ 注意事项
+
+1. **认证标志使用**：获得认证后，必须按规定在产品和包装上加贴认证标志
+2. **有效期管理**：认证证书一般有效期3-5年，注意提前续期
+3. **变更报备**：产品设计、元器件变更时需重新评估认证有效性
+4. **市场抽查**：{market}市场会不定期进行市场抽查，确保持续合规
+
+### 🔗 下一步建议
+→ 进行【关税估算】了解进口税费成本
+→ 进行【合规雷达】全面扫描法规风险
+→ 咨询本地代理机构获取精准报价
+
+---
+出海没有100%零风险，但我们可以帮你把雷区画出来、绕过去。如果需要更具体的文件模板或下一步操作指引，随时告诉我。
+
+```json
+{{
+  "score": 75,
+  "breakdown": [
+    {{"item": "强制认证数量", "type": "deduct", "change": -10}},
+    {{"item": "认证复杂度", "type": "deduct", "change": -8}},
+    {{"item": "周期可控", "type": "bonus", "change": +3}}
+  ],
+  "radar": {{
+    "cultural": 0,
+    "compliance": 75,
+    "brand": 0,
+    "localization": 0,
+    "visual": 0,
+    "logistics": 70
+  }}
+}}
+```"""
+
+
+def generate_platform_demo(info: dict) -> str:
+    """生成电商平台体检的演示报告"""
+    market = info["market"]
+    product = info.get("product", "电子产品")
+    platform = info.get("platform", "Amazon")
+    m_info = get_market_info(market)
+    category_key = info.get("category_key", "默认")
+    
+    from datetime import datetime
+    now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    
+    return f"""## 🛒 电商平台体检报告
+━━━━━━━━━━━━━━━━
+**平台：** {platform} {m_info['flag']}
+**站点：** {market}
+**产品品类：** {category_key}
+**检测时间：** {now}
+━━━━━━━━━━━━━━━━
+
+### 📊 平台适配度评分：72/100
+
+### 🔴 高风险问题（立即处理）
+
+1. **类目准入资质缺失**
+   - 问题：{category_key}类产品在{platform}{market}站需要额外审核
+   - 影响：无法上架或随时被下架
+   - 建议：准备好产品认证资料，提交类目审核申请
+
+2. **产品标签不合规**
+   - 问题：缺少{market}当地语言的产品标签和说明书
+   - 影响：投诉率高，可能触发平台下架
+   - 建议：补充{m_info['language']}标签，包含安全警示和使用说明
+
+3. **变体设置风险**
+   - 问题：产品变体关系可能不符合平台规则
+   - 影响：变体被拆分，流量分散
+   - 建议：检查变体设置，确保父体-子体关系合规
+
+### 🟡 需优化项
+
+1. **Listing质量待提升**
+   - 标题关键词覆盖度：65% → 建议提升至85%+
+   - 图片数量：5张 → 建议至少7张，含场景图和尺寸图
+   - A+页面：未开通 → 建议品牌备案后开通
+   - 视频介绍：无 → 建议添加30-60秒产品视频
+
+2. **定价策略优化**
+   - 当前价格处于同类产品中等水平
+   - 建议：设置有竞争力的入门价，积累Review后调整
+   - 可考虑：优惠券、促销活动提升初期转化
+
+3. **物流方案选择**
+   - FBA配送：建议优先选择，提升Buy Box几率
+   - 自配送：需保证配送时效≤7天
+   - 海外仓：适合大件或高周转产品
+
+### 🟢 表现良好
+
+1. **产品竞争力**：{category_key}品类在{market}站有稳定需求
+2. **市场容量**：月搜索量中等，竞争度适中
+3. **利润空间**：毛利率预估35-45%，健康水平
+
+### 📝 平台关键指标参考
+
+| 指标 | 基准值 | 目标值 |
+|------|--------|--------|
+| 订单缺陷率 | <1% | <0.5% |
+| 迟发率 | <4% | <2% |
+| 取消率 | <2.5% | <1% |
+| 有效追踪率 | >95% | >99% |
+| 准时送达率 | >97% | >99% |
+
+### 🚀 入驻与运营建议
+
+#### 入驻准备清单
+- 企业营业执照
+- 品牌商标（建议注册{market}本地商标）
+- 产品认证证书
+- 双币信用卡
+- 收款账户
+
+#### 新品推广节奏
+```
+第1周：上架 + 自动广告跑词
+第2-3周：优化Listing + 手动广告
+第4-6周：站外引流 + 积累Review
+第7-8周：提升BSR排名 + 稳定出单
+```
+
+---
+出海没有100%零风险，但我们可以帮你把雷区画出来、绕过去。如果需要更具体的文件模板或下一步操作指引，随时告诉我。
+
+```json
+{{
+  "score": 72,
+  "breakdown": [
+    {{"item": "类目准入风险", "type": "deduct", "change": -10}},
+    {{"item": "标签合规性", "type": "deduct", "change": -8}},
+    {{"item": "Listing质量", "type": "deduct", "change": -5}},
+    {{"item": "市场容量", "type": "bonus", "change": +5}}
+  ],
+  "radar": {{
+    "cultural": 60,
+    "compliance": 65,
+    "brand": 70,
+    "localization": 65,
+    "visual": 70,
+    "logistics": 75
+  }}
+}}
+```"""
+
+
+def generate_ip_demo(info: dict) -> str:
+    """生成知识产权预检的演示报告"""
+    market = info["market"]
+    product = info.get("product", "示例品牌")
+    search_type = info.get("content_type", "商标")
+    m_info = get_market_info(market)
+    category_key = info.get("category_key", "默认")
+    platform = info.get("platform", "Amazon")
+    
+    from datetime import datetime
+    now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    
+    return f"""## 📝 知识产权预检报告
+━━━━━━━━━━━━━━━━
+**目标市场：** {m_info['flag']} {market}
+**检测类型：** {search_type}检索
+**品牌/产品：** {product}
+**检测时间：** {now}
+━━━━━━━━━━━━━━━━
+
+### 🚨 风险等级：🟡 中风险
+
+检测到 {product} 在{market}市场存在2项潜在知识产权风险，建议在入市前进行全面排查和风险规避。
+
+### 🔍 详细检测结果
+
+#### 1️⃣ 商标风险分析
+**检索类型：** 相同/近似商标检索
+**检索范围：** {market}商标局数据库
+
+**结果：**
+- 🟡 **近似商标风险**：发现2枚在先近似商标（第9类电子产品）
+  - 商标1：{product}Tech（注册日期：2022年）
+  - 商标2：{product}Pro（注册日期：2023年）
+- 🟢 **相同商标**：未发现完全相同的已注册商标
+- 🟢 **驰名商标**：不涉及驰名商标保护范围
+
+**风险评估：**
+- 近似度：65%（中等）
+- 商品类别：部分重合
+- 驳回风险：中等偏高
+- 建议：建议微调商标设计后再申请
+
+#### 2️⃣ 专利风险分析
+**检索类型：** 发明专利/外观设计专利检索
+
+**结果：**
+- 🟡 **发明专利**：发现3项相关专利，需进一步分析权利要求保护范围
+- 🟢 **外观设计**：未发现高度近似的外观设计专利
+- 💡 **可专利性**：产品的核心功能点有一定的创新空间
+
+**风险评估：**
+- 侵权风险：中等
+- 规避难度：中等
+- 建议：进行专利稳定性分析和FTO（自由实施）分析
+
+#### 3️⃣ 版权风险分析
+**检索类型：** 软件著作权/作品版权
+
+**结果：**
+- 🟢 **软件著作权**：产品自带软件为自主开发，不涉及侵权
+- 🟢 **产品外观**：原创设计，不涉及版权侵权
+- ⚠️ **包装文案**：需注意营销文案中引用的图片和字体版权
+
+#### 4️⃣ 投诉历史查询
+**平台投诉记录：**
+- Amazon：无相关投诉记录
+- 知识产权局：无无效宣告记录
+- 海关：无知识产权备案扣货记录
+
+### 📋 行动建议
+
+#### 高优先级（入市前完成）
+1. **商标调整与注册**
+   - 方案A：调整商标设计，增加显著性元素
+   - 方案B：购买现有商标（预计成本$5,000-15,000）
+   - 建议选择方案A，成本更低且品牌自主性强
+
+2. **专利FTO分析**
+   - 委托当地专利律师出具FTO意见书
+   - 针对高风险专利设计规避方案
+   - 评估专利许可的可能性
+
+#### 中优先级（3个月内）
+3. **知识产权布局**
+   - 商标：全类注册（核心类别+关联类别）
+   - 专利：申请{market}本地发明专利和外观设计
+   - 版权：软件著作权登记+产品手册版权登记
+
+4. **品牌备案**
+   - {platform or 'Amazon'}品牌备案
+   - 海关知识产权备案
+   - 域名注册（.com, .{market.lower() if len(market)==2 else 'com'}）
+
+#### 低优先级（长期维护）
+5. **监测体系**
+   - 商标监测：定期监测近似商标申请
+   - 专利监测：跟踪竞品专利布局
+   - 市场监测：监控侵权产品
+
+### 💰 预估费用
+
+| 项目 | 预估费用 | 周期 |
+|------|---------|------|
+| 商标注册 | $3,000-5,000 | 8-12个月 |
+| 专利申请 | $8,000-15,000 | 18-24个月 |
+| FTO分析 | $5,000-8,000 | 2-4周 |
+| 品牌备案 | $500-1,000 | 1-2周 |
+
+---
+出海没有100%零风险，但我们可以帮你把雷区画出来、绕过去。如果需要更具体的文件模板或下一步操作指引，随时告诉我。
+
+```json
+{{
+  "score": 68,
+  "breakdown": [
+    {{"item": "商标近似风险", "type": "deduct", "change": -12}},
+    {{"item": "专利侵权风险", "type": "deduct", "change": -10}},
+    {{"item": "无投诉记录", "type": "bonus", "change": +5}},
+    {{"item": "版权安全", "type": "bonus", "change": +3}}
+  ],
+  "radar": {{
+    "cultural": 0,
+    "compliance": 68,
+    "brand": 60,
+    "localization": 0,
+    "visual": 70,
+    "logistics": 0
+  }}
+}}
+```"""
+
+
+def generate_logistics_compliance_demo(info: dict) -> str:
+    """生成物流合规的演示报告"""
+    market = info["market"]
+    product = info.get("product", "电子产品")
+    origin = info.get("origin", "中国")
+    m_info = get_market_info(market)
+    category_key = info.get("category_key", "默认")
+    declared_value = info.get("declared_value", "1,000")
+    
+    from datetime import datetime
+    now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    
+    return f"""## 🚢 物流合规检测报告
+━━━━━━━━━━━━━━━━
+**起运国：** 🇨🇳 {origin}
+**目的国：** {m_info['flag']} {market}
+**产品：** {product}
+**申报价值：** ${declared_value} USD
+**检测时间：** {now}
+━━━━━━━━━━━━━━━━
+
+### 📊 合规评分：73/100
+
+### 🔴 高风险预警
+
+1. **制裁筛查风险**
+   - 风险等级：🟡 中风险
+   - 说明：产品部分元器件供应商位于制裁敏感地区，需进行最终用户筛查
+   - 建议：
+     - 进行全面的供应链尽职调查
+     - 确认所有交易方不在制裁清单上
+     - 准备KYC（Know Your Customer）资料
+
+2. **危险品分类**
+   - 风险等级：🟡 中风险
+   - 说明：{category_key}产品含锂电池，属于第9类危险品
+   - 要求：
+     - 使用UN38.3认证的锂电池
+     - 外包装加贴危险品标签
+     - 随货附带MSDS和UN38.3测试报告
+     - 选择有危险品运输资质的物流商
+
+### 🟡 注意事项
+
+1. **木质包装要求**
+   - 要求：实木包装需经过IPPC熏蒸/热处理
+   - 标识：加贴IPPC专用标识
+   - 建议：优先使用免熏蒸胶合板包装
+
+2. **提前申报要求**
+   - {market}海关要求：货物到港前{24 if market == '美国' else 48}小时提前申报
+   - 所需资料：发票、装箱单、提单、原产地证
+   - 建议：使用专业清关代理，确保申报数据准确
+
+3. **原产地证管理**
+   - 建议办理：{origin}-{market}优惠原产地证
+   - 预期关税优惠：5-10%
+   - 注意事项：
+     - 确保产品符合原产地规则
+     - 原产地证信息与报关单一致
+     - 证书在有效期内使用
+
+### 📦 清关文件清单
+
+| 文件名称 | 必要性 | 说明 |
+|----------|--------|------|
+| 商业发票 | 🔴 必须 | 含详细品名、数量、价值 |
+| 装箱单 | 🔴 必须 | 明细到每个SKU的数量和重量 |
+| 提单/运单 | 🔴 必须 | 海运提单/空运运单 |
+| 原产地证 | 🟡 建议 | 享受关税优惠 |
+| MSDS | 🟡 按需 | 含电池/化学品需提供 |
+| 认证证书 | 🟡 按需 | FCC/CE/UL等产品认证 |
+| 进口许可证 | 🔴 按品类 | 某些特殊品类需要 |
+
+### ⚠️ 常见扣货原因
+
+1. **申报价值过低**
+   - 风险：海关估价调整+罚款
+   - 建议：如实申报，保留交易凭证
+
+2. **品名描述模糊**
+   - 风险：海关归类争议，延误清关
+   - 建议：使用准确的HS编码和品名描述
+
+3. **缺少认证文件**
+   - 风险：扣货+退运+罚款
+   - 建议：提前确认认证要求，备齐文件
+
+### 💡 物流方案建议
+
+#### 方案对比
+| 方案 | 时效 | 成本 | 适合场景 |
+|------|------|------|----------|
+| 海运整柜 | 25-35天 | 低 | 大批量、低价值 |
+| 海运拼箱 | 30-40天 | 中低 | 中小批量 |
+| 空运 | 5-7天 | 高 | 补货、高价值 |
+| 快递 | 3-5天 | 最高 | 样品、急件 |
+
+#### 合规建议
+- 选择有资质的合规物流商
+- 购买货物运输保险
+- 建立完善的物流合规档案
+- 定期进行物流合规审计
+
+---
+出海没有100%零风险，但我们可以帮你把雷区画出来、绕过去。如果需要更具体的文件模板或下一步操作指引，随时告诉我。
+
+```json
+{{
+  "score": 73,
+  "breakdown": [
+    {{"item": "制裁风险", "type": "deduct", "change": -10}},
+    {{"item": "危险品分类", "type": "deduct", "change": -8}},
+    {{"item": "包装要求", "type": "deduct", "change": -5}},
+    {{"item": "清关资料齐全", "type": "bonus", "change": +3}}
+  ],
+  "radar": {{
+    "cultural": 0,
+    "compliance": 70,
+    "brand": 0,
+    "localization": 0,
+    "visual": 0,
+    "logistics": 73
+  }}
+}}
+```"""
+
+
+def generate_crisis_demo(info: dict) -> str:
+    """生成危机处置的演示报告"""
+    market = info["market"]
+    crisis_type = info.get("content_type", "海关扣货")
+    product = info.get("product", "示例产品")
+    m_info = get_market_info(market)
+    category_key = info.get("category_key", "默认")
+    platform = info.get("platform", "Amazon")
+    
+    from datetime import datetime
+    now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    
+    crisis_type_map = {
+        "customs_hold": "海关扣货",
+        "platform_ban": "平台下架/封店",
+        "legal_letter": "收到律师函",
+        "negative_pr": "负面舆情/媒体曝光",
+        "product_recall": "产品召回",
+        "gov_investigation": "政府调查"
+    }
+    crisis_name = crisis_type_map.get(crisis_type, crisis_type)
+    
+    return f"""## 🆘 危机处置方案
+━━━━━━━━━━━━━━━━
+**危机类型：** {crisis_name}
+**涉及市场：** {m_info['flag']} {market}
+**涉及产品：** {product}
+**响应级别：** 🚨 紧急响应
+**生成时间：** {now}
+━━━━━━━━━━━━━━━━
+
+### ⏱️ 黄金24小时行动清单
+
+#### 第1小时：紧急响应
+- [ ] **成立应急小组**：法务+运营+产品+公关
+- [ ] **冻结相关操作**：暂停发货、暂停广告、暂停促销
+- [ ] **信息收集**：收集所有相关文件、邮件、记录
+- [ ] **初步评估**：判断危机等级和影响范围
+
+#### 第2-6小时：深度分析
+- [ ] **原因调查**：查明危机发生的根本原因
+- [ ] **影响评估**：评估对业务、品牌、财务的影响
+- [ ] **风险预判**：预判可能的连锁反应和次生风险
+- [ ] **方案拟定**：拟定2-3套应对方案
+
+#### 第7-24小时：启动应对
+- [ ] **确定方案**：敲定最终应对策略
+- [ ] **内部沟通**：统一内部口径和行动步骤
+- [ ] **外部接触**：与相关方（海关/平台/律师）初步接触
+- [ ] **准备材料**：准备应对所需的全部材料
+
+---
+
+### 📋 {crisis_name}专项应对方案
+
+#### 一、情况分析
+**现状：** {product}在{market}市场遭遇{crisis_name}
+**影响范围：**
+- 产品范围：当前批次/全系列产品
+- 渠道影响：{platform or 'Amazon'}/独立站/线下渠道
+- 财务影响：预估损失$10,000-50,000
+- 品牌影响：中等（可能影响用户信任）
+
+**可能原因（待核实）：**
+1. 产品认证/合规问题
+2. 知识产权侵权指控
+3. 消费者投诉/安全隐患
+4. 申报信息不符
+
+#### 二、应对策略
+
+**策略A：积极应对型（推荐）**
+- 主动配合调查，快速响应
+- 提供完整证明材料
+- 争取最快速度解决
+- 适用场景：我方合规、问题可澄清
+
+**策略B：谈判和解型**
+- 与投诉方/监管方协商
+- 寻求和解方案
+- 降低负面影响
+- 适用场景：存在一定合规瑕疵
+
+**策略C：法律救济型**
+- 聘请当地律师
+- 走法律程序维权
+- 适用场景：我方完全合规、对方恶意投诉
+
+#### 三、具体行动步骤
+
+**第1步：收集和整理证据**
+- 产品认证证书
+- 供应商资质文件
+- 采购合同和发票
+- 产品检测报告
+- 历史销售记录
+- 消费者评价（正面）
+
+**第2步：准备沟通文件**
+- 情况说明函（正式、专业）
+- 证据清单和证明材料
+- 整改计划和承诺函（如需）
+- 历史合规记录
+
+**第3步：正式沟通**
+- 指定专人对接
+- 书面沟通为主，留痕
+- 态度诚恳，专业理性
+- 不承认未确认的责任
+
+**第4步：后续跟进**
+- 每日跟进进展
+- 及时调整策略
+- 记录全部沟通过程
+
+#### 四、沟通话术模板
+
+**与海关/监管机构沟通：**
+> 尊敬的{market}海关官员：
+> 
+> 您好！我们是[公司名称]，获悉我司产品{product}被查验，我们高度重视并积极配合调查。
+> 
+> 我司产品一直严格遵守{market}相关法规，具备完整的认证文件。随函附上以下证明材料：...
+> 
+> 恳请贵方尽快审核，如有任何疑问，请随时与我们联系。
+> 
+> 此致
+> 敬礼
+> [联系人/联系方式]
+
+**应对消费者投诉：**
+> 尊敬的顾客：
+> 
+> 非常抱歉给您带来不好的体验。我们非常重视您的反馈，已立即展开调查。
+> 
+> 我们承诺在48小时内给出明确答复和解决方案。在此期间，如有任何疑问，请随时联系我们的客服团队。
+> 
+> 感谢您的理解和支持。
+
+---
+
+### 🛡️ 长期预防机制
+
+1. **合规体系建设**
+   - 建立产品合规档案
+   - 定期进行合规培训
+   - 设置合规专员岗位
+
+2. **风险监测预警**
+   - 监控平台政策变化
+   - 关注竞品危机案例
+   - 建立预警机制
+
+3. **应急预案储备**
+   - 制定各类型危机预案
+   - 储备外部专家资源
+   - 定期进行应急演练
+
+---
+出海没有100%零风险，但我们可以帮你把雷区画出来、绕过去。如果需要更具体的文件模板或下一步操作指引，随时告诉我。
+
+```json
+{{
+  "score": 55,
+  "breakdown": [
+    {{"item": "危机紧急程度", "type": "deduct", "change": -20}},
+    {{"item": "业务影响程度", "type": "deduct", "change": -15}},
+    {{"item": "可控程度", "type": "bonus", "change": +5}},
+    {{"item": "应对方案可行", "type": "bonus", "change": +5}}
+  ],
+  "radar": {{
+    "cultural": 50,
+    "compliance": 45,
+    "brand": 55,
+    "localization": 60,
+    "visual": 70,
+    "logistics": 50
+  }}
+}}
+```"""
+
+
 def generate_store_checkup_demo(info: dict) -> str:
     """生成店铺体检的演示报告"""
     store_url = info.get("store_url", "https://example-store.com")
@@ -1437,13 +2212,350 @@ def generate_trade_academy_demo(info: dict) -> str:
     return result
 
 
-async def get_demo_response(messages: List[Dict[str, str]]) -> str:
+def generate_stories_demo(info: dict) -> str:
+    """生成踩雷故事的演示案例"""
+    market = info["market"]
+    product = info.get("product", "3C电子产品")
+    m_info = get_market_info(market)
+    category_key = info.get("category_key", "默认")
+    
+    from datetime import datetime
+    now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    
+    stories = [
+        {
+            "brand": "某知名充电宝品牌",
+            "amount": "$120万",
+            "issue": "产品认证不全+锂电池运输违规",
+            "detail": "该品牌因未通过FCC认证和UL安全测试，被美国海关查扣整柜货物，同时因锂电池包装不符合危险品运输规定，被处以$120万罚款，全部货物被强制退运。",
+            "lesson": "电子产品出口美国必须通过FCC认证，含锂电池产品需满足UN38.3测试和包装要求。"
+        },
+        {
+            "brand": "某家居用品品牌",
+            "amount": "$85万",
+            "issue": "商标侵权被投诉",
+            "detail": "该品牌使用的Logo与美国某品牌近似，被对方投诉至Amazon平台，导致全店被封，冻结资金$85万，最终通过谈判和解，但品牌被迫更名。",
+            "lesson": "出海前必须进行商标检索，避免使用近似品牌名，建议注册目标市场本地商标。"
+        },
+        {
+            "brand": "某服装品牌",
+            "amount": "损失约$50万",
+            "issue": "文化禁忌踩雷",
+            "detail": "该品牌在中东市场推出的服装系列因使用了宗教敏感图案，引发消费者强烈抵制，社交媒体上出现#Boycott话题，产品全部下架，品牌形象严重受损。",
+            "lesson": "进入文化差异大的市场前，必须进行全面的文化风险评估，特别是宗教、颜色、图案等元素。"
+        }
+    ]
+    
+    story = stories[0]
+    
+    return f"""## 💥 踩雷故事案例库
+━━━━━━━━━━━━━━━━
+**检索市场：** {m_info['flag']} {market}
+**产品品类：** {category_key}
+**检索关键词：** {product}
+**生成时间：** {now}
+━━━━━━━━━━━━━━━━
+
+### 🔍 共检索到 3 个相关案例
+
+---
+
+### 📌 案例一：{story['brand']}
+
+**💸 损失金额：** {story['amount']}
+**⚠️ 踩雷类型：** {story['issue']}
+
+#### 📖 事件经过
+{story['detail']}
+
+#### 🎯 教训总结
+{story['lesson']}
+
+#### 🛡️ 如何避免
+1. **提前认证**：在产品开发阶段就规划认证
+2. **合规审查**：建立完善的合规审核流程
+3. **专业咨询**：聘请当地合规顾问把关
+4. **小批量测试**：先小批量试单验证合规性
+
+---
+
+### 📌 案例二：{stories[1]['brand']}
+
+**💸 损失金额：** {stories[1]['amount']}
+**⚠️ 踩雷类型：** {stories[1]['issue']}
+
+#### 📖 事件经过
+{stories[1]['detail']}
+
+#### 🎯 教训总结
+{stories[1]['lesson']}
+
+---
+
+### 📌 案例三：{stories[2]['brand']}
+
+**💸 损失金额：** {stories[2]['amount']}
+**⚠️ 踩雷类型：** {stories[2]['issue']}
+
+#### 📖 事件经过
+{stories[2]['detail']}
+
+#### 🎯 教训总结
+{stories[2]['lesson']}
+
+---
+
+### 📊 踩雷类型分布（{market}市场）
+
+| 踩雷类型 | 案例数量 | 占比 | 平均损失 |
+|----------|---------|------|---------|
+| 产品认证合规 | 12 | 35% | $95万 |
+| 知识产权侵权 | 10 | 29% | $68万 |
+| 文化禁忌风险 | 5 | 15% | $45万 |
+| 物流清关问题 | 5 | 14% | $38万 |
+| 平台规则违规 | 3 | 7% | $52万 |
+
+### 💡 风险防范建议
+
+1. **建立合规体系**：设立专门的合规岗位或外包给专业机构
+2. **定期培训**：团队成员定期接受出海合规培训
+3. **风险排查**：新产品上线前进行全面风险扫描
+4. **购买保险**：适当购买产品责任险和知识产权保险
+5. **储备资源**：建立当地律师、合规顾问资源网络
+
+### 📰 新闻来源
+- 中国贸易报
+- 跨境电商头条
+- {market}海关公告
+- 行业协会报告
+
+---
+出海没有100%零风险，但我们可以帮你把雷区画出来、绕过去。如果需要更具体的文件模板或下一步操作指引，随时告诉我。
+
+```json
+{{
+  "score": 60,
+  "breakdown": [
+    {{"item": "认证合规风险", "type": "deduct", "change": -15}},
+    {{"item": "知识产权风险", "type": "deduct", "change": -12}},
+    {{"item": "文化风险", "type": "deduct", "change": -8}},
+    {{"item": "可规避程度", "type": "bonus", "change": +5}}
+  ],
+  "radar": {{
+    "cultural": 60,
+    "compliance": 55,
+    "brand": 65,
+    "localization": 60,
+    "visual": 70,
+    "logistics": 65
+  }}
+}}
+```"""
+
+
+def generate_trade_news_demo(info: dict) -> str:
+    """生成外贸新闻的演示内容"""
+    market = info["market"]
+    category = info.get("content_type", "政策法规")
+    m_info = get_market_info(market)
+    
+    from datetime import datetime
+    now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    
+    return f"""## 📰 外贸新闻速递
+━━━━━━━━━━━━━━━━
+**市场：** {m_info['flag']} {market}
+**分类：** {category}
+**更新时间：** {now}
+━━━━━━━━━━━━━━━━
+
+### 🔥 今日要闻 Top 5
+
+---
+
+#### 1️⃣ {market}宣布新一轮关税调整计划，部分品类税率下调
+
+**发布时间：** 2小时前
+**来源：** {market}贸易代表办公室
+**分类：** 关税税务
+
+**摘要：**
+{market}政府宣布从下月起对部分进口商品实施关税调整，其中{category}类产品税率平均下调3-5%。业内分析认为，这将有利于中国相关产品进入{market}市场。
+
+**影响分析：**
+- 📉 利好：进口成本降低，价格竞争力提升
+- ⚠️ 注意：需确认具体的HS编码和适用范围
+- 💡 建议：关注原产地规则，确保符合关税减免条件
+
+**原文链接：** [查看原文（英文）]
+**中文翻译：** ✅ 已翻译
+
+---
+
+#### 2️⃣ Amazon{market}站新政：卖家需在30天内更新产品合规信息
+
+**发布时间：** 5小时前
+**来源：** Amazon卖家公告
+**分类：** 平台动态
+
+**摘要：**
+Amazon{market}站发布公告，要求所有销售电子产品的卖家在30天内更新产品合规认证信息，包括FCC/CE认证编号、检测报告等。逾期未更新的Listing将被下架。
+
+**影响分析：**
+- 🔴 紧急：涉及所有电子产品卖家
+- ⚠️ 风险：未更新将导致Listing下架
+- 💡 建议：立即检查并更新所有ASIN的合规信息
+
+**行动清单：**
+- [ ] 整理所有产品的认证文件
+- [ ] 在后台上传认证编号
+- [ ] 确保产品包装图片含认证标志
+
+---
+
+#### 3️⃣ {market}消费者保护机构发布新规定，加强产品安全监管
+
+**发布时间：** 1天前
+**来源：** {market}消费者保护局
+**分类：** 政策法规
+
+**摘要：**
+{market}消费者保护机构发布最新产品安全规定，要求进口产品必须提供更详尽的安全测试报告，并在产品包装上标注清晰的警示语。新规将于90天后正式生效。
+
+**影响分析：**
+- 🟡 中等影响：需更新产品包装和说明书
+- ⏱️ 过渡期：90天
+- 💰 成本影响：增加约5-8%的合规成本
+
+---
+
+#### 4️⃣ 跨境物流新通道开通，中国至{market}时效缩短3-5天
+
+**发布时间：** 1天前
+**来源：** 物流行业新闻
+**分类：** 市场趋势
+
+**摘要：**
+多家物流服务商联合推出中国至{market}的新物流通道，通过优化清关流程和本地配送网络，整体时效缩短3-5天，运费降低约10%。
+
+**影响分析：**
+- 📈 利好：物流时效提升，用户体验改善
+- 💰 成本：运费下降，利润率提升
+- 💡 建议：对比不同物流商的价格和时效
+
+---
+
+#### 5️⃣ 行业报告：{market}{category}市场年增长率达15%，中国卖家机会巨大
+
+**发布时间：** 2天前
+**来源：** 行业研究报告
+**分类：** 市场趋势
+
+**摘要：**
+最新行业报告显示，{market}{category}市场规模今年预计增长15%，达到$230亿。中国卖家凭借供应链优势和性价比，市场份额持续提升。
+
+**关键数据：**
+- 市场规模：$230亿（预计）
+- 年增长率：15%
+- 中国卖家占比：38%
+- Top品类：电子产品、家居、美妆
+
+---
+
+### 📅 本周热点回顾
+
+| 日期 | 新闻标题 | 分类 | 重要性 |
+|------|---------|------|--------|
+| 06-23 | 汇率波动：{market}货币兑人民币贬值2% | 市场趋势 | 🟡 中 |
+| 06-22 | 新认证标准实施时间表公布 | 政策法规 | 🔴 高 |
+| 06-21 | 平台佣金调整通知 | 平台动态 | 🟡 中 |
+| 06-20 | 节日季备货时间表建议 | 市场趋势 | 🟢 低 |
+
+### 🔔 订阅提醒
+可设置关键词订阅，实时获取相关新闻：
+- 关税调整
+- 平台政策
+- 认证法规
+- 品类趋势
+
+---
+出海没有100%零风险，但我们可以帮你把雷区画出来、绕过去。如果需要更具体的文件模板或下一步操作指引，随时告诉我。
+
+```json
+{{
+  "score": 80,
+  "breakdown": [
+    {{"item": "政策利好", "type": "bonus", "change": +10}},
+    {{"item": "平台新规", "type": "deduct", "change": -5}},
+    {{"item": "市场增长", "type": "bonus", "change": +8}},
+    {{"item": "物流优化", "type": "bonus", "change": +5}}
+  ],
+  "radar": {{
+    "cultural": 70,
+    "compliance": 65,
+    "brand": 75,
+    "localization": 70,
+    "visual": 80,
+    "logistics": 85
+  }}
+}}
+```"""
+
+
+async def get_demo_response(messages: List[Dict[str, str]], module_type: str = "") -> str:
     """根据消息内容返回对应的演示数据"""
     content = json.dumps(messages, ensure_ascii=False).lower()
     info = extract_info(messages)
     
+    demo_generators = {
+        "cultural": generate_cultural_demo,
+        "compliance": generate_compliance_demo,
+        "localize": generate_localize_demo,
+        "tariff": generate_tariff_demo,
+        "cert": generate_cert_demo,
+        "platform": generate_platform_demo,
+        "intellectual-property": generate_ip_demo,
+        "logistics-compliance": generate_logistics_compliance_demo,
+        "crisis": generate_crisis_demo,
+        "store-checkup": generate_store_checkup_demo,
+        "product-quick-check": generate_product_quick_check_demo,
+        "trade-academy": generate_trade_academy_demo,
+        "trade-news": generate_trade_news_demo,
+        "stories": generate_stories_demo,
+    }
+    
+    if module_type and module_type in demo_generators:
+        print(f"[DEMO] Using module_type: {module_type}")
+        return demo_generators[module_type](info)
+    
     if "学习主题" in content or "外贸学院" in content or "trade academy" in content:
         return generate_trade_academy_demo(info)
+    elif "踩雷故事" in content or "cautionary tales" in content or "真实品牌案例" in content:
+        return generate_stories_demo(info)
+    elif "外贸新闻" in content or "trade news" in content or "实时新闻" in content:
+        return generate_trade_news_demo(info)
+    elif "本土化改造" in content or "localize" in content or ("本土化" in content and "文化" not in content):
+        return generate_localize_demo(info)
+    elif "产品准入" in content or "认证清单" in content or "强制认证" in content:
+        return generate_cert_demo(info)
+    elif "电商平台体检" in content or "平台规则" in content or "类目准入" in content:
+        return generate_platform_demo(info)
+    elif "知识产权" in content or ("商标" in content and "风险" in content) or ("专利" in content and "风险" in content) or "intellectual property" in content:
+        return generate_ip_demo(info)
+    elif "物流合规" in content or "制裁筛查" in content or ("危险品" in content and "运输" in content) or "清关文件" in content:
+        return generate_logistics_compliance_demo(info)
+    elif "危机处置" in content or "黄金24小时" in content or "海关扣货" in content or "平台下架" in content or "crisis response" in content:
+        return generate_crisis_demo(info)
+    elif "文化雷区" in content or "cultural risk" in content or "7维度文化" in content:
+        return generate_cultural_demo(info)
+    elif "合规雷达" in content or "compliance radar" in content or "5大合规" in content:
+        return generate_compliance_demo(info)
+    elif "店铺ai体检" in content or "store checkup" in content or "店铺健康度" in content:
+        return generate_store_checkup_demo(info)
+    elif "选品快检" in content or "product quick check" in content or "一键合规检测" in content:
+        return generate_product_quick_check_demo(info)
+    elif "关税估算" in content or ("tariff" in content and "hs编码" in content) or "关税税率" in content:
+        return generate_tariff_demo(info)
     elif "文化" in content or "cultural" in content:
         return generate_cultural_demo(info)
     elif "合规" in content or "compliance" in content:
@@ -1454,13 +2566,29 @@ async def get_demo_response(messages: List[Dict[str, str]]) -> str:
         return generate_product_quick_check_demo(info)
     elif "关税" in content or "tariff" in content:
         return generate_tariff_demo(info)
+    elif "本土化" in content or "localize" in content:
+        return generate_localize_demo(info)
+    elif "认证" in content or "cert" in content:
+        return generate_cert_demo(info)
+    elif "平台" in content or "platform" in content:
+        return generate_platform_demo(info)
+    elif "知识产权" in content or "商标" in content or "专利" in content or "ip" in content:
+        return generate_ip_demo(info)
+    elif "物流" in content or "logistics" in content or "清关" in content:
+        return generate_logistics_compliance_demo(info)
+    elif "危机" in content or "crisis" in content or "应急" in content:
+        return generate_crisis_demo(info)
+    elif "案例" in content or "故事" in content:
+        return generate_stories_demo(info)
+    elif "新闻" in content or "news" in content:
+        return generate_trade_news_demo(info)
     else:
         return DEMO_RESPONSES["default"]
 
 
-async def demo_stream(messages: List[Dict[str, str]]) -> AsyncGenerator[str, None]:
+async def demo_stream(messages: List[Dict[str, str]], module_type: str = "") -> AsyncGenerator[str, None]:
     """模拟流式输出演示数据"""
-    demo_text = await get_demo_response(messages)
+    demo_text = await get_demo_response(messages, module_type)
     
     chunk_size = 3
     for i in range(0, len(demo_text), chunk_size):
@@ -1469,15 +2597,15 @@ async def demo_stream(messages: List[Dict[str, str]]) -> AsyncGenerator[str, Non
         await asyncio.sleep(0.01)
 
 
-async def chat_stream(messages: List[Dict[str, str]]) -> AsyncGenerator[str, None]:
+async def chat_stream(messages: List[Dict[str, str]], module_type: str = "") -> AsyncGenerator[str, None]:
     """
     发送消息到 Mimo API 并返回流式响应
     解析 SSE 格式的流式响应
     如果API不可用，自动降级到Demo模式
     """
     if DEMO_MODE == "true" or DEMO_MODE == "1":
-        print("[DEMO MODE] Using demo response (forced)")
-        async for chunk in demo_stream(messages):
+        print(f"[DEMO MODE] Using demo response (forced), module_type={module_type}")
+        async for chunk in demo_stream(messages, module_type):
             yield chunk
         return
     
@@ -1497,7 +2625,7 @@ async def chat_stream(messages: List[Dict[str, str]]) -> AsyncGenerator[str, Non
             async with client.stream("POST", f"{BASE_URL}/chat/completions", json=payload, headers=headers) as response:
                 if response.status_code == 401:
                     print(f"[WARN] API key invalid (401), falling back to demo mode")
-                    async for chunk in demo_stream(messages):
+                    async for chunk in demo_stream(messages, module_type):
                         yield chunk
                     return
                 
@@ -1518,11 +2646,12 @@ async def chat_stream(messages: List[Dict[str, str]]) -> AsyncGenerator[str, Non
                         except json.JSONDecodeError:
                             continue
                             
+
     except (httpx.HTTPStatusError, httpx.ConnectError, httpx.TimeoutException) as e:
         print(f"[WARN] API request failed ({e}), falling back to demo mode")
-        async for chunk in demo_stream(messages):
+        async for chunk in demo_stream(messages, module_type):
             yield chunk
     except Exception as e:
         print(f"[ERROR] Unexpected error: {e}, falling back to demo mode")
-        async for chunk in demo_stream(messages):
+        async for chunk in demo_stream(messages, module_type):
             yield chunk

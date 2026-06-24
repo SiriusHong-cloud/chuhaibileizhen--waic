@@ -16,5 +16,5 @@ async def logistics_compliance_check(origin_country: str, destination_country: s
 请进行物流合规检测。
 """}
     ]
-    async for chunk in chat_stream(messages):
+    async for chunk in chat_stream(messages, "logistics-compliance"):
         yield chunk

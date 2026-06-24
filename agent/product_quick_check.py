@@ -14,5 +14,5 @@ async def product_quick_check(product_name: str, markets: str, category: str = "
 请对该选品进行快速合规检测，生成选品快检报告。
 """}
     ]
-    async for chunk in chat_stream(messages):
+    async for chunk in chat_stream(messages, "product-quick-check"):
         yield chunk

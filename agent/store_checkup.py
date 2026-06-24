@@ -16,5 +16,5 @@ async def store_checkup(store_url: str, platform: str, market: str, category: st
 注意：由于无法直接访问网页，请基于该平台和市场的通用规则，模拟分析一个典型店铺的体检报告。
 """}
     ]
-    async for chunk in chat_stream(messages):
+    async for chunk in chat_stream(messages, "store-checkup"):
         yield chunk

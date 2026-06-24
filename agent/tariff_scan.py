@@ -10,5 +10,5 @@ async def tariff_scan(market: str, hscode: str, origin: str = "中国", declared
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": f"请估算以下产品的关税与税务：\n\n目标市场：{market}\nHS编码：{hscode}\n出口国：{origin}\n申报价值：{declared_value} USD\n贸易方式：{incoterm}\n品类：{category}"},
     ]
-    async for chunk in chat_stream(messages):
+    async for chunk in chat_stream(messages, "tariff"):
         yield chunk

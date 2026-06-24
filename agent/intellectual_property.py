@@ -15,5 +15,5 @@ async def intellectual_property_check(brand_name: str, product_desc: str, market
 请进行知识产权风险预检。
 """}
     ]
-    async for chunk in chat_stream(messages):
+    async for chunk in chat_stream(messages, "intellectual-property"):
         yield chunk
