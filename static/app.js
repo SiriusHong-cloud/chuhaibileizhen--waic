@@ -2307,6 +2307,36 @@ const MAP_STORIES = [
 
 async function initRiskMap() {
     try {
+        if (!window.echarts) {
+            await new Promise((resolve) => {
+                let count = 0;
+                const timer = setInterval(() => {
+                    count++;
+                    if (window.echarts || count > 50) {
+                        clearInterval(timer);
+                        resolve();
+                    }
+                }, 100);
+            });
+            if (!window.echarts && window.echartsFallback) {
+                window.echartsFallback();
+                await new Promise((resolve) => {
+                    let count = 0;
+                    const timer = setInterval(() => {
+                        count++;
+                        if (window.echarts || count > 50) {
+                            clearInterval(timer);
+                            resolve();
+                        }
+                    }, 100);
+                });
+            }
+        }
+        if (!window.echarts) {
+            console.error('ECharts not loaded');
+            return;
+        }
+        
         const res = await fetch('/api/risk-map');
         riskMapData = await res.json();
         

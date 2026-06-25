@@ -5,7 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>出海避雷针⚡ V5 - 跨境出海全链路AI顾问</title>
     <link rel="stylesheet" href="/static/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="https://unpkg.com/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script>
+        window.echartsFallback = function() {
+            if (!window.echarts) {
+                var s = document.createElement('script');
+                s.src = 'https://cdn.bootcdn.net/ajax/libs/echarts/5.4.3/echarts.min.js';
+                document.head.appendChild(s);
+            }
+        };
+    </script>
 </head>
 <body>
     <!-- ========== 顶部导航栏 ========== -->
@@ -204,7 +213,22 @@
             </div>
             
             <div class="result-body">
-                <!-- 筛选栏 -->
+                <!-- 知识卡片区 -->
+                <div id="knowledge-section" class="knowledge-section" style="display:none;">
+                    <div class="knowledge-header">
+                        <span class="knowledge-icon">💡</span>
+                        <h4 class="knowledge-title">常见知识</h4>
+                        <span class="knowledge-subtitle">点击卡片快速了解</span>
+                    </div>
+                    <div id="knowledge-cards" class="knowledge-cards"></div>
+                </div>
+                
+                <!-- 筛选/查询区 -->
+                <div id="query-section" class="query-section">
+                    <div class="query-section-header">
+                        <span class="query-icon">🔍</span>
+                        <h4 class="query-title">智能查询</h4>
+                    </div>
                 <div id="result-filter" class="result-filter" style="display:none;">
                     <div class="filter-row">
                         <div class="filter-item">
@@ -256,6 +280,7 @@
                 <div id="loading-indicator" class="loading-indicator">
                     <div class="loading-spinner"></div>
                     <span class="loading-text" data-i18n="analyzing">AI正在分析中...</span>
+                </div>
                 </div>
             </div>
             
