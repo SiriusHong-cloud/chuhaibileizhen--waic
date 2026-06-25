@@ -250,6 +250,8 @@ const i18n = {
         viewAllNews: '查看全部 →',
         modulesTitle: '🛠️ 全链路功能模块',
         modulesDesc: '从文化合规到物流清关，一站式覆盖出海全流程',
+        mapTitle: '🗺️ 全球出海风险热力图',
+        mapDesc: '点击国家查看详细外贸信息和主流平台',
         analyzing: 'AI正在分析中...',
         scanningTitle: 'AI正在扫描中...',
         closeBtn: '关闭',
@@ -281,6 +283,8 @@ const i18n = {
         viewAllNews: 'View All →',
         modulesTitle: '🛠️ Full-Feature Modules',
         modulesDesc: 'From cultural compliance to logistics clearance, one-stop coverage',
+        mapTitle: '🗺️ Global Risk Heatmap',
+        mapDesc: 'Click on a country to see details',
         analyzing: 'AI is analyzing...',
         scanningTitle: 'AI is scanning...',
         closeBtn: 'Close',
@@ -353,6 +357,9 @@ document.addEventListener('DOMContentLoaded', function() {
             this.classList.add('active');
         });
     });
+    
+    // 初始化风险地图
+    initRiskMap();
 });
 
 // ========== 渲染模块卡片 ==========
@@ -2015,4 +2022,656 @@ async function loadHistoryDetail(id) {
 // ========== 滚动到顶部 ==========
 function scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ========== 风险地图 ==========
+let riskMapData = {};
+let riskChart = null;
+
+const COUNTRY_PLATFORMS = {
+    '美国': [
+        { icon: '🛒', name: 'Amazon', desc: '最大电商平台' },
+        { icon: '🛍️', name: 'Walmart', desc: '传统零售巨头' },
+        { icon: '🎵', name: 'TikTok Shop', desc: '新兴社交电商' },
+        { icon: '📦', name: 'eBay', desc: '老牌拍卖平台' },
+    ],
+    '欧盟': [
+        { icon: '🛒', name: 'Amazon EU', desc: '覆盖全欧' },
+        { icon: '🏷️', name: 'Zalando', desc: '时尚类龙头' },
+        { icon: '🎵', name: 'TikTok Shop', desc: '快速增长' },
+        { icon: '📦', name: 'eBay EU', desc: '综合平台' },
+    ],
+    '英国': [
+        { icon: '🛒', name: 'Amazon UK', desc: '英国最大' },
+        { icon: '🏷️', name: 'Argos', desc: '百货零售' },
+        { icon: '🎵', name: 'TikTok Shop', desc: '增长迅速' },
+        { icon: '📦', name: 'eBay UK', desc: '综合平台' },
+    ],
+    '德国': [
+        { icon: '🛒', name: 'Amazon DE', desc: '德国最大' },
+        { icon: '🏷️', name: 'Otto', desc: '本土巨头' },
+        { icon: '🔧', name: 'Zalando', desc: '时尚电商' },
+        { icon: '📦', name: 'eBay DE', desc: '综合平台' },
+    ],
+    '法国': [
+        { icon: '🛒', name: 'Amazon FR', desc: '法国最大' },
+        { icon: '🏷️', name: 'Cdiscount', desc: '本土平台' },
+        { icon: '🛍️', name: 'Fnac', desc: '3C+图书' },
+        { icon: '🎵', name: 'TikTok Shop', desc: '增长中' },
+    ],
+    '日本': [
+        { icon: '🛒', name: 'Amazon JP', desc: '最大平台' },
+        { icon: '🏪', name: '楽天市場', desc: '本土龙头' },
+        { icon: '🛍️', name: 'Yahoo!ショッピング', desc: '老牌平台' },
+        { icon: '🎵', name: 'TikTok Shop', desc: '快速增长' },
+    ],
+    '韩国': [
+        { icon: '🛒', name: 'Coupang', desc: '韩国最大' },
+        { icon: '🏪', name: 'Gmarket', desc: '老牌平台' },
+        { icon: '🛍️', name: '11번가', desc: 'SK旗下' },
+        { icon: '🎵', name: 'TikTok Shop', desc: '增长中' },
+    ],
+    '东南亚': [
+        { icon: '🛒', name: 'Shopee', desc: '东南亚最大' },
+        { icon: '🏪', name: 'Lazada', desc: '阿里系' },
+        { icon: '🎵', name: 'TikTok Shop', desc: '增长迅猛' },
+        { icon: '🛍️', name: 'Temu', desc: '跨境黑马' },
+    ],
+    '印尼': [
+        { icon: '🛒', name: 'Shopee ID', desc: '印尼最大' },
+        { icon: '🏪', name: 'Lazada ID', desc: '第二大' },
+        { icon: '🎵', name: 'TikTok Shop', desc: '增长快' },
+        { icon: '🛍️', name: 'Tokopedia', desc: '本土平台' },
+    ],
+    '越南': [
+        { icon: '🛒', name: 'Shopee VN', desc: '越南最大' },
+        { icon: '🏪', name: 'Lazada VN', desc: '第二大' },
+        { icon: '🎵', name: 'TikTok Shop', desc: '增长迅猛' },
+        { icon: '🛍️', name: 'Tiki', desc: '本土平台' },
+    ],
+    '泰国': [
+        { icon: '🛒', name: 'Shopee TH', desc: '泰国最大' },
+        { icon: '🏪', name: 'Lazada TH', desc: '第二大' },
+        { icon: '🎵', name: 'TikTok Shop', desc: '增长快' },
+        { icon: '🛍️', name: 'JD Central', desc: '京东旗下' },
+    ],
+    '马来西亚': [
+        { icon: '🛒', name: 'Shopee MY', desc: '马来西亚最大' },
+        { icon: '🏪', name: 'Lazada MY', desc: '第二大' },
+        { icon: '🎵', name: 'TikTok Shop', desc: '增长中' },
+        { icon: '🛍️', name: 'Presto Mall', desc: '本土平台' },
+    ],
+    '新加坡': [
+        { icon: '🛒', name: 'Shopee SG', desc: '新加坡最大' },
+        { icon: '🏪', name: 'Lazada SG', desc: '第二大' },
+        { icon: '🎵', name: 'TikTok Shop', desc: '增长快' },
+        { icon: '🛍️', name: 'Amazon SG', desc: '亚马逊布局' },
+    ],
+    '菲律宾': [
+        { icon: '🛒', name: 'Shopee PH', desc: '菲律宾最大' },
+        { icon: '🏪', name: 'Lazada PH', desc: '第二大' },
+        { icon: '🎵', name: 'TikTok Shop', desc: '增长迅猛' },
+        { icon: '🛍️', name: 'Zalora', desc: '时尚平台' },
+    ],
+    '巴西': [
+        { icon: '🛒', name: 'Mercado Livre', desc: '拉美最大' },
+        { icon: '🏪', name: 'Amazon BR', desc: '亚马逊巴西' },
+        { icon: '🛍️', name: 'Magazine Luiza', desc: '本土巨头' },
+        { icon: '🎵', name: 'Shopee BR', desc: '快速增长' },
+    ],
+    '墨西哥': [
+        { icon: '🛒', name: 'Mercado Libre', desc: '墨西哥最大' },
+        { icon: '🏪', name: 'Amazon MX', desc: '亚马逊墨西哥' },
+        { icon: '🛍️', name: 'Liverpool', desc: '本土百货' },
+        { icon: '🎵', name: 'TikTok Shop', desc: '新进入' },
+    ],
+    '印度': [
+        { icon: '🛒', name: 'Flipkart', desc: '印度最大' },
+        { icon: '🏪', name: 'Amazon IN', desc: '亚马逊印度' },
+        { icon: '🛍️', name: 'Meesho', desc: '社交电商' },
+        { icon: '🎵', name: 'TikTok', desc: '已被禁' },
+    ],
+    '俄罗斯': [
+        { icon: '🛒', name: 'Wildberries', desc: '俄罗斯最大' },
+        { icon: '🏪', name: 'Ozon', desc: '第二大平台' },
+        { icon: '🛍️', name: 'AliExpress RU', desc: '速卖通' },
+        { icon: '🎵', name: 'Yandex.Market', desc: '俄本土' },
+    ],
+    '中东': [
+        { icon: '🛒', name: 'Noon', desc: '中东本土' },
+        { icon: '🏪', name: 'Amazon.ae', desc: '亚马逊中东' },
+        { icon: '🛍️', name: 'Jarir', desc: '3C零售' },
+        { icon: '🎵', name: 'TikTok Shop', desc: '增长中' },
+    ],
+    '沙特阿拉伯': [
+        { icon: '🛒', name: 'Noon SA', desc: '沙特最大' },
+        { icon: '🏪', name: 'Amazon.ae', desc: '亚马逊沙特' },
+        { icon: '🛍️', name: 'Jarir', desc: '3C龙头' },
+        { icon: '🎵', name: 'TikTok Shop', desc: '增长快' },
+    ],
+    '阿联酋': [
+        { icon: '🛒', name: 'Noon AE', desc: '阿联酋最大' },
+        { icon: '🏪', name: 'Amazon.ae', desc: '亚马逊阿联酋' },
+        { icon: '🛍️', name: 'Carrefour UAE', desc: '零售巨头' },
+        { icon: '🎵', name: 'TikTok Shop', desc: '增长中' },
+    ],
+    '澳大利亚': [
+        { icon: '🛒', name: 'Amazon AU', desc: '澳大利亚最大' },
+        { icon: '🏪', name: 'eBay AU', desc: '老牌平台' },
+        { icon: '🛍️', name: 'Myer', desc: '百货零售' },
+        { icon: '🎵', name: 'TikTok Shop', desc: '新进入' },
+    ],
+    '加拿大': [
+        { icon: '🛒', name: 'Amazon CA', desc: '加拿大最大' },
+        { icon: '🏪', name: 'Walmart CA', desc: '零售巨头' },
+        { icon: '🛍️', name: 'Shopify', desc: '独立站生态' },
+        { icon: '📦', name: 'eBay CA', desc: '综合平台' },
+    ],
+    '意大利': [
+        { icon: '🛒', name: 'Amazon IT', desc: '意大利最大' },
+        { icon: '🏪', name: 'ePrice', desc: '本土平台' },
+        { icon: '🛍️', name: 'Zalando IT', desc: '时尚平台' },
+        { icon: '🎵', name: 'TikTok Shop', desc: '增长中' },
+    ],
+    '西班牙': [
+        { icon: '🛒', name: 'Amazon ES', desc: '西班牙最大' },
+        { icon: '🏪', name: 'El Corte Inglés', desc: '本土百货' },
+        { icon: '🛍️', name: 'Zalando ES', desc: '时尚平台' },
+        { icon: '🎵', name: 'TikTok Shop', desc: '增长快' },
+    ],
+    '土耳其': [
+        { icon: '🛒', name: 'Trendyol', desc: '土耳其最大' },
+        { icon: '🏪', name: 'Hepsiburada', desc: '第二大平台' },
+        { icon: '🛍️', name: 'N11', desc: '本土平台' },
+        { icon: '🎵', name: 'TikTok Shop', desc: '新进入' },
+    ],
+    '以色列': [
+        { icon: '🛒', name: 'Amazon IL', desc: '亚马逊以色列' },
+        { icon: '🏪', name: 'Rami Levy', desc: '本土零售' },
+        { icon: '🛍️', name: 'Shufersal', desc: '零售巨头' },
+        { icon: '📱', name: '独立站', desc: 'DTC模式' },
+    ],
+    '南非': [
+        { icon: '🛒', name: 'Takealot', desc: '南非最大' },
+        { icon: '🏪', name: 'Shoprite', desc: '零售巨头' },
+        { icon: '🛍️', name: 'Woolworths', desc: '高端零售' },
+        { icon: '📱', name: '独立站', desc: 'DTC增长' },
+    ],
+    '波兰': [
+        { icon: '🛒', name: 'Allegro', desc: '波兰最大' },
+        { icon: '🏪', name: 'Amazon PL', desc: '亚马逊波兰' },
+        { icon: '🛍️', name: 'CD Projekt', desc: '游戏零售' },
+        { icon: '📦', name: 'eBay PL', desc: '综合平台' },
+    ],
+    '瑞典': [
+        { icon: '🛒', name: 'Amazon SE', desc: '亚马逊瑞典' },
+        { icon: '🏪', name: 'Tradera', desc: '本土拍卖' },
+        { icon: '🛍️', name: 'Zalando SE', desc: '时尚平台' },
+        { icon: '📱', name: '独立站', desc: 'DTC受欢迎' },
+    ],
+    '瑞士': [
+        { icon: '🛒', name: 'Amazon DE', desc: '亚马逊德国站' },
+        { icon: '🏪', name: 'Digitec', desc: '本土3C' },
+        { icon: '🛍️', name: 'Galaxus', desc: '综合电商' },
+        { icon: '📱', name: '独立站', desc: '高客单价' },
+    ],
+    '阿根廷': [
+        { icon: '🛒', name: 'Mercado Libre', desc: '阿根廷最大' },
+        { icon: '🏪', name: 'Fravega', desc: '本土家电' },
+        { icon: '🛍️', name: 'Garbarino', desc: '零售连锁' },
+        { icon: '📱', name: '独立站', desc: '增长中' },
+    ],
+    '智利': [
+        { icon: '🛒', name: 'Mercado Libre', desc: '智利最大' },
+        { icon: '🏪', name: 'Falabella', desc: '零售巨头' },
+        { icon: '🛍️', name: 'Paris.cl', desc: '百货电商' },
+        { icon: '📱', name: '独立站', desc: 'DTC机会' },
+    ],
+    '哥伦比亚': [
+        { icon: '🛒', name: 'Mercado Libre', desc: '哥伦比亚最大' },
+        { icon: '🏪', name: 'Falabella', desc: '零售巨头' },
+        { icon: '🛍️', name: 'Exito', desc: '本土零售' },
+        { icon: '📱', name: '独立站', desc: '增长中' },
+    ],
+    '中国香港': [
+        { icon: '🛒', name: 'Shopee HK', desc: 'Shopee香港' },
+        { icon: '🏪', name: 'HKTVmall', desc: '本土平台' },
+        { icon: '🛍️', name: 'Taobao HK', desc: '淘宝香港' },
+        { icon: '📦', name: '转口贸易', desc: '中转枢纽' },
+    ],
+    '中国台湾': [
+        { icon: '🛒', name: '蝦皮購物', desc: '台湾最大' },
+        { icon: '🏪', name: 'PChome', desc: '本土平台' },
+        { icon: '🛍️', name: 'MOMO購物', desc: '富邦旗下' },
+        { icon: '📦', name: '露天拍賣', desc: '老牌平台' },
+    ],
+    '新西兰': [
+        { icon: '🛒', name: 'Trade Me', desc: '新西兰最大' },
+        { icon: '🏪', name: 'Amazon AU', desc: '亚马逊澳洲站' },
+        { icon: '🛍️', name: 'The Warehouse', desc: '零售巨头' },
+        { icon: '📱', name: '独立站', desc: 'DTC增长' },
+    ],
+    '尼日利亚': [
+        { icon: '🛒', name: 'Jumia', desc: '非洲最大' },
+        { icon: '🏪', name: 'Konga', desc: '第二大平台' },
+        { icon: '🛍️', name: 'Jiji', desc: '分类信息' },
+        { icon: '📱', name: '独立站', desc: '高潜力' },
+    ],
+    '埃及': [
+        { icon: '🛒', name: 'Jumia EG', desc: '埃及最大' },
+        { icon: '🏪', name: 'Souq', desc: '亚马逊旗下' },
+        { icon: '🛍️', name: 'Noon EG', desc: 'Noon埃及' },
+        { icon: '📱', name: '独立站', desc: '增长中' },
+    ],
+    '肯尼亚': [
+        { icon: '🛒', name: 'Jumia KE', desc: '肯尼亚最大' },
+        { icon: '🏪', name: 'Kilimall', desc: '中资背景' },
+        { icon: '🛍️', name: 'Masoko', desc: '本土平台' },
+        { icon: '📱', name: '独立站', desc: '潜力市场' },
+    ],
+    '巴基斯坦': [
+        { icon: '🛒', name: 'Daraz', desc: '巴基斯坦最大' },
+        { icon: '🏪', name: 'OLX', desc: '分类信息' },
+        { icon: '🛍️', name: 'Telemart', desc: '本土平台' },
+        { icon: '📱', name: '独立站', desc: '增长中' },
+    ],
+    '孟加拉国': [
+        { icon: '🛒', name: 'Daraz BD', desc: '孟加拉最大' },
+        { icon: '🏪', name: 'Evaly', desc: '本土平台' },
+        { icon: '🛍️', name: 'Chaldal', desc: '生鲜电商' },
+        { icon: '📱', name: '独立站', desc: '潜力大' },
+    ],
+};
+
+const MAP_NEWS = [
+    { tag: '法规', tagType: 'policy', title: '欧盟新电池法规2026年8月生效，含钴/锂电池出口需关注', time: '2小时前' },
+    { tag: '政策', tagType: 'policy', title: '美国UFLPA执法扩大，光伏/番茄/棉花品类被纳入扣押清单', time: '5小时前' },
+    { tag: '认证', tagType: 'cert', title: '印尼新规：所有进口商品需申请Postel认证方可清关', time: '1天前' },
+    { tag: '认证', tagType: 'cert', title: '沙特SABER系统新增5个品类强制认证，建材/汽车配件在列', time: '2天前' },
+    { tag: '税务', tagType: 'tariff', title: '日本JCT消费税新规2025年全面执行，无JCT号难以企业采购', time: '3天前' },
+    { tag: '平台', tagType: 'platform', title: 'TikTok Shop美国站开放本地小店招商，跨境卖家迎新机遇', time: '4天前' },
+    { tag: '税务', tagType: 'tariff', title: '巴西Remessa Conforme新税政全面执行，跨境包裹50美元以上需缴税', time: '5天前' },
+    { tag: '政策', tagType: 'policy', title: '东盟原产地证电子化全面推进，FORM D在线签发', time: '6天前' },
+];
+
+const MAP_STORIES = [
+    { title: 'Shein在墨西哥被查税务合规，2025年补缴税款超10亿比索', country: 'MX 墨西哥' },
+    { title: '某品牌牙膏在沙特因含氟成分被认定为不符合伊斯兰规范被强制下架', country: 'SA 沙特' },
+    { title: '出口日本食品未贴JAS有机标签，整批货物被退回损失50万', country: 'JP 日本' },
+    { title: '3C配件卖家使用伪造CE标志，货物在荷兰海关被扣押销毁', country: 'EU 欧盟' },
+    { title: '服装品牌在印尼因清真认证缺失遭伊斯兰组织抵制，损失惨重', country: 'ID 印尼' },
+    { title: '玩具出口美国无CPC认证，被CPSC通报后在Amazon全站下架', country: 'US 美国' },
+    { title: '化妆品出口韩国未做KFDA注册，4000件产品被海关退货', country: 'KR 韩国' },
+    { title: '某跨境电商公司因转移定价被印度税务局调查，补税罚款500万', country: 'IN 印度' },
+];
+
+async function initRiskMap() {
+    try {
+        const res = await fetch('/api/risk-map');
+        riskMapData = await res.json();
+        
+        const mapRes = await fetch('https://cdn.jsdelivr.net/npm/echarts@5.4.3/map/json/world.json');
+        const mapJson = await mapRes.json();
+        echarts.registerMap('world', mapJson);
+        
+        const chartDom = document.getElementById('risk-map');
+        if (!chartDom) return;
+        
+        riskChart = echarts.init(chartDom);
+        
+        const data = Object.entries(riskMapData).map(([name, info]) => ({
+            name: info.en,
+            value: info.score,
+            riskLevel: info.risk,
+            cnName: name,
+        }));
+        
+        const option = {
+            tooltip: {
+                trigger: 'item',
+                formatter: function(params) {
+                    if (params.data) {
+                        const riskText = {
+                            'high': '🔴 高风险',
+                            'medium_high': '🟠 中高风险',
+                            'medium': '🟡 中风险',
+                            'low': '🟢 低风险',
+                        }[params.data.riskLevel] || '⚪ 未知';
+                        return `<div style="padding:8px;">
+                            <div style="font-weight:600;font-size:14px;margin-bottom:4px;">${params.data.cnName} ${params.name}</div>
+                            <div style="font-size:12px;color:#666;">风险评分：${params.data.value}/100</div>
+                            <div style="font-size:12px;">${riskText}</div>
+                            <div style="font-size:11px;color:#999;margin-top:4px;">点击查看详情</div>
+                        </div>`;
+                    }
+                    return params.name;
+                }
+            },
+            visualMap: {
+                min: 40,
+                max: 90,
+                left: 20,
+                bottom: 20,
+                text: ['低风险', '高风险'],
+                calculable: true,
+                inRange: {
+                    color: ['#10B981', '#34D399', '#FBBF24', '#F59E0B', '#EF4444']
+                },
+                textStyle: {
+                    color: 'var(--text-secondary)',
+                    fontSize: 11,
+                }
+            },
+            series: [{
+                type: 'map',
+                map: 'world',
+                roam: true,
+                zoom: 1.2,
+                scaleLimit: { min: 0.8, max: 5 },
+                label: { show: false },
+                emphasis: {
+                    label: { show: true, fontSize: 10 },
+                    itemStyle: {
+                        areaColor: '#3B82F6',
+                    }
+                },
+                itemStyle: {
+                    borderColor: '#fff',
+                    borderWidth: 0.5,
+                    areaColor: '#E2E8F0',
+                },
+                data: data,
+                nameMap: {
+                    'United States': 'United States',
+                    'China': 'China',
+                    'Japan': 'Japan',
+                    'Korea': 'South Korea',
+                    'United Kingdom': 'United Kingdom',
+                    'Germany': 'Germany',
+                    'France': 'France',
+                    'Italy': 'Italy',
+                    'Spain': 'Spain',
+                    'Russia': 'Russia',
+                    'Brazil': 'Brazil',
+                    'Mexico': 'Mexico',
+                    'India': 'India',
+                    'Australia': 'Australia',
+                    'Canada': 'Canada',
+                    'Indonesia': 'Indonesia',
+                    'Vietnam': 'Vietnam',
+                    'Thailand': 'Thailand',
+                    'Malaysia': 'Malaysia',
+                    'Singapore': 'Singapore',
+                    'Philippines': 'Philippines',
+                    'Saudi Arabia': 'Saudi Arabia',
+                    'United Arab Emirates': 'UAE',
+                    'Turkey': 'Turkey',
+                    'Israel': 'Israel',
+                    'South Africa': 'South Africa',
+                    'Poland': 'Poland',
+                    'Sweden': 'Sweden',
+                    'Switzerland': 'Switzerland',
+                    'Argentina': 'Argentina',
+                    'Chile': 'Chile',
+                    'Colombia': 'Colombia',
+                    'New Zealand': 'New Zealand',
+                    'Nigeria': 'Nigeria',
+                    'Egypt': 'Egypt',
+                    'Kenya': 'Kenya',
+                    'Pakistan': 'Pakistan',
+                    'Bangladesh': 'Bangladesh',
+                }
+            }]
+        };
+        
+        riskChart.setOption(option);
+        
+        riskChart.on('click', function(params) {
+            if (params.data && params.data.cnName) {
+                openCountryModal(params.data.cnName);
+            }
+        });
+        
+        window.addEventListener('resize', function() {
+            if (riskChart) riskChart.resize();
+        });
+        
+        renderMapNews();
+        renderMapStories();
+        
+    } catch (e) {
+        console.error('Init risk map failed:', e);
+    }
+}
+
+function renderMapNews() {
+    const container = document.getElementById('map-news-list');
+    if (!container) return;
+    
+    container.innerHTML = MAP_NEWS.map(item => `
+        <div class="map-news-item" onclick="openModule('trade-news')">
+            <span class="tag ${item.tagType}">${item.tag}</span>
+            <div class="title">${item.title}</div>
+            <div class="meta">
+                <span>${item.time}</span>
+            </div>
+        </div>
+    `).join('');
+}
+
+function renderMapStories() {
+    const container = document.getElementById('map-stories-list');
+    if (!container) return;
+    
+    container.innerHTML = MAP_STORIES.map(item => `
+        <div class="map-story-item" onclick="openModule('stories')">
+            <div class="title">${item.title}</div>
+            <div class="meta">
+                <span class="country">${item.country}</span>
+            </div>
+        </div>
+    `).join('');
+}
+
+// ========== 国家详情弹窗 ==========
+function openCountryModal(countryName) {
+    const info = riskMapData[countryName];
+    if (!info) return;
+    
+    const isEn = currentLang === 'en';
+    const modal = document.getElementById('country-modal');
+    const body = document.getElementById('country-modal-body');
+    
+    const platforms = getCountryPlatforms(countryName);
+    const riskText = {
+        'high': isEn ? '🔴 High Risk' : '🔴 高风险',
+        'medium_high': isEn ? '🟠 Medium-High Risk' : '🟠 中高风险',
+        'medium': isEn ? '🟡 Medium Risk' : '🟡 中风险',
+        'low': isEn ? '🟢 Low Risk' : '🟢 低风险',
+    }[info.risk] || '⚪ Unknown';
+    
+    const categoriesHtml = info.hot_categories.map(cat => 
+        `<span class="category-tag">${cat}</span>`
+    ).join('');
+    
+    const platformsHtml = platforms.map(p => `
+        <div class="platform-card" onclick="openModule('platform')">
+            <div class="icon">${p.icon}</div>
+            <div class="name">${p.name}</div>
+            <div class="desc">${p.desc}</div>
+        </div>
+    `).join('');
+    
+    body.innerHTML = `
+        <div class="country-modal-header">
+            <div class="flag">${info.flag}</div>
+            <div class="name">${countryName}</div>
+            <div class="name-en">${info.en}</div>
+            <div class="risk-badge">${riskText} · ${info.score}分</div>
+        </div>
+        <div class="country-modal-body">
+            <div class="country-section">
+                <div class="country-section-title">
+                    <span class="icon">📊</span>
+                    ${isEn ? 'Basic Info' : '基本信息'}
+                </div>
+                <div class="country-info-grid">
+                    <div class="country-info-item">
+                        <div class="label">${isEn ? 'Risk Score' : '风险评分'}</div>
+                        <div class="value">${info.score}/100</div>
+                    </div>
+                    <div class="country-info-item">
+                        <div class="label">${isEn ? 'Export Volume' : '贸易额(亿美元)'}</div>
+                        <div class="value">${info.export_volume}</div>
+                    </div>
+                    <div class="country-info-item">
+                        <div class="label">${isEn ? 'Certification' : '主要认证'}</div>
+                        <div class="value">${info.认证}</div>
+                    </div>
+                    <div class="country-info-item">
+                        <div class="label">${isEn ? 'Cultural Taboos' : '文化禁忌'}</div>
+                        <div class="value" style="font-size:12px;font-weight:500;">${info.禁忌}</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="country-section">
+                <div class="country-section-title">
+                    <span class="icon">🛒</span>
+                    ${isEn ? 'Major Platforms' : '主流购物平台'}
+                </div>
+                <div class="country-platforms">
+                    ${platformsHtml}
+                </div>
+            </div>
+            
+            <div class="country-section">
+                <div class="country-section-title">
+                    <span class="icon">🔥</span>
+                    ${isEn ? 'Hot Categories' : '热门品类'}
+                </div>
+                <div class="country-categories">
+                    ${categoriesHtml}
+                </div>
+            </div>
+            
+            <div class="country-section">
+                <div class="country-section-title">
+                    <span class="icon">⚠️</span>
+                    ${isEn ? 'Key Risk Points' : '关键风险提示'}
+                </div>
+                <div class="country-risk-box">
+                    <div class="label">${isEn ? 'Important Notes' : '出海须知'}</div>
+                    <div class="content">${info.key_risk}</div>
+                </div>
+            </div>
+            
+            <div class="country-section" style="text-align:center;padding-top:8px;">
+                <button class="btn-primary" onclick="startCountryScan('${countryName}')" style="padding:12px 32px;font-size:15px;">
+                    🚀 ${isEn ? 'Start Full Country Analysis' : '开始该国全面检测'}
+                </button>
+            </div>
+        </div>
+    `;
+    
+    modal.classList.add('show');
+}
+
+function getCountryPlatforms(countryName) {
+    if (COUNTRY_PLATFORMS[countryName]) {
+        return COUNTRY_PLATFORMS[countryName];
+    }
+    
+    const regionMap = {
+        '欧盟': '欧盟',
+        '德国': '德国',
+        '法国': '法国',
+        '意大利': '意大利',
+        '西班牙': '西班牙',
+        '荷兰': '欧盟',
+        '比利时': '欧盟',
+        '瑞典': '瑞典',
+        '波兰': '波兰',
+        '瑞士': '瑞士',
+        '奥地利': '欧盟',
+        '丹麦': '欧盟',
+        '芬兰': '欧盟',
+        '葡萄牙': '欧盟',
+        '希腊': '欧盟',
+        '美国': '美国',
+        '加拿大': '加拿大',
+        '墨西哥': '墨西哥',
+        '巴西': '巴西',
+        '阿根廷': '阿根廷',
+        '智利': '智利',
+        '哥伦比亚': '哥伦比亚',
+        '日本': '日本',
+        '韩国': '韩国',
+        '澳大利亚': '澳大利亚',
+        '新西兰': '新西兰',
+        '印度': '印度',
+        '俄罗斯': '俄罗斯',
+        '土耳其': '土耳其',
+        '以色列': '以色列',
+        '南非': '南非',
+        '沙特阿拉伯': '沙特阿拉伯',
+        '阿联酋': '阿联酋',
+        '卡塔尔': '中东',
+        '科威特': '中东',
+        '巴林': '中东',
+        '阿曼': '中东',
+        '印尼': '印尼',
+        '越南': '越南',
+        '泰国': '泰国',
+        '马来西亚': '马来西亚',
+        '新加坡': '新加坡',
+        '菲律宾': '菲律宾',
+        '缅甸': '东南亚',
+        '柬埔寨': '东南亚',
+        '老挝': '东南亚',
+        '文莱': '中东',
+        '中国香港': '中国香港',
+        '中国台湾': '中国台湾',
+        '尼日利亚': '尼日利亚',
+        '埃及': '埃及',
+        '肯尼亚': '肯尼亚',
+        '巴基斯坦': '巴基斯坦',
+        '孟加拉国': '孟加拉国',
+        '斯里兰卡': '南亚',
+        '蒙古': '东亚',
+    };
+    
+    const region = regionMap[countryName];
+    if (region && COUNTRY_PLATFORMS[region]) {
+        return COUNTRY_PLATFORMS[region];
+    }
+    
+    return [
+        { icon: '🛒', name: 'Amazon', desc: '亚马逊全球' },
+        { icon: '📦', name: 'eBay', desc: 'eBay国际' },
+        { icon: '🎵', name: 'TikTok Shop', desc: '社交电商' },
+        { icon: '📱', name: '独立站', desc: 'DTC模式' },
+    ];
+}
+
+function startCountryScan(countryName) {
+    closeCountryModal();
+    const isEn = currentLang === 'en';
+    
+    document.getElementById('quick-market').value = countryName;
+    if (typeof initMarketSelects === 'function') {
+        setTimeout(() => { initMarketSelects(); }, 50);
+    }
+    
+    openModule('compliance');
+}
+
+function closeCountryModal() {
+    document.getElementById('country-modal').classList.remove('show');
+}
+
+function closeCountryModalOnOverlay(event) {
+    if (event.target.id === 'country-modal') {
+        closeCountryModal();
+    }
 }

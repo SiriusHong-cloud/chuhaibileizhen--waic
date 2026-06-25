@@ -443,7 +443,8 @@ body {
 
 /* ========== 区块通用样式 ========== */
 .news-section,
-.modules-section {
+.modules-section,
+.map-section {
     margin-bottom: 56px;
 }
 
@@ -746,6 +747,335 @@ body {
 .module-card:hover .module-arrow {
     color: var(--primary);
     transform: translateX(4px);
+}
+
+/* ========== 地图图例 ========== */
+.map-legend {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.legend-dot.danger {
+    background: #EF4444;
+}
+
+.legend-dot.warning {
+    background: #F59E0B;
+}
+
+.legend-dot.safe {
+    background: #10B981;
+}
+
+/* ========== 地图三栏布局 ========== */
+.map-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr 280px;
+    gap: 20px;
+    height: 520px;
+}
+
+.map-side-panel {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.panel-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--bg-tertiary);
+}
+
+.panel-icon {
+    font-size: 18px;
+}
+
+.panel-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.panel-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+}
+
+.map-news-item,
+.map-story-item {
+    padding: 12px;
+    border-radius: var(--radius-md);
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+    border: 1px solid transparent;
+}
+
+.map-news-item:hover,
+.map-story-item:hover {
+    background: var(--primary-bg);
+    border-color: var(--primary-border);
+}
+
+.map-news-item .tag,
+.map-story-item .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    font-size: 10px;
+    font-weight: 600;
+    border-radius: 10px;
+    margin-bottom: 6px;
+}
+
+.map-news-item .tag.policy { background: var(--primary-bg); color: var(--primary); }
+.map-news-item .tag.tariff { background: var(--warning-bg); color: var(--warning); }
+.map-news-item .tag.platform { background: var(--success-bg); color: var(--success); }
+.map-news-item .tag.cert { background: var(--danger-bg); color: var(--danger); }
+
+.map-story-item {
+    background: rgba(239, 68, 68, 0.05);
+    border-color: rgba(239, 68, 68, 0.15);
+}
+
+.map-story-item:hover {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: var(--danger);
+}
+
+.map-news-item .title,
+.map-story-item .title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.4;
+    margin-bottom: 4px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.map-news-item .meta,
+.map-story-item .meta {
+    font-size: 11px;
+    color: var(--text-muted);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.map-story-item .country {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--danger);
+}
+
+.map-center {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    position: relative;
+}
+
+.risk-map {
+    width: 100%;
+    height: 100%;
+}
+
+/* ========== 国家详情弹窗 ========== */
+.country-modal {
+    max-width: 720px;
+    width: 95%;
+    max-height: 85vh;
+    padding: 0;
+    overflow: hidden;
+}
+
+.country-modal-header {
+    padding: 28px 32px 20px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    position: relative;
+}
+
+.country-modal-header .flag {
+    font-size: 48px;
+    margin-bottom: 8px;
+}
+
+.country-modal-header .name {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.country-modal-header .name-en {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.country-modal-header .risk-badge {
+    position: absolute;
+    top: 24px;
+    right: 32px;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+}
+
+.country-modal-body {
+    padding: 24px 32px 32px;
+    max-height: calc(85vh - 140px);
+    overflow-y: auto;
+}
+
+.country-section {
+    margin-bottom: 24px;
+}
+
+.country-section:last-child {
+    margin-bottom: 0;
+}
+
+.country-section-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.country-section-title .icon {
+    font-size: 18px;
+}
+
+.country-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.country-info-item {
+    background: var(--bg);
+    border-radius: var(--radius-md);
+    padding: 12px 16px;
+}
+
+.country-info-item .label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+
+.country-info-item .value {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.country-platforms {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.platform-card {
+    flex: 1;
+    min-width: 140px;
+    background: var(--bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 14px;
+    text-align: center;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.platform-card:hover {
+    border-color: var(--primary);
+    background: var(--primary-bg);
+    transform: translateY(-2px);
+}
+
+.platform-card .icon {
+    font-size: 28px;
+    margin-bottom: 6px;
+}
+
+.platform-card .name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 2px;
+}
+
+.platform-card .desc {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.country-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.category-tag {
+    padding: 6px 14px;
+    background: var(--primary-bg);
+    color: var(--primary);
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.country-risk-box {
+    background: var(--warning-bg);
+    border: 1px solid var(--warning-border);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+}
+
+.country-risk-box .label {
+    font-size: 12px;
+    color: var(--warning);
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.country-risk-box .content {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
 }
 
 /* ========== 结果面板 ========== */
@@ -1506,6 +1836,10 @@ body {
     .modules-grid {
         grid-template-columns: repeat(2, 1fr);
     }
+    .map-layout {
+        grid-template-columns: 240px 1fr 240px;
+        height: 460px;
+    }
 }
 
 @media (max-width: 900px) {
@@ -1532,6 +1866,20 @@ body {
     .news-grid,
     .modules-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .map-layout {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+    
+    .map-side-panel {
+        max-height: 300px;
+    }
+    
+    .map-center {
+        height: 400px;
+        order: -1;
     }
     
     .result-panel {

@@ -79,6 +79,40 @@
             </div>
         </section>
 
+        <!-- ========== 全球风险地图 ========== -->
+        <section class="map-section">
+            <div class="section-header">
+                <h3 class="section-title" data-i18n="mapTitle">🗺️ 全球出海风险热力图</h3>
+                <p class="section-desc" data-i18n="mapDesc">点击国家查看详细外贸信息和主流平台</p>
+                <div class="map-legend">
+                    <span class="legend-item"><span class="legend-dot danger"></span>高风险</span>
+                    <span class="legend-item"><span class="legend-dot warning"></span>中高风险</span>
+                    <span class="legend-item"><span class="legend-dot safe"></span>低风险</span>
+                </div>
+            </div>
+            <div class="map-layout">
+                <div class="map-side-panel left-panel">
+                    <div class="panel-header">
+                        <span class="panel-icon">📰</span>
+                        <span class="panel-title">行业速报</span>
+                    </div>
+                    <div class="panel-content" id="map-news-list">
+                    </div>
+                </div>
+                <div class="map-center">
+                    <div id="risk-map" class="risk-map"></div>
+                </div>
+                <div class="map-side-panel right-panel">
+                    <div class="panel-header">
+                        <span class="panel-icon">💥</span>
+                        <span class="panel-title">踩雷案例</span>
+                    </div>
+                    <div class="panel-content" id="map-stories-list">
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- ========== 今日新闻速览 ========== -->
         <section class="news-section">
             <div class="section-header">
@@ -259,6 +293,14 @@
         </div>
         <div id="history-list" class="history-list"></div>
     </aside>
+
+    <!-- ========== 国家详情弹窗 ========== -->
+    <div id="country-modal" class="modal-overlay" onclick="closeCountryModalOnOverlay(event)">
+        <div class="modal-content country-modal">
+            <button class="modal-close" onclick="closeCountryModal()">×</button>
+            <div id="country-modal-body"></div>
+        </div>
+    </div>
 
     <!-- ========== 店铺体检iframe弹窗 ========== -->
     <div id="store-modal" class="modal-overlay" onclick="closeStoreModal(event)">
