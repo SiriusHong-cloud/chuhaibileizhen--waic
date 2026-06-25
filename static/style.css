@@ -2530,3 +2530,204 @@ body {
         font-size: 12px;
     }
 }
+
+/* ========== 知识卡片区 ========== */
+.knowledge-section {
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.knowledge-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.knowledge-icon {
+    font-size: 24px;
+}
+
+.knowledge-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.knowledge-subtitle {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-left: auto;
+}
+
+.knowledge-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.knowledge-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.knowledge-card:hover {
+    border-color: var(--primary-color);
+    background: var(--bg-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(26, 86, 219, 0.08);
+}
+
+.knowledge-card.expanded {
+    border-color: var(--primary-color);
+    background: var(--bg-primary);
+    box-shadow: 0 4px 16px rgba(26, 86, 219, 0.12);
+}
+
+.card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.card-icon {
+    font-size: 28px;
+    flex-shrink: 0;
+}
+
+.card-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.card-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.card-desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+.card-tag {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+    flex-shrink: 0;
+}
+
+.tag-hot {
+    background: #FEF3C7;
+    color: #D97706;
+}
+
+.tag-must {
+    background: #DBEAFE;
+    color: #2563EB;
+}
+
+.tag-important {
+    background: #FCE7F3;
+    color: #DB2777;
+}
+
+.tag-warning {
+    background: #FEE2E2;
+    color: #DC2626;
+}
+
+.card-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, margin-top 0.3s ease;
+}
+
+.card-content p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+}
+
+.knowledge-card.expanded .card-content {
+    max-height: 200px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--border-color);
+}
+
+.card-arrow {
+    position: absolute;
+    bottom: 8px;
+    right: 12px;
+    font-size: 10px;
+    color: var(--text-tertiary);
+    transition: transform 0.3s ease;
+}
+
+.knowledge-card.expanded .card-arrow {
+    transform: rotate(180deg);
+}
+
+/* ========== 查询区 ========== */
+.query-section {
+    background: var(--bg-primary);
+    border-radius: 12px;
+}
+
+.query-section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.query-icon {
+    font-size: 24px;
+}
+
+.query-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+/* 知识卡片响应式 */
+@media (max-width: 900px) {
+    .knowledge-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .knowledge-cards {
+        grid-template-columns: 1fr;
+    }
+    
+    .knowledge-header {
+        flex-wrap: wrap;
+    }
+    
+    .knowledge-subtitle {
+        margin-left: 0;
+        width: 100%;
+    }
+    
+    .knowledge-title {
+        font-size: 16px;
+    }
+}

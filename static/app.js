@@ -186,6 +186,175 @@ const MODULES = [
     }
 ];
 
+// ========== 模块知识卡片 ==========
+const KNOWLEDGE_CARDS = {
+    cultural: {
+        title: '文化雷区知识库',
+        cards: [
+            { icon: '🎨', title: '颜色禁忌', desc: '各国颜色象征差异大', content: '日本紫色高贵、中国红色喜庆、欧美白色纯洁、泰国黄色王室专用、中东绿色神圣。选品和包装前务必确认目标市场颜色偏好。', tag: '热门' },
+            { icon: '🔢', title: '数字忌讳', desc: '数字背后有文化含义', content: '中日韩忌讳4（死）、欧美忌讳13（不吉利）、印度忌讳0、中东忌讳5。价格设置、SKU编号、促销日期都要避开忌讳数字。', tag: '必看' },
+            { icon: '🐾', title: '动物图案', desc: '动物寓意因地而异', content: '中国龙是权威、西方龙是邪恶；印度牛神圣不可侵犯；伊斯兰国家禁止猪图案；澳大利亚袋鼠是国宝；东南亚大象象征吉祥。', tag: '' },
+            { icon: '🙏', title: '宗教禁忌', desc: '宗教影响渗透生活', content: '伊斯兰国家禁猪肉酒精、斋月白天不可公开进食；印度教敬牛禁牛肉；佛教国家对佛像需恭敬；基督教国家圣诞节是重要节日。', tag: '重要' },
+            { icon: '✋', title: '肢体语言', desc: '手势含义大不同', content: '竖大拇指在中东/伊朗是侮辱；OK手势在巴西/土耳其是脏话；双手递物在日本是尊重；用左手递东西在印度/中东不礼貌。', tag: '' },
+            { icon: '👤', title: '性别敏感', desc: '性别观念差异显著', content: '中东国家对性别隔离要求严格；北欧强调性别平等；日韩职场等级分明；东南亚相对宽松。广告和包装中人物形象需谨慎处理。', tag: '' },
+        ]
+    },
+    compliance: {
+        title: '合规法规知识库',
+        cards: [
+            { icon: '🛡️', title: '产品认证', desc: '各国强制认证清单', content: '欧盟CE、美国FCC/FDA、日本PSE/TELEC、韩国KC、澳大利亚RCM、巴西INMETRO、俄罗斯EAC、沙特SASO/SABER、尼日利亚SONCAP。', tag: '热门' },
+            { icon: '🔒', title: '数据隐私', desc: '全球数据保护法规', content: '欧盟GDPR（最高4%全球营业额罚款）、美国CCPA、巴西LGPD、日本APPI、韩国PIPA、印度DPDP。跨境电商必须重视用户数据保护。', tag: '重要' },
+            { icon: '📢', title: '广告法规', desc: '广告宣传合规要求', content: '各国对虚假宣传、比较广告、代言人都有严格规定。德国禁止比较广告、英国ASA监管严格、美国FTC要求披露赞助关系、中国广告法禁用极限词。', tag: '' },
+            { icon: '💰', title: '税务合规', desc: '跨境税务要点', content: '欧盟VAT（IOSS/OSS）、美国销售税（各州不同）、英国VAT、日本JCT、澳大利亚GST、加拿大GST。税号注册和申报是合规基础。', tag: '必看' },
+            { icon: '📜', title: '知识产权', desc: '商标专利版权保护', content: '商标地域性原则（去哪国注册哪国）、专利先申请制、版权自动产生。跨境卖家应提前布局目标市场商标注册，防止被抢注。', tag: '' },
+            { icon: '🏷️', title: '标签合规', desc: '产品标签要求', content: '成分/材质标签、警示语、原产地标注、使用说明、安全认证标志。各国标签要求不同，服装/玩具/食品/电子产品尤其严格。', tag: '' },
+        ]
+    },
+    localize: {
+        title: '本土化改造知识库',
+        cards: [
+            { icon: '📝', title: '产品命名', desc: '命名也要接地气', content: '好名字要符合当地语言习惯、易发音、无歧义、不冒犯。避免直译导致的尴尬（如某品牌名在当地语言中是脏话）。建议找母语者审核。', tag: '热门' },
+            { icon: '💬', title: '营销话术', desc: '打动当地消费者', content: '不同市场的购买决策逻辑不同。欧美强调功能和数据、东南亚喜欢社交种草、日本注重细节和品质、中东看重名人背书。', tag: '' },
+            { icon: '🖼️', title: '视觉设计', desc: '视觉本土化要点', content: '模特选用当地人、场景符合当地生活方式、颜色搭配符合审美偏好、图标和手势符合当地习惯。不要直接套用国内视觉风格。', tag: '' },
+            { icon: '🎄', title: '节日日历', desc: '抓住营销节点', content: '欧美圣诞+黑五、东南亚9.9/11.11、日本樱花季+盂兰盆节、中东斋月+开斋节、印度排灯节、中国春节。每个节日都是营销良机。', tag: '必看' },
+            { icon: '💳', title: '支付方式', desc: '各国主流支付', content: '欧美信用卡/PayPal、东南亚COD（货到付款）+电子钱包、日本便利店付款、韩国Kakao Pay、中东Cash on Delivery、印度UPI。', tag: '重要' },
+            { icon: '🚚', title: '物流偏好', desc: '物流体验影响复购', content: '欧美追求速度（亚马逊Prime次日达）、东南亚价格敏感接受慢、日本对配送时间精确性要求高、中东最后一公里配送难。', tag: '' },
+        ]
+    },
+    tariff: {
+        title: '关税估算知识库',
+        cards: [
+            { icon: '📦', title: 'HS编码', desc: '海关编码的基础', content: 'HS编码（海关编码）是国际贸易的通用语言，决定关税税率和监管条件。前6位全球统一，后几位各国自行细化。归类错误可能导致高额罚款。', tag: '热门' },
+            { icon: '💸', title: '关税种类', desc: '不只基础关税', content: '除基础关税外，还可能有：反倾销税、反补贴税、保障措施税、增值税/消费税等。总税率可能远高于基础关税率。', tag: '重要' },
+            { icon: '🌏', title: 'FTA优惠', desc: '自由贸易协定', content: '中国已与20多个国家/地区签FTA（如RCEP、中澳、中新、中智等）。符合原产地规则的产品可享受零关税或优惠关税。', tag: '必看' },
+            { icon: '📋', title: '原产地证', desc: '优惠关税的凭证', content: '原产地证书是享受FTA优惠关税的必要文件。常见的有：一般原产地证CO、普惠制证FORMA、区域优惠证（如RCEP、中澳CHAFTA）。', tag: '' },
+            { icon: '🔍', title: '完税价格', desc: '关税计算基数', content: '关税=完税价格×关税税率。完税价格通常是CIF价（成本+保险+运费）。不同国家可能有不同的估价规则。', tag: '' },
+            { icon: '⚠️', title: '低报风险', desc: '低申报得不偿失', content: '故意低报货值以减少关税是走私行为，一旦被查出可能面临：补税+罚款+货物没收+列入黑名单+刑事追责。切勿因小失大。', tag: '警示' },
+        ]
+    },
+    cert: {
+        title: '产品准入知识库',
+        cards: [
+            { icon: '🇪🇺', title: '欧盟认证', desc: 'CE及其他认证', content: 'CE是欧盟市场准入标志（自我声明），涉及指令包括：低电压LVD、电磁兼容EMC、机械MD、玩具安全Toys、个人防护PPE、医疗器械MDR等。', tag: '热门' },
+            { icon: '🇺🇸', title: '美国认证', desc: 'FCC/FDA/UL等', content: '电子产品需FCC认证（ID/DoC/Verification）、食品药品化妆品需FDA注册/认证、安全认证UL/ETL（非强制但市场认可度高）。', tag: '重要' },
+            { icon: '🇯🇵', title: '日本认证', desc: 'PSE/TELEC等', content: '电气产品需PSE认证（菱形/圆形）、无线产品需TELEC/技适标志、医疗器械需PMDA认证、食品需厚生劳动省备案。', tag: '' },
+            { icon: '🇰🇷', title: '韩国认证', desc: 'KC/KCC等', content: '电气用品安全认证KC（强制）、无线通信设备KCC认证、儿童产品KC Kids、食品KFDA。韩国认证通常需要本地代表。', tag: '' },
+            { icon: '💰', title: '认证费用', desc: '认证成本参考', content: '认证费用差异很大：FCC ID约$3000-8000、CE LVD+EMC约¥8000-20000、PSE菱形约¥30000+、TELEC约¥20000-40000。周期从2周到半年不等。', tag: '必看' },
+            { icon: '📅', title: '认证周期', desc: '提前规划时间', content: '认证需要时间：CE自我声明1-2周、FCC ID 4-8周、PSE菱形 6-8周、KC 6-12周。新产品开发建议提前规划认证时间。', tag: '' },
+        ]
+    },
+    platform: {
+        title: '电商平台知识库',
+        cards: [
+            { icon: '🏪', title: 'Amazon', desc: '全球最大电商平台', content: '站点覆盖美/欧/日/澳/中东等，重产品轻店铺，FBA是核心竞争力。注意：商标备案、变体合规、Review政策、广告ACOS、账号关联风险。', tag: '热门' },
+            { icon: '🎵', title: 'TikTok Shop', desc: '新兴内容电商', content: '短视频+直播带货模式，美区/东南亚/英国增长迅猛。注意：达人合作、短视频内容合规、本土店vs跨境店、物流时效要求。', tag: '热门' },
+            { icon: '🛒', title: 'eBay', desc: '老牌拍卖电商', content: '欧美市场认可度高，拍卖+一口价模式。注意：拍卖规则、卖家表现标准（TRS）、Feedback评分、VeRO知识产权保护。', tag: '' },
+            { icon: '👕', title: 'Shopee', desc: '东南亚头部平台', content: '覆盖东南亚+台湾+拉美，移动优先，社交属性强。注意：聊聊回复率、免运活动、Shopee Mall、SLS物流、本土店政策。', tag: '' },
+            { icon: '🛍️', title: 'Lazada', desc: '阿里系东南亚平台', content: '覆盖东南亚6国，阿里旗下，品牌属性强。注意：LazMall品牌商城、LGS物流、跨境钱包、大促节点（生日大促/双11）。', tag: '' },
+            { icon: '💰', title: '平台费用', desc: '佣金+物流+广告', content: '平台成本主要包括：佣金（8-15%）、配送费（按重量体积）、广告费（ACOS 15-30%常见）、月租/服务费。定价时务必算清成本。', tag: '必看' },
+        ]
+    },
+    'intellectual-property': {
+        title: '知识产权知识库',
+        cards: [
+            { icon: '™️', title: '商标基础', desc: '品牌保护第一步', content: '商标按类别注册（尼斯分类共45类），具有地域性。电商卖家通常需要注册第9类（电子产品）、第25类（服装）、第35类（广告销售）等核心类别。', tag: '热门' },
+            { icon: '💡', title: '专利类型', desc: '技术创新保护', content: '发明专利（技术方案，20年）、实用新型（产品结构，10年）、外观设计（产品外观，15年）。跨境产品需在目标市场申请专利。', tag: '重要' },
+            { icon: '©️', title: '版权保护', desc: '原创内容保护', content: '版权自动产生（无需注册），但注册证书是维权有力证据。保护对象包括：图片、文字、视频、音乐、软件、美术作品等。', tag: '' },
+            { icon: '⚔️', title: '常见投诉', desc: '平台常见IP投诉', content: 'Amazon品牌备案2.0投诉、eBay VeRO计划、TikTok Shop IP投诉。常见投诉类型：商标侵权、专利侵权、版权侵权、盗图。', tag: '必看' },
+            { icon: '🛡️', title: '侵权应对', desc: '被投诉了怎么办', content: '收到侵权投诉后：1. 立即下架相关产品 2. 分析投诉是否成立 3. 如不成立可申诉（DMCA Counter-Notice）4. 如成立可尝试联系权利人和解。', tag: '重要' },
+            { icon: '🌍', title: '马德里注册', desc: '国际商标捷径', content: '马德里体系可通过一份申请指定多个成员国（目前覆盖130+国家），比逐一国家注册更省钱。但需注意：基础注册要求、中心打击原则。', tag: '' },
+        ]
+    },
+    'logistics-compliance': {
+        title: '物流合规知识库',
+        cards: [
+            { icon: '🔍', title: '制裁筛查', desc: '制裁合规是红线', content: '美国OFAC制裁名单、欧盟制裁清单、联合国制裁。受制裁的国家/实体/个人绝对不能交易，否则可能面临次级制裁。发货前务必核查收货方。', tag: '警示' },
+            { icon: '🧨', title: '危险品分类', desc: '危险品运输规则', content: '9类危险品：爆炸品、气体、易燃液体、易燃固体、氧化物、毒性物质、放射性、腐蚀性、杂项。常见如锂电池（第9类）、香水（第3类）。', tag: '热门' },
+            { icon: '🪵', title: '木质包装', desc: '木质熏蒸要求', content: '实木包装（木箱、木托盘、木架）需经熏蒸/热处理并加施IPPC标识，否则目的港可能被退货或销毁。人造板（胶合板、密度板）通常不需要。', tag: '必看' },
+            { icon: '📋', title: '提前申报', desc: '预报关要求', content: '欧盟ENS（入境摘要报关单）、美国ISF/ABI、加拿大ACI。需在货物装船前24/48小时向海关申报，迟报可能面临罚款。', tag: '' },
+            { icon: '🌐', title: '原产地证', desc: '产地证的作用', content: '原产地证是证明货物"国籍"的文件，用于：享受关税优惠（FTA）、反倾销调查、海关统计、进口国清关。常见：CO、FORM A、RCEP证。', tag: '' },
+            { icon: '📦', title: 'INCOTERMS', desc: '贸易术语', content: '2020版11个术语：EXW/FCA/CPT/CIP/DAP/DPU/DDP（适用所有运输），FAS/FOB/CFR/CIF（仅适用于水上运输）。明确买卖双方责任划分。', tag: '' },
+        ]
+    },
+    crisis: {
+        title: '危机处置知识库',
+        cards: [
+            { icon: '🚨', title: '黄金24小时', desc: '危机发生后最重要的一天', content: '海关扣货/平台下架等危机发生后，前24小时是处置关键期：1. 立即冻结相关库存 2. 收集完整证据 3. 评估影响范围 4. 制定应对方案 5. 主动沟通。', tag: '重要' },
+            { icon: '📄', title: '证据清单', desc: '维权需要哪些证据', content: '应对海关扣货/平台投诉需要：采购合同/发票、产品认证证书、检测报告、授权文件、品牌注册证、产品照片/描述页截图、沟通记录。', tag: '必看' },
+            { icon: '💬', title: '沟通话术', desc: '如何与对方沟通', content: '沟通原则：态度诚恳不卑不亢、事实清楚数据说话、先理解再解释、提供解决方案而非辩解。书面沟通留痕，重要邮件抄送相关方。', tag: '' },
+            { icon: '⚖️', title: '申诉流程', desc: '平台申诉怎么做', content: 'Amazon申诉：POA行动计划（根本原因+整改措施+预防措施）+ 证据。其他平台类似。申诉切忌模板化，要针对具体问题具体分析。', tag: '热门' },
+            { icon: '💰', title: '罚款应对', desc: '收到罚单怎么办', content: '收到罚款通知：1. 核实罚款依据是否成立 2. 如不成立可在规定期限内申请复议/听证 3. 如成立考虑是否能申请减免 4. 按时缴纳避免产生滞纳金。', tag: '' },
+            { icon: '📦', title: '货物退回', desc: '货物被扣/退回处理', content: '货物被扣处理方案：1. 补正资料争取放行 2. 申请退运/销毁 3. 转卖第三国 4. 法律途径维权。综合评估货物价值和处理成本，选择最优方案。', tag: '' },
+        ]
+    },
+    'store-checkup': {
+        title: '店铺体检知识库',
+        cards: [
+            { icon: '⭐', title: '店铺评分', desc: '平台考核核心指标', content: '常见指标：订单缺陷率ODR、迟发率、取消率、有效追踪率、准时交货率、客服响应时间。不同平台标准不同，不达标可能导致销售权限受限。', tag: '热门' },
+            { icon: '📸', title: 'Listing合规', desc: '产品页面容易踩的雷', content: '标题/图片/描述中的常见问题：关键词堆砌、图片盗图、极限词、虚假宣传、品牌侵权、错误类目、变体滥用。定期检查Listing合规性。', tag: '重要' },
+            { icon: '💰', title: '定价分析', desc: '定价策略与竞争力', content: '定价需考虑：成本+平台佣金+广告费+物流费+利润。同时参考竞品价格、价格带分布、促销节奏。避免价格战，找到自己的定位。', tag: '' },
+            { icon: '📊', title: '广告健康度', desc: '广告投放效果评估', content: '核心指标：ACOS（广告销售成本比）、CTR（点击率）、CVR（转化率）、Impression（曝光）。健康ACOS通常在15-30%，但需结合品类和生命周期看。', tag: '' },
+            { icon: '📝', title: 'Review管理', desc: '评价的重要性', content: 'Review影响转化率和Buy Box。注意：绝对不能刷评（亚马逊零容忍）、可通过早期评论人/Vine等合规方式获取、差评及时回复和处理。', tag: '必看' },
+            { icon: '🔒', title: '账号安全', desc: '防关联防封号', content: '账号关联因素：IP/设备/浏览器指纹、收款账号、注册信息、产品信息、操作习惯。多账号运营务必做好隔离。定期备份账号数据和资料。', tag: '警示' },
+        ]
+    },
+    'product-quick-check': {
+        title: '选品快检知识库',
+        cards: [
+            { icon: '🚫', title: '禁售品类', desc: '绝对不能卖的产品', content: '各平台禁售品：武器/毒品/违禁品、假冒伪劣、侵权产品、危险化学品、动植物制品、食品/药品/医疗器械（需认证）。上架前确认品类准入要求。', tag: '警示' },
+            { icon: '📜', title: '认证需求', desc: '选品先看认证', content: '选品阶段就要考虑认证：是否需要强制认证？认证费用多少？周期多久？有无本地代理要求？认证成本太高的产品不适合小卖家。', tag: '热门' },
+            { icon: '💸', title: '关税预估', desc: '成本测算的重要部分', content: '选品必须算清关税成本：HS编码是多少？最惠国税率多少？有无反倾销税？是否享受FTA优惠？关税可能直接影响产品利润空间。', tag: '必看' },
+            { icon: '🌍', title: '文化适配', desc: '产品适合目标市场吗', content: '产品的颜色/形状/图案/功能/包装是否符合当地文化？有无宗教/文化禁忌？是否需要做本土化改造？小改动可能带来大销量。', tag: '' },
+            { icon: '📐', title: '尺寸重量', desc: '物流成本不容忽视', content: '体积重vs实重，哪个大按哪个算。抛货（体积大重量轻）物流成本占比高，可能导致亏损。选品时关注产品尺寸和重量。', tag: '' },
+            { icon: '📊', title: '市场容量', desc: '需求有多大', content: '通过关键词搜索量、BSR排名、竞品数量、Review数量等估算市场容量。需求太小的品类做不起来，太红海的品类竞争太激烈。', tag: '' },
+        ]
+    },
+    'trade-news': {
+        title: '外贸新闻知识库',
+        cards: [
+            { icon: '📰', title: '政策动向', desc: '关注政策变化', content: '各国贸易政策、关税调整、监管新规、进出口限制等政策变化直接影响业务。建议订阅官方渠道和权威媒体，第一时间获取政策动态。', tag: '热门' },
+            { icon: '💱', title: '汇率波动', desc: '汇率影响利润', content: '汇率波动直接影响利润。应对方式：报价预留汇率空间、使用锁汇/远期结售汇、多币种账户、定价时考虑汇率走势、关注美联储/央行政策。', tag: '重要' },
+            { icon: '🚢', title: '物流行情', desc: '海运/空运价格', content: '国际物流价格波动大：美森/以星快船价格、空运价格、UPS/FedEx折扣。关注运价指数（SCFI），旺季提前安排舱位。', tag: '' },
+            { icon: '🛒', title: '平台动态', desc: '平台政策变化', content: '各大平台政策频繁调整：佣金变化、类目准入、物流时效要求、广告政策、评价政策、账号安全。卖家需及时跟进平台动态。', tag: '' },
+            { icon: '📈', title: '市场趋势', desc: '把握消费趋势', content: '关注目标市场消费趋势、品类增长、新兴机会。通过Google Trends、亚马逊BSR、社交媒体热门话题等发现选品机会。', tag: '' },
+            { icon: '⚖️', title: '贸易摩擦', desc: '国际经贸关系', content: '中美贸易战、欧盟反倾销、印度对中国的限制、中东局势等。贸易摩擦可能导致关税提高、清关变慢、收款受限等风险。', tag: '警示' },
+        ]
+    },
+    'trade-academy': {
+        title: '外贸学院知识库',
+        cards: [
+            { icon: '🎓', title: '新手入门', desc: '从零开始做外贸', content: '新手必学基础：国际贸易术语（INCOTERMS）、报关报检流程、收汇方式（T/T/L/C/D/P）、单证制作（发票/箱单/提单/产地证）。', tag: '热门' },
+            { icon: '📖', title: '外贸术语', desc: '常用外贸术语词典', content: '常见术语：FOB/CIF/EXW（贸易术语）、B/L（提单）、L/C（信用证）、T/T（电汇）、D/P（付款交单）、D/A（承兑交单）、CO（产地证）、CI（商业发票）。', tag: '必看' },
+            { icon: '💰', title: '收款方式', desc: '安全收汇是关键', content: '常见收款方式：T/T（最常用）、L/C（银行信用，适合大额）、PayPal（小额方便但手续费高）、西联、中信保（出口信用保险）。注意客户信用风险。', tag: '重要' },
+            { icon: '📋', title: '单证制作', desc: '单证一致单单一致', content: '常用出口单证：商业发票、装箱单、提单、产地证、保险单、商检证、受益人证明等。信用证项下务必做到"单单一致、单证一致"。', tag: '' },
+            { icon: '🚢', title: '物流流程', desc: '出货全流程', content: '出货流程：备货→订舱→做箱→报关→上船→签发提单→收款→寄单。海运提单（B/L）是物权凭证，非常重要，务必保管好。', tag: '' },
+            { icon: '🧾', title: '出口退税', desc: '政策红利要拿好', content: '出口退税是国家鼓励出口的政策，退还国内已缴增值税。退税率从0%到17%不等。注意：需在规定期限内申报，资料齐全。', tag: '' },
+        ]
+    },
+    'trade-tools': {
+        title: '外贸工具箱知识库',
+        cards: [
+            { icon: '🔢', title: 'HS编码查询', desc: '归类是技术活', content: 'HS编码是国际贸易的基础。归类总规则有6条，类注章注是关键。常见查询渠道：海关总署网站、中国国际贸易单一窗口、归类决定查询。', tag: '热门' },
+            { icon: '📖', title: '外贸术语', desc: '随时查随时学', content: '外贸术语是行业通用语言。建议收藏常用术语表，遇到不懂的随时查阅。特别是缩写（如FOB、CIF、L/C、B/L）一定要熟记。', tag: '必看' },
+            { icon: '💱', title: '汇率换算', desc: '实时汇率查询', content: '人民币对主要货币汇率：美元、欧元、日元、英镑、韩元、澳元、加元、港币、新台币、新加坡元、林吉特、越南盾、泰铢、卢布、卢比、雷亚尔、比索等。', tag: '' },
+            { icon: '📏', title: '单位换算', desc: '重量长度面积体积', content: '常用换算：英寸/厘米、磅/公斤、盎司/克、英尺/米、码/米、平方英尺/平方米、立方英尺/立方米、加仑/升、磅/公斤。', tag: '' },
+            { icon: '🏷️', title: '关税率查询', desc: '各国进口关税', content: '查询各国进口关税税率：中国→世界各国的出口关税、各国→中国的进口关税。注意：最惠国税率、协定税率、特惠税率、普通税率的区别。', tag: '' },
+            { icon: '📅', title: '节日日历', desc: '各国营销节点', content: '全球主要节日日历：欧美圣诞/黑五/网一、东南亚9.9/11.11、日本樱花季/盂兰盆节、中东斋月/开斋节、印度排灯节、中国春节/618/双11。', tag: '' },
+        ]
+    },
+    stories: {
+        title: '踩雷案例知识库',
+        cards: [
+            { icon: '⚖️', title: '商标抢注', desc: '品牌被抢注的教训', content: '不少中国卖家品牌在海外被抢注，要么高价赎回，要么被迫改名。教训：产品未动商标先行，核心市场提前注册商标，马德里体系更划算。', tag: '热门' },
+            { icon: '🚫', title: '侵权下架', desc: '侵权的代价', content: 'Listing被下架、资金被冻结、店铺被关闭，甚至被起诉。常见侵权：商标、专利、版权、盗图、品牌滥用。教训：上架前做侵权排查。', tag: '警示' },
+            { icon: '📦', title: '海关扣货', desc: '货物被扣的损失', content: '因认证缺失、申报不实、侵权嫌疑等原因货物被扣，损失的不只是货值，还有延误销售机会。教训：出货前确认所有合规文件齐全。', tag: '必看' },
+            { icon: '💰', title: '罚款案例', desc: '罚单有多贵', content: 'GDPR罚款最高全球营业额4%、虚假宣传罚款倍数起、海关罚款可能是货值的数倍。教训：合规是成本也是投资，省小钱可能亏大钱。', tag: '' },
+            { icon: '🏪', title: '封店教训', desc: '店铺被封怎么办', content: '账号关联、刷单、刷评、侵权、操控排名等都可能导致封店。教训：合规运营是根本、多账号分散风险、重要资料定期备份。', tag: '重要' },
+            { icon: '📉', title: '市场风险', desc: '踩对坑血本无归', content: '某市场突发政策变化、汇率暴跌、战乱、疫情封城等黑天鹅事件。教训：不要把鸡蛋放一个篮子里，多市场多平台分散风险，关注地缘政治。', tag: '' },
+        ]
+    }
+};
+
 // ========== 市场数据 ==========
 const MARKETS = [
     { value: '美国', flag: '🇺🇸', en: 'United States' },
@@ -264,6 +433,7 @@ const i18n = {
         scoreForbidden: '🔴 禁止出海 — 先把雷全排了',
         startScan: '开始检测',
         targetMarket: '目标市场',
+        productCategory: '产品品类',
         pleaseSelect: '请选择...',
     },
     en: {
@@ -297,6 +467,7 @@ const i18n = {
         scoreForbidden: '🔴 Do Not Launch — Clear All Risks',
         startScan: 'Start Scan',
         targetMarket: 'Target Market',
+        productCategory: 'Product Category',
         pleaseSelect: 'Please select...',
     }
 };
@@ -435,6 +606,51 @@ function openModule(moduleId) {
     openModuleWithContent(moduleId);
 }
 
+// ========== 渲染知识卡片 ==========
+function renderKnowledgeCards(moduleId) {
+    const knowledge = KNOWLEDGE_CARDS[moduleId];
+    const section = document.getElementById('knowledge-section');
+    const container = document.getElementById('knowledge-cards');
+    
+    if (!knowledge || !knowledge.cards || knowledge.cards.length === 0) {
+        section.style.display = 'none';
+        return;
+    }
+    
+    section.style.display = 'block';
+    
+    const isEn = currentLang === 'en';
+    const title = isEn ? (knowledge.titleEn || knowledge.title) : knowledge.title;
+    
+    section.querySelector('.knowledge-title').textContent = title;
+    section.querySelector('.knowledge-subtitle').textContent = isEn ? 'Click cards to learn more' : '点击卡片快速了解';
+    
+    container.innerHTML = knowledge.cards.map((card, idx) => `
+        <div class="knowledge-card" data-idx="${idx}" onclick="toggleKnowledgeCard(this, ${idx}, '${moduleId}')">
+            <div class="card-header">
+                <span class="card-icon">${card.icon}</span>
+                <div class="card-text">
+                    <div class="card-title">${card.title}</div>
+                    <div class="card-desc">${card.desc}</div>
+                </div>
+                ${card.tag ? `<span class="card-tag tag-${card.tag === '热门' ? 'hot' : card.tag === '必看' ? 'must' : card.tag === '重要' ? 'important' : card.tag === '警示' ? 'warning' : ''}">${card.tag}</span>` : ''}
+            </div>
+            <div class="card-content">
+                <p>${card.content}</p>
+            </div>
+            <div class="card-arrow">▼</div>
+        </div>
+    `).join('');
+}
+
+function toggleKnowledgeCard(el, idx, moduleId) {
+    const allCards = document.querySelectorAll('.knowledge-card');
+    allCards.forEach(c => {
+        if (c !== el) c.classList.remove('expanded');
+    });
+    el.classList.toggle('expanded');
+}
+
 function openModuleWithContent(moduleId) {
     const module = MODULES.find(m => m.id === moduleId);
     if (!module) return;
@@ -443,6 +659,9 @@ function openModuleWithContent(moduleId) {
     const title = isEn ? module.titleEn : module.title;
     const defaultMarket = '美国';
     const defaultProduct = '电子产品';
+    
+    // 渲染知识卡片（上方区域）
+    renderKnowledgeCards(moduleId);
     
     showResultFilter(true);
     document.getElementById('filter-market-label').textContent = t('targetMarket');
@@ -1031,6 +1250,9 @@ function openTradeNews() {
     currentModuleType = 'trade-news';
     const isEn = currentLang === 'en';
     
+    // 渲染知识卡片
+    renderKnowledgeCards('trade-news');
+    
     showResultFilter(true);
     document.getElementById('filter-market-label').textContent = isEn ? 'Market' : '关注市场';
     document.getElementById('filter-category-label').textContent = isEn ? 'Category' : '关注品类';
@@ -1062,6 +1284,9 @@ function submitNews() {
 function openTradeAcademy() {
     currentModuleType = 'trade-academy';
     const isEn = currentLang === 'en';
+    
+    // 渲染知识卡片
+    renderKnowledgeCards('trade-academy');
     
     showResultFilter(true);
     document.getElementById('filter-market-label').textContent = isEn ? 'Topic' : '学习主题';
@@ -2340,7 +2565,7 @@ async function initRiskMap() {
         const res = await fetch('/api/risk-map');
         riskMapData = await res.json();
         
-        const mapRes = await fetch('https://cdn.jsdelivr.net/npm/echarts@5.4.3/map/json/world.json');
+        const mapRes = await fetch('/static/world.json');
         const mapJson = await mapRes.json();
         echarts.registerMap('world', mapJson);
         
