@@ -19,7 +19,7 @@
         .page-title {
             font-size: 22px;
             font-weight: 800;
-            background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+            background: linear-gradient(135deg, #0EA5E9, #06B6D4);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -32,7 +32,7 @@
         }
         .qr-card {
             background: #111827;
-            border: 1px solid rgba(255,255,255,0.06);
+            border: 1px solid rgba(14,165,233,0.15);
             border-radius: 18px;
             padding: 24px 20px;
             margin-bottom: 18px;
@@ -49,9 +49,8 @@
             top: 0; left: 0; right: 0;
             height: 3px;
         }
-        .qr-card:nth-child(1)::before { background: linear-gradient(90deg, #3B82F6, #8B5CF6); }
-        .qr-card:nth-child(2)::before { background: linear-gradient(90deg, #10B981, #3B82F6); }
-        .qr-card:nth-child(3)::before { background: linear-gradient(90deg, #F59E0B, #EF4444); }
+        .qr-card:nth-child(1)::before { background: linear-gradient(90deg, #0EA5E9, #06B6D4); }
+        .qr-card:nth-child(2)::before { background: linear-gradient(90deg, #F97316, #FB923C); }
         .qr-card-num {
             position: absolute;
             top: 12px;
@@ -81,16 +80,16 @@
         }
         .qr-card a {
             display: inline-block;
-            color: #60a5fa;
+            color: #38BDF8;
             font-size: 12px;
             text-decoration: none;
             padding: 6px 16px;
-            border: 1px solid rgba(96,165,250,0.3);
+            border: 1px solid rgba(56,189,248,0.3);
             border-radius: 8px;
             transition: all 0.2s;
         }
         .qr-card a:hover {
-            background: #60a5fa;
+            background: #38BDF8;
             color: #0f172a;
         }
         .status-tag {
@@ -103,6 +102,21 @@
         }
         .status-ready { background: rgba(16,185,129,0.15); color: #34D399; }
         .status-pending { background: rgba(245,158,11,0.15); color: #FBBF24; }
+        .feature-badges {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .feature-badge {
+            font-size: 10px;
+            background: rgba(14,165,233,0.1);
+            color: #38BDF8;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
         .tip {
             font-size: 11px;
             color: #475569;
@@ -114,7 +128,7 @@
         .divider {
             width: 60px;
             height: 2px;
-            background: rgba(59,130,246,0.3);
+            background: rgba(14,165,233,0.3);
             border-radius: 1px;
             margin: 8px auto;
         }
@@ -124,29 +138,24 @@
     <span class="page-title">出海避雷针⚡</span>
     <p class="page-subtitle">活动二维码 · 长按图片保存到手机</p>
 
-    <!-- QR 1: GitHub 仓库 -->
+    <!-- QR 1: 项目主页（介绍页 + GitHub 源码 合并） -->
     <div class="qr-card">
         <span class="qr-card-num">#1</span>
-        <img src="/static/github_repo.png" alt="GitHub 仓库二维码">
-        <h2>GitHub 仓库</h2>
-        <p class="desc">扫码访问项目源码，查看技术实现</p>
-        <a href="https://github.com/SiriusHong-cloud/chuhaibileizhen--waic" target="_blank">打开仓库</a>
+        <img src="/static/project_intro.png" alt="项目主页二维码">
+        <h2>项目主页</h2>
+        <p class="desc">扫码查看精美图文介绍 + GitHub 源码<br>14大模块功能、UI预览、核心亮点，一键进仓库</p>
+        <a href="https://htmlpreview.github.io/?https://github.com/SiriusHong-cloud/chuhaibileizhen--waic/blob/main/docs/index.html" target="_blank">打开主页</a>
+        <div class="feature-badges">
+            <span class="feature-badge">📚 图文介绍</span>
+            <span class="feature-badge">⭐ GitHub</span>
+            <span class="feature-badge">🎨 地球蓝</span>
+        </div>
         <br><span class="status-tag status-ready">✅ 长期有效</span>
     </div>
 
-    <!-- QR 2: 项目介绍页 -->
+    <!-- QR 2: 小红书（占位） -->
     <div class="qr-card">
         <span class="qr-card-num">#2</span>
-        <img src="/static/project_intro.png" alt="项目介绍页二维码">
-        <h2>项目介绍页</h2>
-        <p class="desc">扫码查看精美图文介绍：14大模块功能、UI预览、核心亮点</p>
-        <a href="https://htmlpreview.github.io/?https://github.com/SiriusHong-cloud/chuhaibileizhen--waic/blob/main/docs/index.html" target="_blank">打开介绍页</a>
-        <br><span class="status-tag status-ready">✅ 长期有效</span>
-    </div>
-
-    <!-- QR 3: 小红书（占位） -->
-    <div class="qr-card">
-        <span class="qr-card-num">#3</span>
         <div style="width:240px;height:240px;border-radius:14px;background:#1E293B;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 14px;border:2px dashed rgba(255,255,255,0.1);">
             <span style="font-size:48px;margin-bottom:8px;">📱</span>
             <span style="font-size:13px;color:#64748B;">小红书二维码</span>
@@ -160,9 +169,8 @@
     <div class="divider"></div>
     
     <p class="tip">
-        💡 <b>三个二维码全部长期有效</b><br>
-        项目介绍页通过 htmlpreview 服务直接渲染 GitHub HTML<br>
-        无需任何配置，扫码即用<br><br>
+        💡 <b>项目主页</b>已合并介绍页 + GitHub 源码<br>
+        扫码后顶部有「⭐ GitHub 源码」按钮，一键跳转仓库<br><br>
         📱 小红书二维码请提供主页链接，我来生成
     </p>
 </body>
