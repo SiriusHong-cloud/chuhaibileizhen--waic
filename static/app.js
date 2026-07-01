@@ -1604,17 +1604,19 @@ function openTradeNews() {
 function renderNewsList(newsArray) {
     const isEn = currentLang === 'en';
     return newsArray.map(n => `
-        <div class="news-item-card" data-type="${n.type}" onclick="openNewsArticle(${n.id})">
-            <div class="news-item-header">
+        <div class="news-item-card" data-type="${n.type}">
+            <div class="news-item-header" onclick="openNewsArticle(${n.id})">
                 <span class="news-item-tag tag-${n.type}">${n.typeLabel}</span>
                 <h5 class="news-item-title">${isEn ? n.title : n.titleCn}</h5>
             </div>
-            <p class="news-item-summary">${n.summary}</p>
+            <p class="news-item-summary" onclick="openNewsArticle(${n.id})">${n.summary}</p>
             <div class="news-item-footer">
                 <span class="news-item-source">📰 ${n.source}</span>
                 <span class="news-item-country">🌍 ${n.country}</span>
                 <span class="news-item-time">⏰ ${n.time}</span>
-                <span class="news-item-arrow">${isEn ? 'Read more →' : '阅读全文 →'}</span>
+                <a class="news-item-link" href="${n.sourceUrl}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">
+                    ${isEn ? 'View Original →' : '查看原文 →'}
+                </a>
             </div>
             <div class="news-item-tags">
                 ${n.tags.map(t => `<span class="mini-tag">${t}</span>`).join('')}
@@ -1664,7 +1666,7 @@ function openNewsArticle(id) {
             </div>
             
             <div class="article-actions">
-                <a class="btn-secondary" href="${news.sourceUrl}" target="_blank" rel="noopener noreferrer">
+                <a class="btn-secondary" href="${news.sourceUrl}" target="_blank" rel="noopener noreferrer" onclick="openSourceUrl('${news.sourceUrl}')">
                     🔗 ${isEn ? 'View Original Article' : '查看原文（英文）'}
                 </a>
                 <button class="btn-primary" onclick="extractNewsInfo(${news.id})">
@@ -1681,6 +1683,15 @@ function openNewsArticle(id) {
             </div>
         </div>
     `;
+}
+
+function openSourceUrl(url) {
+    event.preventDefault();
+    event.stopPropagation();
+    const newWindow = window.open(url, '_blank');
+    if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+        window.location.href = url;
+    }
 }
 
 function extractNewsInfo(id) {
@@ -2099,6 +2110,7 @@ function quickScan() {
 // ========== 新闻详情 ==========
 function openNewsDetail(id) {
     openModule('trade-news');
+    setTimeout(() => openNewsArticle(id), 50);
 }
 
 // ========== SSE 流式请求 ==========

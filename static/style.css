@@ -3200,6 +3200,18 @@ body {
     font-weight: 500;
 }
 
+.news-item-link {
+    margin-left: auto;
+    color: var(--primary);
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.news-item-link:hover {
+    text-decoration: underline;
+}
+
 .news-item-tags {
     display: flex;
     gap: 6px;
