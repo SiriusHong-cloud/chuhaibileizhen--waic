@@ -3,102 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>出海避雷针 - 二维码</title>
+    <title>出海避雷针⚡ - 活动二维码</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: #0f172a;
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: #0B1120;
             color: #e2e8f0;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 24px 16px;
+            padding: 32px 16px;
         }
-        h1 {
-            font-size: 20px;
-            margin-bottom: 8px;
-            text-align: center;
+        .page-title {
+            font-size: 22px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 4px;
         }
-        .subtitle {
+        .page-subtitle {
             font-size: 13px;
-            color: #94a3b8;
-            margin-bottom: 32px;
-            text-align: center;
+            color: #64748b;
+            margin-bottom: 28px;
         }
         .qr-card {
-            background: #1e293b;
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 24px;
+            background: #111827;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 18px;
+            padding: 24px 20px;
+            margin-bottom: 18px;
             text-align: center;
             width: 100%;
-            max-width: 360px;
+            max-width: 340px;
             box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .qr-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+        }
+        .qr-card:nth-child(1)::before { background: linear-gradient(90deg, #3B82F6, #8B5CF6); }
+        .qr-card:nth-child(2)::before { background: linear-gradient(90deg, #10B981, #3B82F6); }
+        .qr-card:nth-child(3)::before { background: linear-gradient(90deg, #F59E0B, #EF4444); }
+        .qr-card-num {
+            position: absolute;
+            top: 12px;
+            left: 16px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #475569;
         }
         .qr-card img {
-            width: 260px;
-            height: 260px;
-            border-radius: 12px;
+            width: 240px;
+            height: 240px;
+            border-radius: 14px;
             background: white;
             padding: 16px;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
         .qr-card h2 {
-            font-size: 17px;
-            margin-bottom: 6px;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 4px;
         }
-        .qr-card p {
-            font-size: 13px;
+        .qr-card .desc {
+            font-size: 12px;
             color: #94a3b8;
-            word-break: break-all;
+            line-height: 1.5;
+            margin-bottom: 10px;
         }
         .qr-card a {
             display: inline-block;
-            margin-top: 12px;
             color: #60a5fa;
-            font-size: 13px;
+            font-size: 12px;
             text-decoration: none;
-            padding: 8px 16px;
-            border: 1px solid #60a5fa;
+            padding: 6px 16px;
+            border: 1px solid rgba(96,165,250,0.3);
             border-radius: 8px;
+            transition: all 0.2s;
         }
         .qr-card a:hover {
             background: #60a5fa;
             color: #0f172a;
         }
+        .status-tag {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-top: 8px;
+        }
+        .status-ready { background: rgba(16,185,129,0.15); color: #34D399; }
+        .status-pending { background: rgba(245,158,11,0.15); color: #FBBF24; }
         .tip {
-            font-size: 12px;
-            color: #64748b;
-            margin-top: 24px;
+            font-size: 11px;
+            color: #475569;
+            margin-top: 20px;
             text-align: center;
-            max-width: 360px;
-            line-height: 1.6;
+            max-width: 340px;
+            line-height: 1.7;
+        }
+        .divider {
+            width: 60px;
+            height: 2px;
+            background: rgba(59,130,246,0.3);
+            border-radius: 1px;
+            margin: 8px auto;
         }
     </style>
 </head>
 <body>
-    <h1>出海避雷针 QR Codes</h1>
-    <p class="subtitle">长按图片可保存到手机相册</p>
+    <span class="page-title">出海避雷针⚡</span>
+    <p class="page-subtitle">活动二维码 · 长按图片保存到手机</p>
 
+    <!-- QR 1: GitHub 仓库 -->
     <div class="qr-card">
+        <span class="qr-card-num">#1</span>
         <img src="/static/github_repo.png" alt="GitHub 仓库二维码">
         <h2>GitHub 仓库</h2>
-        <p>扫码访问项目源码仓库</p>
-        <a href="https://github.com/SiriusHong-cloud/chuhaibileizhen--waic" target="_blank">打开链接</a>
+        <p class="desc">扫码访问项目源码，查看技术实现</p>
+        <a href="https://github.com/SiriusHong-cloud/chuhaibileizhen--waic" target="_blank">打开仓库</a>
+        <br><span class="status-tag status-ready">✅ 长期有效</span>
     </div>
 
+    <!-- QR 2: 项目介绍页 -->
     <div class="qr-card">
-        <img src="/static/github_issues.png" alt="GitHub Issues 二维码">
-        <h2>反馈与建议</h2>
-        <p>扫码提交问题或建议</p>
-        <a href="https://github.com/SiriusHong-cloud/chuhaibileizhen--waic/issues" target="_blank">打开链接</a>
+        <span class="qr-card-num">#2</span>
+        <img src="/static/project_intro.png" alt="项目介绍页二维码">
+        <h2>项目介绍页</h2>
+        <p class="desc">扫码查看精美图文介绍：14大模块功能、UI预览、核心亮点</p>
+        <a href="https://siriushong-cloud.github.io/chuhaibileizhen--waic/" target="_blank">打开介绍页</a>
+        <br><span class="status-tag status-pending">⏳ 需开启 GitHub Pages</span>
     </div>
 
+    <!-- QR 3: 小红书（占位） -->
+    <div class="qr-card">
+        <span class="qr-card-num">#3</span>
+        <div style="width:240px;height:240px;border-radius:14px;background:#1E293B;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 14px;border:2px dashed rgba(255,255,255,0.1);">
+            <span style="font-size:48px;margin-bottom:8px;">📱</span>
+            <span style="font-size:13px;color:#64748B;">小红书二维码</span>
+            <span style="font-size:11px;color:#475569;">待提供链接后生成</span>
+        </div>
+        <h2>小红书主页</h2>
+        <p class="desc">扫码关注小红书，获取更多出海干货</p>
+        <span class="status-tag status-pending">⏳ 等待链接</span>
+    </div>
+
+    <div class="divider"></div>
+    
     <p class="tip">
-        项目网页二维码将在 Render 部署完成后生成<br>
-        届时扫码即可直接体验「出海避雷针」应用
+        💡 <b>项目介绍页</b>需在电脑上开启 GitHub Pages：<br>
+        仓库 Settings → Pages → Source 选 <code>docs</code> 目录 → Save<br>
+        开启后约 1 分钟生效，二维码即可扫码访问<br><br>
+        📱 小红书二维码请提供主页链接，我来生成
     </p>
 </body>
 </html>
