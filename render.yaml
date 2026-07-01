@@ -1,0 +1,25 @@
+# Render 配置文件 - 一键部署到 Render 免费套餐
+# 文档: https://render.com/docs/blueprint-spec
+# 使用方式：
+#   1. 注册 Render 账号 (https://render.com)
+#   2. New -> Blueprint -> 选择 GitHub 仓库 SiriusHong-cloud/chuhaibileizhen--waic
+#   3. Render 会自动识别此配置文件并部署
+#   4. 部署成功后会获得一个公网URL（如 https://chuhaibileizhen.onrender.com）
+#   5. 把该URL填入 generate_qr.py 的 WEB_URL 变量重新运行，即可生成项目网页二维码
+
+services:
+  - type: web
+    name: chuhaibileizhen
+    runtime: python
+    plan: free  # 免费套餐：自动休眠，访问时自动唤醒（约30秒冷启动）
+    region: singapore  # 选新加坡节点，对国内访问更友好
+    branch: trae/agent-ZTCguv  # 当前活动开发分支
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /
+    autoDeploy: true  # push代码自动部署
+    envVars:
+      # 项目自带Demo模式：API_KEY未配置时会返回完整演示数据，适合活动展示
+      # 如需真实AI分析，可在Render后台手动添加环境变量 MIMO_API_KEY
+      - key: DEMO_MODE
+        value: auto
