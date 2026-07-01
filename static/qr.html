@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>出海避雷针 - 二维码</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px 16px;
+        }
+        h1 {
+            font-size: 20px;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        .subtitle {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-bottom: 32px;
+            text-align: center;
+        }
+        .qr-card {
+            background: #1e293b;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            text-align: center;
+            width: 100%;
+            max-width: 360px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+        }
+        .qr-card img {
+            width: 260px;
+            height: 260px;
+            border-radius: 12px;
+            background: white;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        .qr-card h2 {
+            font-size: 17px;
+            margin-bottom: 6px;
+        }
+        .qr-card p {
+            font-size: 13px;
+            color: #94a3b8;
+            word-break: break-all;
+        }
+        .qr-card a {
+            display: inline-block;
+            margin-top: 12px;
+            color: #60a5fa;
+            font-size: 13px;
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 1px solid #60a5fa;
+            border-radius: 8px;
+        }
+        .qr-card a:hover {
+            background: #60a5fa;
+            color: #0f172a;
+        }
+        .tip {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 24px;
+            text-align: center;
+            max-width: 360px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <h1>出海避雷针 QR Codes</h1>
+    <p class="subtitle">长按图片可保存到手机相册</p>
+
+    <div class="qr-card">
+        <img src="/static/github_repo.png" alt="GitHub 仓库二维码">
+        <h2>GitHub 仓库</h2>
+        <p>扫码访问项目源码仓库</p>
+        <a href="https://github.com/SiriusHong-cloud/chuhaibileizhen--waic" target="_blank">打开链接</a>
+    </div>
+
+    <div class="qr-card">
+        <img src="/static/github_issues.png" alt="GitHub Issues 二维码">
+        <h2>反馈与建议</h2>
+        <p>扫码提交问题或建议</p>
+        <a href="https://github.com/SiriusHong-cloud/chuhaibileizhen--waic/issues" target="_blank">打开链接</a>
+    </div>
+
+    <p class="tip">
+        项目网页二维码将在 Render 部署完成后生成<br>
+        届时扫码即可直接体验「出海避雷针」应用
+    </p>
+</body>
+</html>
