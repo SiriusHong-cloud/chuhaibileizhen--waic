@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>出海避雷针⚡ - 跨境出海全链路AI顾问</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary: #3B82F6;
+            --primary-dark: #1D4ED8;
+            --accent: #F59E0B;
+            --danger: #EF4444;
+            --success: #10B981;
+            --bg-dark: #0B1120;
+            --bg-card: #111827;
+            --bg-card2: #1E293B;
+            --text: #F1F5F9;
+            --text-dim: #94A3B8;
+            --text-muted: #64748B;
+            --gradient-1: linear-gradient(135deg, #3B82F6, #8B5CF6);
+            --gradient-2: linear-gradient(135deg, #F59E0B, #EF4444);
+            --gradient-3: linear-gradient(135deg, #10B981, #3B82F6);
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* ===== Hero Section ===== */
+        .hero {
+            position: relative;
+            padding: 48px 20px 36px;
+            text-align: center;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 50% 50%, rgba(59,130,246,0.12) 0%, transparent 50%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+        .hero-content { position: relative; z-index: 1; }
+        .hero-logo {
+            font-size: 56px;
+            display: block;
+            margin-bottom: 12px;
+            filter: drop-shadow(0 0 20px rgba(59,130,246,0.4));
+        }
+        .hero-title {
+            font-size: 28px;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
+        }
+        .hero-version {
+            display: inline-block;
+            background: var(--gradient-2);
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 10px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+        }
+        .hero-subtitle {
+            font-size: 15px;
+            color: var(--text-dim);
+            line-height: 1.6;
+            max-width: 320px;
+            margin: 0 auto;
+        }
+        
+        /* ===== Stats Bar ===== */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 0 16px 28px;
+            flex-wrap: wrap;
+        }
+        .stat-chip {
+            background: var(--bg-card2);
+            border: 1px solid rgba(59,130,246,0.2);
+            border-radius: 10px;
+            padding: 8px 14px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .stat-chip .num {
+            color: var(--primary);
+            font-size: 16px;
+            font-weight: 800;
+        }
+        
+        /* ===== Section ===== */
+        .section {
+            padding: 0 16px 32px;
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .section-header .dot {
+            width: 4px;
+            height: 20px;
+            border-radius: 2px;
+            background: var(--gradient-1);
+        }
+        .section-header h2 {
+            font-size: 17px;
+            font-weight: 700;
+        }
+        .section-header .badge {
+            font-size: 10px;
+            background: rgba(59,130,246,0.15);
+            color: var(--primary);
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+        
+        /* ===== Module Cards ===== */
+        .modules-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .module-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 14px;
+            padding: 14px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .module-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(59,130,246,0.3);
+        }
+        .module-card.full-width {
+            grid-column: 1 / -1;
+        }
+        .module-icon {
+            font-size: 24px;
+            margin-bottom: 6px;
+            display: block;
+        }
+        .module-name {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .module-name .new-tag {
+            font-size: 9px;
+            background: linear-gradient(135deg, #EF4444, #F59E0B);
+            color: white;
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-weight: 700;
+        }
+        .module-desc {
+            font-size: 11px;
+            color: var(--text-dim);
+            line-height: 1.5;
+        }
+        .module-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 8px;
+        }
+        .module-tags span {
+            font-size: 9px;
+            background: rgba(59,130,246,0.1);
+            color: #60A5FA;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        .module-tags span.risk-high {
+            background: rgba(239,68,68,0.1);
+            color: #F87171;
+        }
+        .module-tags span.risk-safe {
+            background: rgba(16,185,129,0.1);
+            color: #34D399;
+        }
+        
+        /* ===== UI Preview ===== */
+        .ui-preview {
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 18px;
+            padding: 20px 16px;
+            position: relative;
+            overflow: hidden;
+        }
+        .ui-preview::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: var(--gradient-1);
+        }
+        .mock-browser {
+            background: #0F172A;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 14px;
+        }
+        .mock-browser-bar {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 12px;
+            background: #1E293B;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .mock-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+        }
+        .mock-dot.r { background: #EF4444; }
+        .mock-dot.y { background: #F59E0B; }
+        .mock-dot.g { background: #10B981; }
+        .mock-url {
+            flex: 1;
+            background: #0F172A;
+            border-radius: 4px;
+            padding: 3px 8px;
+            font-size: 9px;
+            color: var(--text-muted);
+            margin-left: 6px;
+        }
+        .mock-content {
+            padding: 12px;
+        }
+        .mock-score-ring {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            border: 6px solid var(--bg-card2);
+            border-top-color: #EF4444;
+            border-right-color: #F59E0B;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 800;
+            color: #F59E0B;
+            margin: 0 auto 12px;
+        }
+        .mock-bar {
+            height: 6px;
+            border-radius: 3px;
+            background: var(--bg-card2);
+            margin-bottom: 6px;
+            overflow: hidden;
+        }
+        .mock-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+        }
+        .preview-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+        .preview-desc {
+            font-size: 12px;
+            color: var(--text-dim);
+            line-height: 1.6;
+        }
+        
+        /* ===== Features ===== */
+        .feature-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 14px;
+        }
+        .feature-icon {
+            font-size: 28px;
+            flex-shrink: 0;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(59,130,246,0.1);
+            border-radius: 10px;
+        }
+        .feature-text h4 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+        .feature-text p {
+            font-size: 12px;
+            color: var(--text-dim);
+            line-height: 1.5;
+        }
+        
+        /* ===== Footer ===== */
+        .footer {
+            text-align: center;
+            padding: 32px 16px 48px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        .footer-logo {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+        .footer-text {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 16px;
+        }
+        .footer-links a {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 8px 20px;
+            border: 1px solid rgba(59,130,246,0.3);
+            border-radius: 10px;
+            transition: all 0.2s;
+        }
+        .footer-links a:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* ===== QR Section ===== */
+        .qr-section {
+            padding: 0 16px 36px;
+        }
+        .qr-reminder {
+            background: var(--bg-card);
+            border: 1px dashed rgba(59,130,246,0.3);
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+        }
+        .qr-reminder h3 {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .qr-reminder p {
+            font-size: 12px;
+            color: var(--text-dim);
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== Hero ===== -->
+<div class="hero">
+    <div class="hero-content">
+        <span class="hero-logo">⚡</span>
+        <h1 class="hero-title">出海避雷针</h1>
+        <span class="hero-version">V5.0</span>
+        <p class="hero-subtitle">跨境出海全链路AI顾问<br>从文化合规到物流清关，一站式覆盖</p>
+    </div>
+</div>
+
+<!-- ===== Stats ===== -->
+<div class="stats-bar">
+    <div class="stat-chip"><span class="num">14</span>功能模块</div>
+    <div class="stat-chip"><span class="num">44+</span>国家覆盖</div>
+    <div class="stat-chip"><span class="num">7</span>维度检测</div>
+    <div class="stat-chip"><span class="num">🤖</span>AI驱动</div>
+</div>
+
+<!-- ===== UI Preview ===== -->
+<div class="section">
+    <div class="section-header">
+        <span class="dot"></span>
+        <h2>产品界面</h2>
+    </div>
+    <div class="ui-preview">
+        <div class="mock-browser">
+            <div class="mock-browser-bar">
+                <span class="mock-dot r"></span>
+                <span class="mock-dot y"></span>
+                <span class="mock-dot g"></span>
+                <span class="mock-url">出海避雷针⚡ - 全链路AI检测</span>
+            </div>
+            <div class="mock-content">
+                <div class="mock-score-ring">72</div>
+                <div style="margin-bottom: 8px;">
+                    <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-dim);margin-bottom:3px;">
+                        <span>文化适配</span><span style="color:#F87171;">高风险</span>
+                    </div>
+                    <div class="mock-bar"><div class="mock-bar-fill" style="width:35%;background:#EF4444;"></div></div>
+                </div>
+                <div style="margin-bottom: 8px;">
+                    <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-dim);margin-bottom:3px;">
+                        <span>合规认证</span><span style="color:#FBBF24;">中风险</span>
+                    </div>
+                    <div class="mock-bar"><div class="mock-bar-fill" style="width:60%;background:#F59E0B;"></div></div>
+                </div>
+                <div style="margin-bottom: 8px;">
+                    <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-dim);margin-bottom:3px;">
+                        <span>物流通关</span><span style="color:#34D399;">低风险</span>
+                    </div>
+                    <div class="mock-bar"><div class="mock-bar-fill" style="width:85%;background:#10B981;"></div></div>
+                </div>
+                <div>
+                    <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-dim);margin-bottom:3px;">
+                        <span>关税成本</span><span style="color:#FBBF24;">中风险</span>
+                    </div>
+                    <div class="mock-bar"><div class="mock-bar-fill" style="width:55%;background:#F59E0B;"></div></div>
+                </div>
+            </div>
+        </div>
+        <p class="preview-label">AI 全链路风险评估</p>
+        <p class="preview-desc">输入目标市场和产品，一键生成 7 维度风险评分雷达图 + 详细分析报告</p>
+    </div>
+</div>
+
+<!-- ===== 14 Modules ===== -->
+<div class="section">
+    <div class="section-header">
+        <span class="dot"></span>
+        <h2>14大功能模块</h2>
+        <span class="badge">全链路</span>
+    </div>
+    <div class="modules-grid">
+        <div class="module-card">
+            <span class="module-icon">🎯</span>
+            <div class="module-name">文化雷区检测</div>
+            <div class="module-desc">7维度文化扫描：宗教、颜色、数字、动物、肢体语言</div>
+            <div class="module-tags">
+                <span class="risk-high">高风险</span>
+                <span>宗教禁忌</span><span>颜色象征</span>
+            </div>
+        </div>
+        <div class="module-card">
+            <span class="module-icon">📡</span>
+            <div class="module-name">合规雷达</div>
+            <div class="module-desc">法规/认证/税务扫描：数据隐私、产品认证、广告法规</div>
+            <div class="module-tags">
+                <span class="risk-high">高风险</span>
+                <span>数据隐私</span><span>产品认证</span>
+            </div>
+        </div>
+        <div class="module-card">
+            <span class="module-icon">🔧</span>
+            <div class="module-name">本土化改造</div>
+            <div class="module-desc">文案/视觉/命名本地化：产品命名、营销话术、节日日历</div>
+            <div class="module-tags">
+                <span>产品命名</span><span>营销话术</span>
+            </div>
+        </div>
+        <div class="module-card">
+            <span class="module-icon">💰</span>
+            <div class="module-name">关税估算</div>
+            <div class="module-desc">HS编码→关税+物流成本：基础关税、FTA优惠</div>
+            <div class="module-tags">
+                <span>HS归类</span><span>关税税率</span>
+            </div>
+        </div>
+        <div class="module-card">
+            <span class="module-icon">✅</span>
+            <div class="module-name">产品准入</div>
+            <div class="module-desc">认证清单+准入要求：强制认证、费用/周期/本地代理</div>
+            <div class="module-tags">
+                <span class="risk-safe">安全</span>
+                <span>认证类型</span><span>申请流程</span>
+            </div>
+        </div>
+        <div class="module-card">
+            <span class="module-icon">🛒</span>
+            <div class="module-name">电商平台体检</div>
+            <div class="module-desc">Amazon/TikTok Shop等平台规则：类目准入、标签要求</div>
+            <div class="module-tags">
+                <span>入驻条件</span><span>佣金结构</span>
+            </div>
+        </div>
+        <div class="module-card">
+            <span class="module-icon">📝</span>
+            <div class="module-name">知识产权预检</div>
+            <div class="module-desc">商标/专利/版权风险：商标冲突、专利风险、投诉历史</div>
+            <div class="module-tags">
+                <span class="risk-high">高风险</span>
+                <span>商标风险</span><span>专利风险</span>
+            </div>
+        </div>
+        <div class="module-card">
+            <span class="module-icon">🚢</span>
+            <div class="module-name">物流合规</div>
+            <div class="module-desc">制裁筛查+危险品+原产地：清关文件一站式</div>
+            <div class="module-tags">
+                <span class="risk-high">高风险</span>
+                <span>制裁筛查</span><span>原产地证</span>
+            </div>
+        </div>
+        <div class="module-card">
+            <span class="module-icon">🆘</span>
+            <div class="module-name">危机处置</div>
+            <div class="module-desc">海关扣货/下架/召回应急：黄金24小时行动模板</div>
+            <div class="module-tags">
+                <span class="risk-high">高风险</span>
+                <span>响应策略</span><span>媒体沟通</span>
+            </div>
+        </div>
+        <div class="module-card">
+            <span class="module-icon">💥</span>
+            <div class="module-name">踩雷故事</div>
+            <div class="module-desc">真实品牌案例+教训总结：品牌+罚款金额+新闻来源</div>
+            <div class="module-tags">
+                <span class="risk-high">高风险</span>
+                <span>案例检索</span><span>教训总结</span>
+            </div>
+        </div>
+        <div class="module-card">
+            <span class="module-icon">🏪</span>
+            <div class="module-name">店铺AI体检 <span class="new-tag">NEW</span></div>
+            <div class="module-desc">一键跳转商家店铺，AI实时分析评分</div>
+            <div class="module-tags">
+                <span>店铺评分</span><span>Listing评估</span>
+            </div>
+        </div>
+        <div class="module-card">
+            <span class="module-icon">📦</span>
+            <div class="module-name">选品快检 <span class="new-tag">NEW</span></div>
+            <div class="module-desc">输入选品URL/关键词，一键合规检测</div>
+            <div class="module-tags">
+                <span>禁售检查</span><span>关税预估</span>
+            </div>
+        </div>
+        <div class="module-card">
+            <span class="module-icon">📰</span>
+            <div class="module-name">外贸新闻 <span class="new-tag">NEW</span></div>
+            <div class="module-desc">实时新闻+原文/翻译双语切换：政策·关税·平台·市场</div>
+            <div class="module-tags">
+                <span class="risk-safe">安全</span>
+                <span>政策法规</span><span>AI摘要</span>
+            </div>
+        </div>
+        <div class="module-card">
+            <span class="module-icon">📚</span>
+            <div class="module-name">外贸学院 <span class="new-tag">NEW</span></div>
+            <div class="module-desc">新手学习区：入门教程、术语库、实操指南</div>
+            <div class="module-tags">
+                <span class="risk-safe">安全</span>
+                <span>入门课程</span><span>术语词典</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== Highlights ===== -->
+<div class="section">
+    <div class="section-header">
+        <span class="dot"></span>
+        <h2>核心亮点</h2>
+    </div>
+    <div class="feature-list">
+        <div class="feature-item">
+            <div class="feature-icon">🌍</div>
+            <div class="feature-text">
+                <h4>全球风险地图</h4>
+                <p>交互式世界地图，44+国家风险热力图，点击查看详细外贸信息</p>
+            </div>
+        </div>
+        <div class="feature-item">
+            <div class="feature-icon">🤖</div>
+            <div class="feature-text">
+                <h4>AI 流式分析</h4>
+                <p>基于 MIMO 大模型，实时流式输出分析报告，7维度评分+雷达图</p>
+            </div>
+        </div>
+        <div class="feature-item">
+            <div class="feature-icon">🌐</div>
+            <div class="feature-text">
+                <h4>中英双语</h4>
+                <p>一键切换中/英文界面，外贸新闻支持原文+AI中文摘要双语对照</p>
+            </div>
+        </div>
+        <div class="feature-item">
+            <div class="feature-icon">⚡</div>
+            <div class="feature-text">
+                <h4>全链路覆盖</h4>
+                <p>从选品→合规→认证→物流→营销→运营，14模块一站式解决</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== QR Section ===== -->
+<div class="qr-section">
+    <div class="qr-reminder">
+        <h3>📱 扫码体验</h3>
+        <p>部署上线后，扫码即可直接打开<br>「出海避雷针」完整应用</p>
+    </div>
+</div>
+
+<!-- ===== Footer ===== -->
+<div class="footer">
+    <div class="footer-logo">⚡</div>
+    <div class="footer-text">
+        出海避雷针 V5.0 · 跨境出海全链路AI顾问<br>
+        Built with FastAPI + MIMO AI + ECharts
+    </div>
+    <div class="footer-links">
+        <a href="https://github.com/SiriusHong-cloud/chuhaibileizhen--waic" target="_blank">GitHub 源码</a>
+    </div>
+</div>
+
+</body>
+</html>
