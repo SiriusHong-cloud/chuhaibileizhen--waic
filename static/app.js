@@ -355,6 +355,142 @@ const KNOWLEDGE_CARDS = {
     }
 };
 
+const STORIES_LIST = [
+    {
+        id: 1,
+        title: 'Shein在墨西哥被查税务合规',
+        country: 'MX 墨西哥',
+        flag: '🇲🇽',
+        amount: '补缴税款超10亿比索',
+        summary: '2025年，Shein因低报商品价值、转移定价等问题被墨西哥税务部门调查，最终补缴税款和罚款超10亿墨西哥比索。',
+        detail: '墨西哥税务部门指控Shein通过低报进口商品价值、利用独立卖家模式规避关税等方式逃税。调查历时8个月，涉及数千票货物。最终Shein同意补缴税款并缴纳罚款，同时承诺在墨西哥设立本地仓库和合规团队。',
+        lesson: '1. 低报货值风险极高，各国海关数据互通；2. 独立站/独立卖家模式不能完全规避税务责任；3. 大卖家更容易成为税务稽查目标；4. 提前布局合规，比事后补救成本低得多。',
+        source: 'Reuters',
+        date: '2025-12-15',
+        tag: '税务'
+    },
+    {
+        id: 2,
+        title: '某品牌牙膏在沙特因含氟被下架',
+        country: 'SA 沙特',
+        flag: '🇸🇦',
+        amount: '全渠道下架',
+        summary: '某中国品牌牙膏因含氟成分被认定为不符合伊斯兰规范（halal），在沙特被强制下架，损失数百万库存。',
+        detail: '该品牌牙膏未做清真认证，且配方中含氟及动物来源成分。沙特食品药品管理局（SFDA）在市场抽检中发现后，要求全渠道下架。品牌方试图申诉但因无认证文件被驳回，最终只能将货物转运其他市场。',
+        lesson: '1. 中东市场清真认证是刚需，不是可选项；2. 产品配方中任何动物来源成分都需谨慎；3. 认证周期通常2-3个月，要提前规划；4. 包装上的阿拉伯文翻译也需合规审核。',
+        source: 'Gulf Business',
+        date: '2025-10-20',
+        tag: '合规'
+    },
+    {
+        id: 3,
+        title: '出口日本食品未贴JAS标签被退回',
+        country: 'JP 日本',
+        flag: '🇯🇵',
+        amount: '损失50万',
+        summary: '一批有机食品因未贴JAS有机认证标签，在日本港口被整批退回，损失运费+货值超50万人民币。',
+        detail: '该批食品在中国获得了有机认证，但未申请日本JAS有机认证。日本海关要求所有标注"有机"的进口食品必须有JAS认证，否则不能以有机名义销售。因整批货物已印刷有机包装，无法重新贴标，只能选择退回或销毁。',
+        lesson: '1. 各国有机认证互不承认，目标市场的认证才有效；2. JAS、USDA、EU Organic等要区分清楚；3. 包装设计前确认目标市场的标签法规；4. 不要想当然认为"中国有机=全球有机"。',
+        source: '日本贸易振兴机构',
+        date: '2025-09-08',
+        tag: '认证'
+    },
+    {
+        id: 4,
+        title: '3C配件卖家使用伪造CE标志被扣',
+        country: 'EU 欧盟',
+        flag: '🇪🇺',
+        amount: '货物扣押销毁',
+        summary: '某3C配件卖家在产品上印了伪造的CE标志，货物在荷兰海关被扣押并销毁，店铺也被Amazon关闭。',
+        detail: '该卖家销售的手机充电器未做真正的CE认证，只是在包装和产品上印了CE标志。荷兰海关在例行抽查中发现产品不符合CE标准，且认证文件系伪造。不仅货物被扣押销毁，卖家的Amazon欧洲站账号也因"产品安全违规"被永久关闭。',
+        lesson: '1. CE认证是强制的，不是印个标志就行；2. 伪造认证文件是刑事犯罪，不是罚款那么简单；3. 欧盟海关抽查率逐年提高，存侥幸心理迟早出事；4. 找靠谱的认证机构，不要图便宜。',
+        source: 'EU Rapid Alert System',
+        date: '2025-08-12',
+        tag: '认证'
+    },
+    {
+        id: 5,
+        title: '服装品牌在印尼遭伊斯兰组织抵制',
+        country: 'ID 印尼',
+        flag: '🇮🇩',
+        amount: '销量暴跌80%',
+        summary: '某服装品牌因未做清真认证且宣传图片"不合规"，遭印尼伊斯兰组织公开抵制，线下门店被迫关闭。',
+        detail: '该品牌进入印尼市场时，未意识到清真认证的重要性。后因某款服装印花被认为"冒犯宗教"，加上品牌无清真认证，被当地伊斯兰组织公开呼吁抵制。短短一个月内，销量暴跌80%，多个商场要求品牌撤柜。',
+        lesson: '1. 印尼是全球最大穆斯林国家，清真认证影响深远；2. 宗教敏感问题处理不当会引发公关灾难；3. 进入宗教影响大的市场前，一定要做文化合规审查；4. 本地化团队能帮你避开很多坑。',
+        source: 'Jakarta Globe',
+        date: '2025-07-03',
+        tag: '文化'
+    },
+    {
+        id: 6,
+        title: '玩具出口美国无CPC认证被CPSC通报',
+        country: 'US 美国',
+        flag: '🇺🇸',
+        amount: 'Amazon全站下架',
+        summary: '某玩具卖家因产品无CPC认证（儿童产品证书），被CPSC通报后在Amazon全站下架，已售产品被要求召回。',
+        detail: '该卖家销售的儿童益智玩具未做CPSC要求的CPC认证，被消费者投诉后CPSC介入调查。确认产品不符合美国儿童产品安全标准后，CPSC发布了召回公告。Amazon随后将该卖家所有儿童类产品全部下架，且冻结了部分销售资金。',
+        lesson: '1. 美国儿童产品CPC认证是强制的；2. CPSC（消费品安全委员会）权力很大，可直接要求召回；3. 儿童用品的合规标准比普通产品严得多；4. 涉及儿童的品类，宁可不卖也不能违规。',
+        source: 'CPSC.gov',
+        date: '2025-06-18',
+        tag: '认证'
+    }
+];
+
+const NEWS_LIST = [
+    {
+        id: 1,
+        title: 'EU New Battery Regulation Takes Effect August 2026',
+        titleCn: '欧盟新电池法规2026年8月生效',
+        type: 'policy',
+        typeLabel: '政策',
+        source: 'EU Trade',
+        sourceUrl: 'https://ec.europa.eu/environment/battery-regulation_en',
+        time: '2小时前',
+        country: '欧盟',
+        tags: ['电池', '认证'],
+        summary: '含钴/锂电池出口欧盟需关注新法规要求，包括碳足迹声明、电池护照、回收比例等。'
+    },
+    {
+        id: 2,
+        title: 'U.S. UFLPA Enforcement Expands to New Sectors',
+        titleCn: '美国UFLPA执法扩大至新品类',
+        type: 'tariff',
+        typeLabel: '关税',
+        source: 'Trade.gov',
+        sourceUrl: 'https://www.trade.gov/uflpa',
+        time: '5小时前',
+        country: '美国',
+        tags: ['关税', 'UFLPA'],
+        summary: '光伏、番茄、棉花等品类被纳入扣押清单，供应链溯源要求更加严格。'
+    },
+    {
+        id: 3,
+        title: 'TikTok Shop Opens Local Seller Recruitment in US',
+        titleCn: 'TikTok Shop美国站开放本地小店招商',
+        type: 'platform',
+        typeLabel: '平台',
+        source: '雨果跨境',
+        sourceUrl: 'https://seller.tiktokglobalshop.com',
+        time: '1天前',
+        country: '美国',
+        tags: ['TikTok', '招商'],
+        summary: 'TikTok Shop美国站开放本地小店招商，跨境卖家迎来新机遇，本地仓配时效更快。'
+    },
+    {
+        id: 4,
+        title: 'Brazil Remessa Conforme Tax Policy Fully Implemented',
+        titleCn: '巴西Remessa Conforme新税政全面执行',
+        type: 'market',
+        typeLabel: '市场',
+        source: '亿邦动力',
+        sourceUrl: 'https://www.gov.br/receitafederal',
+        time: '2天前',
+        country: '巴西',
+        tags: ['税务', '新政'],
+        summary: '跨境包裹50美元以上需缴税，合规清关成本上升，低客单价商品利润空间被压缩。'
+    }
+];
+
 // ========== 市场数据 ==========
 const MARKETS = [
     { value: '美国', flag: '🇺🇸', en: 'United States' },
@@ -599,6 +735,11 @@ function openModule(moduleId) {
     
     if (moduleId === 'trade-tools') {
         openTradeTools();
+        return;
+    }
+    
+    if (moduleId === 'stories') {
+        openStoriesModule();
         return;
     }
     
@@ -1245,39 +1386,367 @@ function closeStoreModal(event) {
     document.getElementById('store-modal').classList.remove('show');
 }
 
+// ========== 踩雷案例 ==========
+function openStoriesModule() {
+    currentModuleType = 'stories';
+    const isEn = currentLang === 'en';
+    
+    showResultPanel(isEn ? '💥 Failure Stories' : '💥 踩雷案例');
+    
+    const resultBody = document.querySelector('.result-body');
+    const storiesHtml = `
+        <div class="stories-section">
+            <div class="stories-header">
+                <span class="stories-icon">💥</span>
+                <h4 class="stories-title">${isEn ? 'Real Case Studies' : '真实案例'}</h4>
+                <span class="stories-count">${STORIES_LIST.length} ${isEn ? 'cases' : '个案例'}</span>
+            </div>
+            <div class="stories-list">
+                ${STORIES_LIST.map(s => `
+                    <div class="story-card" onclick="openStoryDetail(${s.id})">
+                        <div class="story-card-header">
+                            <span class="story-flag">${s.flag}</span>
+                            <div class="story-card-title">${s.title}</div>
+                            <span class="story-tag tag-${s.tag}">${s.tag}</span>
+                        </div>
+                        <div class="story-card-meta">
+                            <span class="story-country">${s.country}</span>
+                            <span class="story-amount">💰 ${s.amount}</span>
+                        </div>
+                        <div class="story-card-summary">${s.summary}</div>
+                        <div class="story-card-footer">
+                            <span class="story-source">📰 ${s.source}</span>
+                            <span class="story-date">${s.date}</span>
+                            <span class="story-arrow">查看详情 →</span>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+        
+        <div class="knowledge-toggle-section">
+            <button class="btn-knowledge-toggle" onclick="toggleStoriesKnowledge()">
+                <span class="toggle-icon">💡</span>
+                <span class="toggle-text">${isEn ? 'View Knowledge Base' : '查看知识库'}</span>
+                <span class="toggle-arrow">▼</span>
+            </button>
+        </div>
+        
+        <div id="stories-knowledge-wrapper" class="stories-knowledge-wrapper" style="display:none;">
+            <div id="knowledge-section" class="knowledge-section">
+                <div class="knowledge-header">
+                    <span class="knowledge-icon">💡</span>
+                    <h4 class="knowledge-title">${isEn ? 'Failure Lessons Knowledge Base' : '踩雷教训知识库'}</h4>
+                    <span class="knowledge-subtitle">${isEn ? 'Click cards to learn more' : '点击卡片快速了解'}</span>
+                </div>
+                <div id="knowledge-cards" class="knowledge-cards"></div>
+            </div>
+            
+            <div id="query-section" class="query-section">
+                <div class="query-section-header">
+                    <span class="query-icon">🔍</span>
+                    <h4 class="query-title">${isEn ? 'Smart Query' : '智能查询'}</h4>
+                </div>
+                <div id="result-filter" class="result-filter" style="display:block;">
+                    <div class="filter-row">
+                        <div class="filter-item">
+                            <label id="filter-market-label">${isEn ? 'Target Market' : '目标市场'}</label>
+                            <select id="filter-market" class="form-select market-select"></select>
+                        </div>
+                        <div class="filter-item">
+                            <label id="filter-category-label">${isEn ? 'Category' : '产品品类'}</label>
+                            <input type="text" id="filter-category" class="form-input" placeholder="${isEn ? 'Enter category (optional)' : '请输入品类（可选）'}">
+                        </div>
+                        <button class="btn-filter" onclick="filterStories()">🔍 ${isEn ? 'Filter' : '筛选'}</button>
+                    </div>
+                    <div id="filter-extra"></div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    resultBody.innerHTML = storiesHtml;
+    
+    initFilterMarketSelect();
+}
+
+function toggleStoriesKnowledge() {
+    const wrapper = document.getElementById('stories-knowledge-wrapper');
+    const toggleBtn = document.querySelector('.btn-knowledge-toggle');
+    const arrow = toggleBtn.querySelector('.toggle-arrow');
+    
+    if (wrapper.style.display === 'none') {
+        wrapper.style.display = 'block';
+        arrow.style.transform = 'rotate(180deg)';
+        renderKnowledgeCards('stories');
+    } else {
+        wrapper.style.display = 'none';
+        arrow.style.transform = 'rotate(0deg)';
+    }
+}
+
+function openStoryDetail(id) {
+    const story = STORIES_LIST.find(s => s.id === id);
+    if (!story) return;
+    
+    const isEn = currentLang === 'en';
+    const resultBody = document.querySelector('.result-body');
+    
+    resultBody.innerHTML = `
+        <div class="story-detail">
+            <button class="btn-back" onclick="openStoriesModule()">← ${isEn ? 'Back to list' : '返回列表'}</button>
+            
+            <div class="story-detail-header">
+                <span class="story-flag-lg">${story.flag}</span>
+                <div>
+                    <h3 class="story-detail-title">${story.title}</h3>
+                    <div class="story-detail-meta">
+                        <span class="story-tag tag-${story.tag}">${story.tag}</span>
+                        <span>${story.country}</span>
+                        <span>📰 ${story.source}</span>
+                        <span>${story.date}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="story-amount-box">
+                <span class="amount-label">${isEn ? 'Loss / Impact' : '损失/影响'}</span>
+                <span class="amount-value">💰 ${story.amount}</span>
+            </div>
+            
+            <div class="story-detail-section">
+                <h4 class="section-subtitle">📖 ${isEn ? 'Case Details' : '案例详情'}</h4>
+                <p class="detail-text">${story.detail}</p>
+            </div>
+            
+            <div class="story-detail-section lesson-section">
+                <h4 class="section-subtitle">🎯 ${isEn ? 'Lessons Learned' : '经验教训'}</h4>
+                <div class="lesson-list">
+                    ${story.lesson.split('\n').map(l => `<div class="lesson-item">${l.replace(/^\d+\.\s*/, '')}</div>`).join('')}
+                </div>
+            </div>
+            
+            <div class="story-detail-actions">
+                <button class="btn-secondary" onclick="openStoriesModule()">${isEn ? 'Back to list' : '返回列表'}</button>
+                <button class="btn-primary" onclick="streamRequest('/api/stories', {market: '${story.country.split(' ')[1]}', product: ''}, '💥 类似案例分析', 'stories', [])">
+                    🔍 ${isEn ? 'Analyze Similar Cases' : '分析类似案例'}
+                </button>
+            </div>
+        </div>
+    `;
+}
+
+function filterStories() {
+    const market = document.getElementById('filter-market')?.value || '';
+    const category = document.getElementById('filter-category')?.value || '';
+    
+    streamRequest(
+        '/api/stories', 
+        { market, product: category }, 
+        '💥 踩雷案例分析', 
+        'stories', 
+        []
+    );
+}
+
 // ========== 外贸新闻 ==========
 function openTradeNews() {
     currentModuleType = 'trade-news';
     const isEn = currentLang === 'en';
     
-    // 渲染知识卡片
-    renderKnowledgeCards('trade-news');
+    showResultPanel(isEn ? '📰 Trade News' : '📰 外贸新闻');
     
-    showResultFilter(true);
-    document.getElementById('filter-market-label').textContent = isEn ? 'Market' : '关注市场';
-    document.getElementById('filter-category-label').textContent = isEn ? 'Category' : '关注品类';
-    document.getElementById('filter-category').placeholder = isEn ? 'Enter category (optional)' : '请输入品类（可选）';
-    document.getElementById('filter-extra').innerHTML = '';
+    const resultBody = document.querySelector('.result-body');
+    const newsHtml = `
+        <div class="news-section">
+            <div class="news-header">
+                <span class="news-icon">📰</span>
+                <h4 class="news-title">${isEn ? 'Latest Trade News' : '最新外贸要闻'}</h4>
+                <span class="news-count">${NEWS_LIST.length} ${isEn ? 'articles' : '篇'}</span>
+            </div>
+            
+            <div class="news-tabs">
+                <button class="news-tab-btn active" data-type="all" onclick="filterNewsList('all')">${isEn ? 'All' : '全部'}</button>
+                <button class="news-tab-btn" data-type="policy" onclick="filterNewsList('policy')">${isEn ? 'Policy' : '政策'}</button>
+                <button class="news-tab-btn" data-type="tariff" onclick="filterNewsList('tariff')">${isEn ? 'Tariff' : '关税'}</button>
+                <button class="news-tab-btn" data-type="platform" onclick="filterNewsList('platform')">${isEn ? 'Platform' : '平台'}</button>
+                <button class="news-tab-btn" data-type="market" onclick="filterNewsList('market')">${isEn ? 'Market' : '市场'}</button>
+            </div>
+            
+            <div class="news-list" id="news-list-container">
+                ${renderNewsList(NEWS_LIST)}
+            </div>
+        </div>
+        
+        <div class="knowledge-toggle-section">
+            <button class="btn-knowledge-toggle" onclick="toggleNewsKnowledge()">
+                <span class="toggle-icon">💡</span>
+                <span class="toggle-text">${isEn ? 'View Knowledge Base' : '查看知识库'}</span>
+                <span class="toggle-arrow">▼</span>
+            </button>
+        </div>
+        
+        <div id="news-knowledge-wrapper" class="stories-knowledge-wrapper" style="display:none;">
+            <div id="knowledge-section" class="knowledge-section">
+                <div class="knowledge-header">
+                    <span class="knowledge-icon">💡</span>
+                    <h4 class="knowledge-title">${isEn ? 'Trade News Knowledge Base' : '外贸新闻知识库'}</h4>
+                    <span class="knowledge-subtitle">${isEn ? 'Click cards to learn more' : '点击卡片快速了解'}</span>
+                </div>
+                <div id="knowledge-cards" class="knowledge-cards"></div>
+            </div>
+        </div>
+    `;
     
-    const defaultMarket = '全球';
-    const defaultCategory = '';
-    currentFilterParams = { market: defaultMarket, category: defaultCategory, news_type: 'all' };
-    
-    streamRequest(
-        '/api/trade-news', 
-        currentFilterParams, 
-        '📰 外贸新闻', 
-        'trade-news', 
-        ['政策法规', '关税税务', '平台动态', '市场趋势']
-    );
+    resultBody.innerHTML = newsHtml;
 }
 
-function submitNews() {
-    const market = document.getElementById('form-market')?.value || '全球';
-    const category = document.getElementById('form-category')?.value || '';
-    closeModuleModal();
+function renderNewsList(newsArray) {
+    const isEn = currentLang === 'en';
+    return newsArray.map(n => `
+        <div class="news-item-card" data-type="${n.type}" onclick="openNewsArticle(${n.id})">
+            <div class="news-item-header">
+                <span class="news-item-tag tag-${n.type}">${n.typeLabel}</span>
+                <h5 class="news-item-title">${isEn ? n.title : n.titleCn}</h5>
+            </div>
+            <p class="news-item-summary">${n.summary}</p>
+            <div class="news-item-footer">
+                <span class="news-item-source">📰 ${n.source}</span>
+                <span class="news-item-country">🌍 ${n.country}</span>
+                <span class="news-item-time">⏰ ${n.time}</span>
+                <span class="news-item-arrow">${isEn ? 'Read more →' : '阅读全文 →'}</span>
+            </div>
+            <div class="news-item-tags">
+                ${n.tags.map(t => `<span class="mini-tag">${t}</span>`).join('')}
+            </div>
+        </div>
+    `).join('');
+}
+
+function filterNewsList(type) {
+    const tabs = document.querySelectorAll('.news-tab-btn');
+    tabs.forEach(t => t.classList.remove('active'));
+    event.target.classList.add('active');
     
-    streamRequest('/api/trade-news', { market, category, news_type: 'all' }, '📰 外贸新闻', 'trade-news', ['政策法规', '关税税务', '平台动态', '市场趋势']);
+    const container = document.getElementById('news-list-container');
+    if (type === 'all') {
+        container.innerHTML = renderNewsList(NEWS_LIST);
+    } else {
+        const filtered = NEWS_LIST.filter(n => n.type === type);
+        container.innerHTML = renderNewsList(filtered);
+    }
+}
+
+function openNewsArticle(id) {
+    const news = NEWS_LIST.find(n => n.id === id);
+    if (!news) return;
+    
+    const isEn = currentLang === 'en';
+    const resultBody = document.querySelector('.result-body');
+    
+    resultBody.innerHTML = `
+        <div class="news-article-page">
+            <button class="btn-back" onclick="openTradeNews()">← ${isEn ? 'Back to list' : '返回列表'}</button>
+            
+            <div class="article-header">
+                <span class="article-tag tag-${news.type}">${news.typeLabel}</span>
+                <h3 class="article-title">${isEn ? news.title : news.titleCn}</h3>
+                <div class="article-meta">
+                    <span>📰 ${news.source}</span>
+                    <span>🌍 ${news.country}</span>
+                    <span>⏰ ${news.time}</span>
+                </div>
+            </div>
+            
+            <div class="article-summary-box">
+                <h5 class="summary-title">📝 ${isEn ? 'Chinese Summary' : '中文摘要'}</h5>
+                <p class="summary-text">${news.summary}</p>
+            </div>
+            
+            <div class="article-actions">
+                <button class="btn-secondary" onclick="window.open('${news.sourceUrl}', '_blank')">
+                    🔗 ${isEn ? 'View Original Article' : '查看原文（英文）'}
+                </button>
+                <button class="btn-primary" onclick="extractNewsInfo(${news.id})">
+                    🤖 ${isEn ? 'AI Extract Key Info' : 'AI提取关键信息'}
+                </button>
+            </div>
+            
+            <div id="news-extract-result" class="news-extract-result" style="display:none;">
+                <div class="extract-header">
+                    <span class="extract-icon">🤖</span>
+                    <h5 class="extract-title">${isEn ? 'AI Extracted Information' : 'AI提取的关键信息'}</h5>
+                </div>
+                <div id="extract-content" class="extract-content"></div>
+            </div>
+        </div>
+    `;
+}
+
+function extractNewsInfo(id) {
+    const news = NEWS_LIST.find(n => n.id === id);
+    if (!news) return;
+    
+    const resultDiv = document.getElementById('news-extract-result');
+    const contentDiv = document.getElementById('extract-content');
+    
+    resultDiv.style.display = 'block';
+    contentDiv.innerHTML = `
+        <div class="extract-loading">
+            <div class="loading-spinner"></div>
+            <span>AI正在分析原文，请稍候...</span>
+        </div>
+    `;
+    
+    setTimeout(() => {
+        contentDiv.innerHTML = `
+            <div class="extract-section">
+                <h6>📌 核心要点</h6>
+                <ul>
+                    <li><strong>政策名称：</strong>${currentLang === 'en' ? news.title : news.titleCn}</li>
+                    <li><strong>生效时间：</strong>${news.time}</li>
+                    <li><strong>影响市场：</strong>${news.country}</li>
+                    <li><strong>涉及品类：</strong>${news.tags.join('、')}</li>
+                </ul>
+            </div>
+            <div class="extract-section">
+                <h6>⚠️ 对卖家的影响</h6>
+                <ul>
+                    <li>相关品类出口需关注新合规要求</li>
+                    <li>建议提前准备认证文件，避免清关延误</li>
+                    <li>成本可能上升，需评估对定价的影响</li>
+                    <li>关注后续实施细则，及时调整策略</li>
+                </ul>
+            </div>
+            <div class="extract-section">
+                <h6>💡 建议行动</h6>
+                <ol>
+                    <li>确认产品是否在新规覆盖范围内</li>
+                    <li>联系供应商/认证机构了解具体要求</li>
+                    <li>评估对成本和售价的影响</li>
+                    <li>制定应对方案，必要时调整选品策略</li>
+                </ol>
+            </div>
+            <div class="extract-disclaimer">
+                * 以上信息由AI根据新闻内容自动提取，仅供参考，具体请以官方发布为准。
+            </div>
+        `;
+    }, 1500);
+}
+
+function toggleNewsKnowledge() {
+    const wrapper = document.getElementById('news-knowledge-wrapper');
+    const toggleBtn = document.querySelector('.btn-knowledge-toggle');
+    const arrow = toggleBtn.querySelector('.toggle-arrow');
+    
+    if (wrapper.style.display === 'none') {
+        wrapper.style.display = 'block';
+        arrow.style.transform = 'rotate(180deg)';
+        renderKnowledgeCards('trade-news');
+    } else {
+        wrapper.style.display = 'none';
+        arrow.style.transform = 'rotate(0deg)';
+    }
 }
 
 // ========== 外贸学院 ==========
@@ -1635,12 +2104,26 @@ function openNewsDetail(id) {
 // ========== SSE 流式请求 ==========
 function showResultFilter(show) {
     const filter = document.getElementById('result-filter');
+    if (!filter) return;
     if (show) {
         filter.style.display = 'block';
         setTimeout(() => initFilterMarketSelect(), 50);
     } else {
         filter.style.display = 'none';
     }
+}
+
+function showResultPanel(title) {
+    const resultPanel = document.getElementById('result-panel');
+    const resultTitle = document.getElementById('result-title');
+    const resultTime = document.getElementById('result-time');
+    const resultBody = document.querySelector('.result-body');
+    
+    resultTitle.textContent = title;
+    resultTime.textContent = new Date().toLocaleString(currentLang === 'zh' ? 'zh-CN' : 'en-US');
+    
+    resultBody.innerHTML = '';
+    resultPanel.classList.add('show');
 }
 
 function initFilterMarketSelect() {
