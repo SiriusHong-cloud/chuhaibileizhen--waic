@@ -1393,7 +1393,6 @@ function openStoriesModule() {
     
     showResultPanel(isEn ? '💥 Failure Stories' : '💥 踩雷案例');
     
-    const resultBody = document.querySelector('.result-body');
     const storiesHtml = `
         <div class="stories-section">
             <div class="stories-header">
@@ -1465,7 +1464,7 @@ function openStoriesModule() {
         </div>
     `;
     
-    resultBody.innerHTML = storiesHtml;
+    showCustomContent(storiesHtml);
     
     initFilterMarketSelect();
 }
@@ -1485,55 +1484,61 @@ function toggleStoriesKnowledge() {
     }
 }
 
+function renderLessonList(lesson) {
+    return lesson.split('\n').map(l => {
+        const text = l.replace(/^\d+\.\s*/, '');
+        return `<div class="lesson-item">${text}</div>`;
+    }).join('');
+}
+
 function openStoryDetail(id) {
     const story = STORIES_LIST.find(s => s.id === id);
     if (!story) return;
     
     const isEn = currentLang === 'en';
-    const resultBody = document.querySelector('.result-body');
+    const backText = isEn ? 'Back to list' : '返回列表';
+    const lossLabel = isEn ? 'Loss / Impact' : '损失/影响';
+    const detailTitle = isEn ? 'Case Details' : '案例详情';
+    const lessonTitle = isEn ? 'Lessons Learned' : '经验教训';
+    const analyzeText = isEn ? 'Analyze Similar Cases' : '分析类似案例';
     
-    resultBody.innerHTML = `
-        <div class="story-detail">
-            <button class="btn-back" onclick="openStoriesModule()">← ${isEn ? 'Back to list' : '返回列表'}</button>
-            
-            <div class="story-detail-header">
-                <span class="story-flag-lg">${story.flag}</span>
-                <div>
-                    <h3 class="story-detail-title">${story.title}</h3>
-                    <div class="story-detail-meta">
-                        <span class="story-tag tag-${story.tag}">${story.tag}</span>
-                        <span>${story.country}</span>
-                        <span>📰 ${story.source}</span>
-                        <span>${story.date}</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="story-amount-box">
-                <span class="amount-label">${isEn ? 'Loss / Impact' : '损失/影响'}</span>
-                <span class="amount-value">💰 ${story.amount}</span>
-            </div>
-            
-            <div class="story-detail-section">
-                <h4 class="section-subtitle">📖 ${isEn ? 'Case Details' : '案例详情'}</h4>
-                <p class="detail-text">${story.detail}</p>
-            </div>
-            
-            <div class="story-detail-section lesson-section">
-                <h4 class="section-subtitle">🎯 ${isEn ? 'Lessons Learned' : '经验教训'}</h4>
-                <div class="lesson-list">
-                    ${story.lesson.split('\n').map(l => `<div class="lesson-item">${l.replace(/^\d+\.\s*/, '')}</div>`).join('')}
-                </div>
-            </div>
-            
-            <div class="story-detail-actions">
-                <button class="btn-secondary" onclick="openStoriesModule()">${isEn ? 'Back to list' : '返回列表'}</button>
-                <button class="btn-primary" onclick="streamRequest('/api/stories', {market: '${story.country.split(' ')[1]}', product: ''}, '💥 类似案例分析', 'stories', [])">
-                    🔍 ${isEn ? 'Analyze Similar Cases' : '分析类似案例'}
-                </button>
-            </div>
-        </div>
-    `;
+    let html = '<div class="story-detail">';
+    html += '<button class="btn-back" onclick="openStoriesModule()">← ' + backText + '</button>';
+    html += '<div class="story-detail-header">';
+    html += '<span class="story-flag-lg">' + story.flag + '</span>';
+    html += '<div>';
+    html += '<h3 class="story-detail-title">' + story.title + '</h3>';
+    html += '<div class="story-detail-meta">';
+    html += '<span class="story-tag tag-' + story.tag + '">' + story.tag + '</span>';
+    html += '<span>' + story.country + '</span>';
+    html += '<span>📰 ' + story.source + '</span>';
+    html += '<span>' + story.date + '</span>';
+    html += '</div></div></div>';
+    html += '<div class="story-amount-box">';
+    html += '<span class="amount-label">' + lossLabel + '</span>';
+    html += '<span class="amount-value">💰 ' + story.amount + '</span>';
+    html += '</div>';
+    html += '<div class="story-detail-section">';
+    html += '<h4 class="section-subtitle">📖 ' + detailTitle + '</h4>';
+    html += '<p class="detail-text">' + story.detail + '</p>';
+    html += '</div>';
+    html += '<div class="story-detail-section lesson-section">';
+    html += '<h4 class="section-subtitle">🎯 ' + lessonTitle + '</h4>';
+    html += '<div class="lesson-list">' + renderLessonList(story.lesson) + '</div>';
+    html += '</div>';
+    html += '<div class="story-detail-actions">';
+    html += '<button class="btn-secondary" onclick="openStoriesModule()">' + backText + '</button>';
+    html += '<button class="btn-primary" onclick="analyzeSimilarCases(' + story.id + ')">' + analyzeText + '</button>';
+    html += '</div></div>';
+    
+    showCustomContent(html);
+}
+
+function analyzeSimilarCases(id) {
+    const story = STORIES_LIST.find(s => s.id === id);
+    if (!story) return;
+    const country = story.country.split(' ')[1] || story.country;
+    streamRequest('/api/stories', { market: country, product: '' }, '💥 类似案例分析', 'stories', []);
 }
 
 function filterStories() {
@@ -1556,7 +1561,6 @@ function openTradeNews() {
     
     showResultPanel(isEn ? '📰 Trade News' : '📰 外贸新闻');
     
-    const resultBody = document.querySelector('.result-body');
     const newsHtml = `
         <div class="news-section">
             <div class="news-header">
@@ -1598,7 +1602,7 @@ function openTradeNews() {
         </div>
     `;
     
-    resultBody.innerHTML = newsHtml;
+    showCustomContent(newsHtml);
 }
 
 function renderNewsList(newsArray) {
@@ -1644,45 +1648,42 @@ function openNewsArticle(id) {
     if (!news) return;
     
     const isEn = currentLang === 'en';
-    const resultBody = document.querySelector('.result-body');
+    const backText = isEn ? 'Back to list' : '返回列表';
+    const summaryTitle = isEn ? 'Chinese Summary' : '中文摘要';
+    const viewOriginal = isEn ? 'View Original Article' : '查看原文（英文）';
+    const extractBtn = isEn ? 'AI Extract Key Info' : 'AI提取关键信息';
+    const extractTitle = isEn ? 'AI Extracted Information' : 'AI提取的关键信息';
     
-    resultBody.innerHTML = `
-        <div class="news-article-page">
-            <button class="btn-back" onclick="openTradeNews()">← ${isEn ? 'Back to list' : '返回列表'}</button>
-            
-            <div class="article-header">
-                <span class="article-tag tag-${news.type}">${news.typeLabel}</span>
-                <h3 class="article-title">${isEn ? news.title : news.titleCn}</h3>
-                <div class="article-meta">
-                    <span>📰 ${news.source}</span>
-                    <span>🌍 ${news.country}</span>
-                    <span>⏰ ${news.time}</span>
-                </div>
-            </div>
-            
-            <div class="article-summary-box">
-                <h5 class="summary-title">📝 ${isEn ? 'Chinese Summary' : '中文摘要'}</h5>
-                <p class="summary-text">${news.summary}</p>
-            </div>
-            
-            <div class="article-actions">
-                <a class="btn-secondary" href="${news.sourceUrl}" target="_blank" rel="noopener noreferrer" onclick="openSourceUrl('${news.sourceUrl}')">
-                    🔗 ${isEn ? 'View Original Article' : '查看原文（英文）'}
-                </a>
-                <button class="btn-primary" onclick="extractNewsInfo(${news.id})">
-                    🤖 ${isEn ? 'AI Extract Key Info' : 'AI提取关键信息'}
-                </button>
-            </div>
-            
-            <div id="news-extract-result" class="news-extract-result" style="display:none;">
-                <div class="extract-header">
-                    <span class="extract-icon">🤖</span>
-                    <h5 class="extract-title">${isEn ? 'AI Extracted Information' : 'AI提取的关键信息'}</h5>
-                </div>
-                <div id="extract-content" class="extract-content"></div>
-            </div>
-        </div>
-    `;
+    let html = '<div class="news-article-page">';
+    html += '<button class="btn-back" onclick="openTradeNews()">← ' + backText + '</button>';
+    html += '<div class="article-header">';
+    html += '<span class="article-tag tag-' + news.type + '">' + news.typeLabel + '</span>';
+    html += '<h3 class="article-title">' + (isEn ? news.title : news.titleCn) + '</h3>';
+    html += '<div class="article-meta">';
+    html += '<span>📰 ' + news.source + '</span>';
+    html += '<span>🌍 ' + news.country + '</span>';
+    html += '<span>⏰ ' + news.time + '</span>';
+    html += '</div></div>';
+    html += '<div class="article-summary-box">';
+    html += '<h5 class="summary-title">📝 ' + summaryTitle + '</h5>';
+    html += '<p class="summary-text">' + news.summary + '</p>';
+    html += '</div>';
+    html += '<div class="article-actions">';
+    html += '<a class="btn-secondary" href="' + news.sourceUrl + '" target="_blank" rel="noopener noreferrer" onclick="openSourceUrl(this.href)">';
+    html += '🔗 ' + viewOriginal + '</a>';
+    html += '<button class="btn-primary" onclick="extractNewsInfo(' + news.id + ')">';
+    html += '🤖 ' + extractBtn + '</button>';
+    html += '</div>';
+    html += '<div id="news-extract-result" class="news-extract-result" style="display:none;">';
+    html += '<div class="extract-header">';
+    html += '<span class="extract-icon">🤖</span>';
+    html += '<h5 class="extract-title">' + extractTitle + '</h5>';
+    html += '</div>';
+    html += '<div id="extract-content" class="extract-content"></div>';
+    html += '</div>';
+    html += '</div>';
+    
+    showCustomContent(html);
 }
 
 function openSourceUrl(url) {
@@ -2129,13 +2130,23 @@ function showResultPanel(title) {
     const resultPanel = document.getElementById('result-panel');
     const resultTitle = document.getElementById('result-title');
     const resultTime = document.getElementById('result-time');
-    const resultBody = document.querySelector('.result-body');
     
     resultTitle.textContent = title;
     resultTime.textContent = new Date().toLocaleString(currentLang === 'zh' ? 'zh-CN' : 'en-US');
     
-    resultBody.innerHTML = '';
     resultPanel.classList.add('show');
+}
+
+function showCustomContent(html) {
+    document.getElementById('knowledge-section').style.display = 'none';
+    document.getElementById('result-filter').style.display = 'none';
+    document.getElementById('score-panel').style.display = 'none';
+    document.getElementById('radar-panel').style.display = 'none';
+    document.getElementById('loading-indicator').style.display = 'none';
+    
+    const resultContent = document.getElementById('result-content');
+    resultContent.innerHTML = html;
+    resultContent.style.display = 'block';
 }
 
 function initFilterMarketSelect() {
