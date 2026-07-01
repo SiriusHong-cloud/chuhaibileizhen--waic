@@ -3031,6 +3031,11 @@ body {
     font-size: 14px;
     color: var(--text-primary);
     transition: all 0.25s ease;
+    text-decoration: none;
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-secondary:hover {
@@ -3050,6 +3055,11 @@ body {
     color: white;
     font-weight: 500;
     transition: all 0.25s ease;
+    text-decoration: none;
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-primary:hover {

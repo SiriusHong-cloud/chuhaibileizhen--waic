@@ -1664,9 +1664,9 @@ function openNewsArticle(id) {
             </div>
             
             <div class="article-actions">
-                <button class="btn-secondary" onclick="window.open('${news.sourceUrl}', '_blank')">
+                <a class="btn-secondary" href="${news.sourceUrl}" target="_blank" rel="noopener noreferrer">
                     🔗 ${isEn ? 'View Original Article' : '查看原文（英文）'}
-                </button>
+                </a>
                 <button class="btn-primary" onclick="extractNewsInfo(${news.id})">
                     🤖 ${isEn ? 'AI Extract Key Info' : 'AI提取关键信息'}
                 </button>
