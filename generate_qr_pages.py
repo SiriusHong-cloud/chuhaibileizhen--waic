@@ -1,5 +1,6 @@
 """
-生成项目介绍页二维码（GitHub Pages URL）
+生成项目介绍页二维码
+使用 htmlpreview.github.io 服务，无需手动开启 GitHub Pages
 """
 import qrcode
 from qrcode.constants import ERROR_CORRECT_H
@@ -28,6 +29,6 @@ def make_qr(url: str, filename: str, title: str):
     print()
 
 
-# 项目介绍页（GitHub Pages 部署后的固定URL）
-GITHUB_PAGES_URL = "https://siriushong-cloud.github.io/chuhaibileizhen--waic/"
-make_qr(GITHUB_PAGES_URL, "project_intro.png", "项目介绍页二维码")
+# 方案1：htmlpreview.github.io - 直接渲染GitHub HTML，无需任何配置
+INTRO_URL = "https://htmlpreview.github.io/?https://github.com/SiriusHong-cloud/chuhaibileizhen--waic/blob/main/docs/index.html"
+make_qr(INTRO_URL, "project_intro.png", "项目介绍页二维码 (htmlpreview)")
