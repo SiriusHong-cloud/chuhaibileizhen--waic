@@ -10,25 +10,31 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         :root {
-            --primary: #3B82F6;
-            --primary-dark: #1D4ED8;
-            --accent: #F59E0B;
-            --danger: #EF4444;
+            --primary: #0EA5E9;
+            --primary-dark: #0284C7;
+            --accent: #06B6D4;
+            --danger: #F97316;
             --success: #10B981;
-            --bg-dark: #0B1120;
-            --bg-card: #111827;
-            --bg-card2: #1E293B;
-            --text: #F1F5F9;
-            --text-dim: #94A3B8;
-            --text-muted: #64748B;
-            --gradient-1: linear-gradient(135deg, #3B82F6, #8B5CF6);
-            --gradient-2: linear-gradient(135deg, #F59E0B, #EF4444);
-            --gradient-3: linear-gradient(135deg, #10B981, #3B82F6);
+            --warning: #F59E0B;
+            --bg-light: #F0F9FF;
+            --bg-white: #FFFFFF;
+            --bg-card: #FFFFFF;
+            --bg-soft: #E0F2FE;
+            --bg-mute: #F8FAFC;
+            --text: #0C4A6E;
+            --text-main: #164E63;
+            --text-dim: #64748B;
+            --text-muted: #94A3B8;
+            --border: #BAE6FD;
+            --gradient-1: linear-gradient(135deg, #0EA5E9, #06B6D4);
+            --gradient-2: linear-gradient(135deg, #38BDF8, #7DD3FC);
+            --gradient-3: linear-gradient(135deg, #0284C7, #0EA5E9);
+            --gradient-earth: linear-gradient(180deg, #E0F2FE 0%, #F0F9FF 30%, #FFFFFF 100%);
         }
         
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            background: var(--bg-dark);
+            background: var(--gradient-earth);
             color: var(--text);
             min-height: 100vh;
             overflow-x: hidden;
@@ -44,28 +50,41 @@
         .hero::before {
             content: '';
             position: absolute;
-            top: -50%;
+            top: -30%;
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle at 50% 50%, rgba(59,130,246,0.12) 0%, transparent 50%);
+            background: radial-gradient(circle at 50% 30%, rgba(14,165,233,0.12) 0%, transparent 50%);
             animation: pulse 8s ease-in-out infinite;
         }
+        .hero::after {
+            content: '🌍';
+            position: absolute;
+            top: 20px;
+            right: -20px;
+            font-size: 80px;
+            opacity: 0.06;
+            animation: float 6s ease-in-out infinite;
+        }
         @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
+            0%, 100% { transform: scale(1); opacity: 0.8; }
             50% { transform: scale(1.1); opacity: 1; }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
         }
         .hero-content { position: relative; z-index: 1; }
         .hero-logo {
             font-size: 56px;
             display: block;
             margin-bottom: 12px;
-            filter: drop-shadow(0 0 20px rgba(59,130,246,0.4));
+            filter: drop-shadow(0 4px 20px rgba(14,165,233,0.3));
         }
         .hero-title {
             font-size: 28px;
             font-weight: 800;
-            background: var(--gradient-1);
+            background: var(--gradient-3);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -74,13 +93,14 @@
         }
         .hero-version {
             display: inline-block;
-            background: var(--gradient-2);
+            background: var(--gradient-1);
             color: white;
             font-size: 11px;
             font-weight: 700;
             padding: 2px 10px;
             border-radius: 20px;
             margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(14,165,233,0.3);
         }
         .hero-subtitle {
             font-size: 15px;
@@ -99,19 +119,21 @@
             flex-wrap: wrap;
         }
         .stat-chip {
-            background: var(--bg-card2);
-            border: 1px solid rgba(59,130,246,0.2);
-            border-radius: 10px;
-            padding: 8px 14px;
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 10px 16px;
             font-size: 12px;
             font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
+            color: var(--text-main);
+            box-shadow: 0 2px 8px rgba(14,165,233,0.06);
         }
         .stat-chip .num {
             color: var(--primary);
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 800;
         }
         
@@ -134,11 +156,12 @@
         .section-header h2 {
             font-size: 17px;
             font-weight: 700;
+            color: var(--text);
         }
         .section-header .badge {
             font-size: 10px;
-            background: rgba(59,130,246,0.15);
-            color: var(--primary);
+            background: var(--bg-soft);
+            color: var(--primary-dark);
             padding: 2px 8px;
             border-radius: 6px;
             font-weight: 600;
@@ -152,14 +175,15 @@
         }
         .module-card {
             background: var(--bg-card);
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
             border-radius: 14px;
             padding: 14px;
-            transition: transform 0.2s, border-color 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(14,165,233,0.04);
         }
         .module-card:hover {
             transform: translateY(-2px);
-            border-color: rgba(59,130,246,0.3);
+            box-shadow: 0 4px 16px rgba(14,165,233,0.12);
         }
         .module-card.full-width {
             grid-column: 1 / -1;
@@ -176,10 +200,11 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            color: var(--text);
         }
         .module-name .new-tag {
             font-size: 9px;
-            background: linear-gradient(135deg, #EF4444, #F59E0B);
+            background: linear-gradient(135deg, #F97316, #FB923C);
             color: white;
             padding: 1px 6px;
             border-radius: 4px;
@@ -198,28 +223,30 @@
         }
         .module-tags span {
             font-size: 9px;
-            background: rgba(59,130,246,0.1);
-            color: #60A5FA;
+            background: var(--bg-soft);
+            color: var(--primary-dark);
             padding: 2px 6px;
             border-radius: 4px;
+            font-weight: 500;
         }
         .module-tags span.risk-high {
-            background: rgba(239,68,68,0.1);
-            color: #F87171;
+            background: #FFF7ED;
+            color: #EA580C;
         }
         .module-tags span.risk-safe {
-            background: rgba(16,185,129,0.1);
-            color: #34D399;
+            background: #ECFDF5;
+            color: #059669;
         }
         
         /* ===== UI Preview ===== */
         .ui-preview {
             background: var(--bg-card);
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 1px solid var(--border);
             border-radius: 18px;
             padding: 20px 16px;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 4px 20px rgba(14,165,233,0.08);
         }
         .ui-preview::before {
             content: '';
@@ -229,7 +256,8 @@
             background: var(--gradient-1);
         }
         .mock-browser {
-            background: #0F172A;
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
             border-radius: 12px;
             overflow: hidden;
             margin-bottom: 14px;
@@ -239,45 +267,47 @@
             align-items: center;
             gap: 5px;
             padding: 8px 12px;
-            background: #1E293B;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            background: #F1F5F9;
+            border-bottom: 1px solid #E2E8F0;
         }
         .mock-dot {
             width: 8px; height: 8px; border-radius: 50%;
         }
-        .mock-dot.r { background: #EF4444; }
-        .mock-dot.y { background: #F59E0B; }
-        .mock-dot.g { background: #10B981; }
+        .mock-dot.r { background: #F87171; }
+        .mock-dot.y { background: #FBBF24; }
+        .mock-dot.g { background: #34D399; }
         .mock-url {
             flex: 1;
-            background: #0F172A;
+            background: #FFFFFF;
             border-radius: 4px;
             padding: 3px 8px;
             font-size: 9px;
             color: var(--text-muted);
             margin-left: 6px;
+            border: 1px solid #E2E8F0;
         }
         .mock-content {
-            padding: 12px;
+            padding: 14px;
+            background: #FFFFFF;
         }
         .mock-score-ring {
             width: 80px; height: 80px;
             border-radius: 50%;
-            border: 6px solid var(--bg-card2);
-            border-top-color: #EF4444;
+            border: 6px solid #E0F2FE;
+            border-top-color: #F97316;
             border-right-color: #F59E0B;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 20px;
             font-weight: 800;
-            color: #F59E0B;
+            color: #EA580C;
             margin: 0 auto 12px;
         }
         .mock-bar {
             height: 6px;
             border-radius: 3px;
-            background: var(--bg-card2);
+            background: #E0F2FE;
             margin-bottom: 6px;
             overflow: hidden;
         }
@@ -308,9 +338,10 @@
             align-items: flex-start;
             gap: 12px;
             background: var(--bg-card);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 12px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
             padding: 14px;
+            box-shadow: 0 2px 8px rgba(14,165,233,0.04);
         }
         .feature-icon {
             font-size: 28px;
@@ -320,13 +351,14 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(59,130,246,0.1);
-            border-radius: 10px;
+            background: var(--bg-soft);
+            border-radius: 12px;
         }
         .feature-text h4 {
             font-size: 14px;
             font-weight: 700;
             margin-bottom: 2px;
+            color: var(--text);
         }
         .feature-text p {
             font-size: 12px;
@@ -338,7 +370,8 @@
         .footer {
             text-align: center;
             padding: 32px 16px 48px;
-            border-top: 1px solid rgba(255,255,255,0.05);
+            border-top: 1px solid var(--border);
+            background: var(--bg-mute);
         }
         .footer-logo {
             font-size: 32px;
@@ -356,18 +389,20 @@
             margin-top: 16px;
         }
         .footer-links a {
-            color: var(--primary);
+            color: var(--primary-dark);
             text-decoration: none;
             font-size: 13px;
             font-weight: 600;
             padding: 8px 20px;
-            border: 1px solid rgba(59,130,246,0.3);
+            border: 1px solid var(--border);
             border-radius: 10px;
             transition: all 0.2s;
+            background: var(--bg-white);
         }
         .footer-links a:hover {
             background: var(--primary);
             color: white;
+            border-color: var(--primary);
         }
         
         /* ===== QR Section ===== */
@@ -375,8 +410,8 @@
             padding: 0 16px 36px;
         }
         .qr-reminder {
-            background: var(--bg-card);
-            border: 1px dashed rgba(59,130,246,0.3);
+            background: var(--bg-soft);
+            border: 1px dashed var(--primary);
             border-radius: 14px;
             padding: 20px;
             text-align: center;
@@ -385,6 +420,7 @@
             font-size: 15px;
             font-weight: 700;
             margin-bottom: 8px;
+            color: var(--primary-dark);
         }
         .qr-reminder p {
             font-size: 12px;
@@ -431,25 +467,25 @@
                 <div class="mock-score-ring">72</div>
                 <div style="margin-bottom: 8px;">
                     <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-dim);margin-bottom:3px;">
-                        <span>文化适配</span><span style="color:#F87171;">高风险</span>
+                        <span>文化适配</span><span style="color:#EA580C;">高风险</span>
                     </div>
-                    <div class="mock-bar"><div class="mock-bar-fill" style="width:35%;background:#EF4444;"></div></div>
+                    <div class="mock-bar"><div class="mock-bar-fill" style="width:35%;background:#F97316;"></div></div>
                 </div>
                 <div style="margin-bottom: 8px;">
                     <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-dim);margin-bottom:3px;">
-                        <span>合规认证</span><span style="color:#FBBF24;">中风险</span>
+                        <span>合规认证</span><span style="color:#D97706;">中风险</span>
                     </div>
                     <div class="mock-bar"><div class="mock-bar-fill" style="width:60%;background:#F59E0B;"></div></div>
                 </div>
                 <div style="margin-bottom: 8px;">
                     <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-dim);margin-bottom:3px;">
-                        <span>物流通关</span><span style="color:#34D399;">低风险</span>
+                        <span>物流通关</span><span style="color:#059669;">低风险</span>
                     </div>
                     <div class="mock-bar"><div class="mock-bar-fill" style="width:85%;background:#10B981;"></div></div>
                 </div>
                 <div>
                     <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-dim);margin-bottom:3px;">
-                        <span>关税成本</span><span style="color:#FBBF24;">中风险</span>
+                        <span>关税成本</span><span style="color:#D97706;">中风险</span>
                     </div>
                     <div class="mock-bar"><div class="mock-bar-fill" style="width:55%;background:#F59E0B;"></div></div>
                 </div>
