@@ -1079,8 +1079,45 @@ function tariffForm() {
             <select id="form-market" class="form-select market-select"></select>
         </div>
         <div class="form-group">
+            <label>${currentLang === 'en' ? 'Quick Select Product (Auto-fill HS Code)' : '快速选择品类（自动填入HS编码）'}</label>
+            <select id="form-product-quick" class="form-select" onchange="autoFillHsCode(this.value)">
+                <option value="">${currentLang === 'en' ? '-- Select product to auto-fill --' : '-- 选择品类自动填入 --'}</option>
+                <option value="8517.62.0000|蓝牙耳机">蓝牙耳机/无线耳机</option>
+                <option value="8525.80.0000|移动电源">移动电源/充电宝</option>
+                <option value="8471.30.0000|笔记本电脑">笔记本电脑</option>
+                <option value="8471.50.0000|平板电脑">平板电脑</option>
+                <option value="8528.72.1000|智能手表">智能手表/手环</option>
+                <option value="8504.40.0000|充电器">充电器/适配器</option>
+                <option value="8544.42.0000|数据线">数据线/充电线</option>
+                <option value="9405.11.0000|LED灯">LED灯/灯具</option>
+                <option value="6109.10.0000|T恤">T恤/针织衫</option>
+                <option value="6110.20.0000|毛衣">毛衣/卫衣</option>
+                <option value="6402.99.0000|运动鞋">运动鞋/休闲鞋</option>
+                <option value="6115.95.0000|袜子">袜子</option>
+                <option value="6505.00.0000|帽子">帽子</option>
+                <option value="9403.60.0000|家具">木制家具</option>
+                <option value="9403.10.0000|金属家具">金属家具</option>
+                <option value="3926.90.0000|塑料制品">塑料制品/家居用品</option>
+                <option value="7323.93.0000|不锈钢餐具">不锈钢餐具/厨具</option>
+                <option value="3304.99.0000|护肤品">护肤品/面霜</option>
+                <option value="3304.10.0000|口红">口红/唇彩</option>
+                <option value="3305.10.0000|洗发水">洗发水/护发素</option>
+                <option value="3303.00.0000|香水">香水/香氛</option>
+                <option value="1905.31.0000|饼干">饼干/曲奇</option>
+                <option value="1806.32.0000|巧克力">巧克力</option>
+                <option value="9503.00.0000|玩具">玩具</option>
+                <option value="9504.50.0000|游戏手柄">游戏机/游戏手柄</option>
+                <option value="4202.21.0000|皮包">皮包/背包</option>
+                <option value="4202.92.0000|双肩包">双肩包/书包</option>
+                <option value="7117.90.0000|饰品">时尚饰品</option>
+                <option value="9102.12.0000|手表">手表/电子表</option>
+                <option value="8708.29.0000|汽车配件">汽车内饰/配件</option>
+                <option value="9506.91.0000|运动器材">运动器材/健身设备</option>
+            </select>
+        </div>
+        <div class="form-group">
             <label>${currentLang === 'en' ? 'HS Code' : 'HS编码'}</label>
-            <input type="text" id="form-hs" class="form-input" placeholder="${currentLang === 'en' ? 'Enter HS Code' : '请输入HS编码'}">
+            <input type="text" id="form-hs" class="form-input" placeholder="${currentLang === 'en' ? 'Enter HS Code or select above' : '请输入HS编码或上方选择品类'}">
         </div>
         <div class="form-row">
             <div class="form-group">
@@ -1097,6 +1134,15 @@ function tariffForm() {
             </div>
         </div>
     `;
+}
+
+function autoFillHsCode(val) {
+    if (!val) return;
+    const parts = val.split('|');
+    if (parts.length === 2) {
+        const hsInput = document.getElementById('form-hs');
+        if (hsInput) hsInput.value = parts[0];
+    }
 }
 
 function certForm() {
@@ -1454,7 +1500,21 @@ function openStoriesModule() {
                         </div>
                         <div class="filter-item">
                             <label id="filter-category-label">${isEn ? 'Category' : '产品品类'}</label>
-                            <input type="text" id="filter-category" class="form-input" placeholder="${isEn ? 'Enter category (optional)' : '请输入品类（可选）'}">
+                            <select id="filter-category" class="form-select">
+                                <option value="">${isEn ? 'All Categories' : '全部品类'}</option>
+                                <option value="3C电子">3C电子</option>
+                                <option value="服装鞋包">服装鞋包</option>
+                                <option value="家居用品">家居用品</option>
+                                <option value="美妆个护">美妆个护</option>
+                                <option value="食品饮料">食品饮料</option>
+                                <option value="母婴玩具">母婴玩具</option>
+                                <option value="箱包配饰">箱包配饰</option>
+                                <option value="运动户外">运动户外</option>
+                                <option value="汽车配件">汽车配件</option>
+                                <option value="机械电子">机械电子</option>
+                                <option value="医疗设备">医疗设备</option>
+                                <option value="化工产品">化工产品</option>
+                            </select>
                         </div>
                         <button class="btn-filter" onclick="filterStories()">🔍 ${isEn ? 'Filter' : '筛选'}</button>
                     </div>
@@ -1892,12 +1952,13 @@ function renderToolTab(tab, isEn) {
                     oninput="searchHsCode(this.value)">
                 <select id="hs-category" class="form-select" onchange="searchHsCode(document.getElementById('hs-search-input').value)">
                     <option value="">${isEn ? 'All Categories' : '全部品类'}</option>
-                    <option value="3C">3C电子</option>
-                    <option value="服装">服装鞋包</option>
-                    <option value="家居">家居用品</option>
-                    <option value="食品">食品饮料</option>
-                    <option value="美妆">美妆个护</option>
-                    <option value="玩具">母婴玩具</option>
+                    <option value="3C">${isEn ? '3C Electronics' : '3C电子'}</option>
+                    <option value="服装">${isEn ? 'Apparel & Shoes' : '服装鞋包'}</option>
+                    <option value="家居">${isEn ? 'Home & Living' : '家居用品'}</option>
+                    <option value="食品">${isEn ? 'Food & Beverage' : '食品饮料'}</option>
+                    <option value="美妆">${isEn ? 'Beauty & Care' : '美妆个护'}</option>
+                    <option value="玩具">${isEn ? 'Toys & Baby' : '母婴玩具'}</option>
+                    <option value="箱包">${isEn ? 'Bags & Accessories' : '箱包配饰'}</option>
                 </select>
             </div>
             <div class="tool-result-list" id="hs-result-list">
@@ -2669,7 +2730,37 @@ function closeResult() {
 }
 
 function generateFullReport() {
-    alert(currentLang === 'en' ? 'Generating full report...' : '生成完整报告中...');
+    const isEn = currentLang === 'en';
+    const market = document.getElementById('filter-market')?.value || '美国';
+    const category = document.getElementById('filter-category')?.value || '3C电子';
+    
+    const isSpecialModule = ['stories', 'trade-news', 'trade-academy', 'trade-tools', 'store-checkup'].includes(currentModuleType);
+    if (isSpecialModule || !currentModuleType) {
+        alert(isEn ? 'Please run a detection module first, then generate full report.' : '请先运行一个检测模块，再生成完整报告。');
+        return;
+    }
+
+    const question = isEn
+        ? `Please generate a COMPREHENSIVE Cross-border Export Full Report for the following:\nMarket: ${market}\nCategory: ${category}\n\nThe report MUST include the following sections:\n1. Executive Summary\n2. Cultural Risk Assessment\n3. Compliance & Certification Requirements\n4. Tariff & Cost Estimation\n5. Localization Recommendations\n6. IP Risk Check\n7. Logistics & Customs Compliance\n8. Action Plan & Timeline\n9. Risk Score & Radar\n\nUse [RISK_SCORE] format for scoring.`
+        : `请为以下产品/市场生成一份完整的跨境出海综合报告：\n目标市场：${market}\n产品品类：${category}\n\n报告必须包含以下板块：\n1. 执行摘要（总体风险等级和核心结论）\n2. 文化雷区评估（宗教、颜色、数字、图案禁忌）\n3. 合规认证要求（强制认证清单、费用、周期）\n4. 关税成本估算（HS编码、税率、到岸成本）\n5. 本土化改造建议（命名、文案、视觉、支付）\n6. 知识产权风险（商标、专利、版权）\n7. 物流清关合规（运输方式、清关文件、危险品）\n8. 行动计划与时间线（分阶段待办清单）\n9. 综合评分与雷达图\n\n请使用[RISK_SCORE]格式输出评分，用中文Markdown格式回复，内容详细专业。`;
+
+    const body = { question, category };
+
+    showResultPanel(isEn ? '⚡ Full Export Report' : '⚡ 完整出海综合报告');
+
+    const resultContent = document.getElementById('result-content');
+    const loading = document.getElementById('loading-indicator');
+    document.getElementById('score-panel').style.display = 'none';
+    document.getElementById('radar-panel').style.display = 'none';
+    document.getElementById('result-filter').style.display = 'none';
+    document.getElementById('knowledge-section').style.display = 'none';
+    resultContent.innerHTML = '';
+    loading.style.display = 'flex';
+
+    streamRequest('/api/qa', body, isEn ? '⚡ Full Export Report' : '⚡ 完整出海综合报告', 'qa', isEn
+        ? ['Cultural', 'Compliance', 'Tariff', 'Localization', 'IP', 'Logistics']
+        : ['文化', '合规', '关税', '本土化', '知识产权', '物流']
+    );
 }
 
 // ========== 模态框控制 ==========
