@@ -1190,6 +1190,24 @@ function autoFillHsCode(val) {
     }
 }
 
+function getHsCodeByCategory(category) {
+    const hsCodeMap = {
+        '3C电子': '8517.62.0000',
+        '服装鞋包': '6109.10.0000',
+        '家居用品': '9403.60.0000',
+        '美妆个护': '3304.99.0000',
+        '食品饮料': '1806.32.0000',
+        '母婴玩具': '9503.00.0000',
+        '箱包配饰': '4202.21.0000',
+        '运动户外': '9506.91.0000',
+        '汽车配件': '8708.29.0000',
+        '机械电子': '8504.50.0000',
+        '医疗设备': '9018.31.0000',
+        '化工产品': '3824.99.0000'
+    };
+    return hsCodeMap[category] || '';
+}
+
 function certForm() {
     return `
         <div class="form-group">
@@ -2274,7 +2292,7 @@ function applyFilter() {
     const market = document.getElementById('filter-market')?.value || '美国';
     const category = document.getElementById('filter-category')?.value || '';
     const filterType = document.getElementById('filter-type')?.value || '';
-    const filterHsCode = document.getElementById('filter-hscode')?.value || '';
+    let filterHsCode = document.getElementById('filter-hscode')?.value || '';
     const filterLevel = document.getElementById('filter-level')?.value || '';
     
     const module = MODULES.find(m => m.id === currentModuleType);
@@ -2303,6 +2321,14 @@ function applyFilter() {
             body = { content: category || '示例产品', market, content_type: filterType || '产品命名', category: '' };
             break;
         case 'tariff':
+            if (category && !filterHsCode) {
+                const hsCodeFromCategory = getHsCodeByCategory(category);
+                if (hsCodeFromCategory) {
+                    filterHsCode = hsCodeFromCategory;
+                    const hsInput = document.getElementById('filter-hscode');
+                    if (hsInput) hsInput.value = filterHsCode;
+                }
+            }
             body = { market, hscode: filterHsCode || '8517.62.0000', origin: '中国', declared_value: '1000', incoterm: 'FOB', category: '' };
             break;
         case 'cert':
