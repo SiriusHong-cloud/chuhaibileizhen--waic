@@ -1167,6 +1167,28 @@ body {
     min-width: auto;
 }
 
+.btn-filter {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    height: 38px;
+    padding: 0 16px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity 0.2s;
+}
+
+.btn-filter:hover {
+    opacity: 0.9;
+}
+
 .filter-extra {
     margin-top: 12px;
     padding-top: 12px;
