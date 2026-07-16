@@ -856,11 +856,48 @@ function openModuleWithContent(moduleId) {
         case 'tariff':
             extraHtml = `
                 <div class="filter-item">
+                    <label>${isEn ? 'Quick Select Product' : '快速选择品类'}</label>
+                    <select id="filter-product-quick" class="form-select small" onchange="autoFillHsCode(this.value)">
+                        <option value="">${isEn ? '-- Select product --' : '-- 选择品类 --'}</option>
+                        <option value="8517.62.0000|蓝牙耳机">蓝牙耳机/无线耳机</option>
+                        <option value="8525.80.0000|移动电源">移动电源/充电宝</option>
+                        <option value="8471.30.0000|笔记本电脑">笔记本电脑</option>
+                        <option value="8471.50.0000|平板电脑">平板电脑</option>
+                        <option value="8528.72.1000|智能手表">智能手表/手环</option>
+                        <option value="8504.40.0000|充电器">充电器/适配器</option>
+                        <option value="8544.42.0000|数据线">数据线/充电线</option>
+                        <option value="9405.11.0000|LED灯">LED灯/灯具</option>
+                        <option value="6109.10.0000|T恤">T恤/针织衫</option>
+                        <option value="6110.20.0000|毛衣">毛衣/卫衣</option>
+                        <option value="6402.99.0000|运动鞋">运动鞋/休闲鞋</option>
+                        <option value="6115.95.0000|袜子">袜子</option>
+                        <option value="6505.00.0000|帽子">帽子</option>
+                        <option value="9403.60.0000|木制家具">木制家具</option>
+                        <option value="9403.10.0000|金属家具">金属家具</option>
+                        <option value="3926.90.0000|塑料制品">塑料制品/家居用品</option>
+                        <option value="7323.93.0000|不锈钢餐具">不锈钢餐具/厨具</option>
+                        <option value="3304.99.0000|护肤品">护肤品/面霜</option>
+                        <option value="3304.10.0000|口红">口红/唇彩</option>
+                        <option value="3305.10.0000|洗发水">洗发水/护发素</option>
+                        <option value="3303.00.0000|香水">香水/香氛</option>
+                        <option value="1905.31.0000|饼干">饼干/曲奇</option>
+                        <option value="1806.32.0000|巧克力">巧克力</option>
+                        <option value="9503.00.0000|玩具">玩具</option>
+                        <option value="9504.50.0000|游戏手柄">游戏机/游戏手柄</option>
+                        <option value="4202.21.0000|皮包">皮包/背包</option>
+                        <option value="4202.92.0000|双肩包">双肩包/书包</option>
+                        <option value="7117.90.0000|饰品">时尚饰品</option>
+                        <option value="9102.12.0000|手表">手表/电子表</option>
+                        <option value="8708.29.0000|汽车配件">汽车内饰/配件</option>
+                        <option value="9506.91.0000|运动器材">运动器材/健身设备</option>
+                    </select>
+                </div>
+                <div class="filter-item">
                     <label>${isEn ? 'HS Code' : 'HS编码'}</label>
                     <input type="text" id="filter-hscode" class="form-input small" placeholder="8517.62.0000">
                 </div>
             `;
-            body = { market: defaultMarket, hscode: '8517.62.0000', origin: '中国', declared_value: '1000', incoterm: 'FOB', category: '' };
+            body = { market: defaultMarket, hscode: '', origin: '中国', declared_value: '1000', incoterm: 'FOB', category: '' };
             break;
         case 'cert':
             extraHtml = '';
@@ -1137,11 +1174,19 @@ function tariffForm() {
 }
 
 function autoFillHsCode(val) {
-    if (!val) return;
+    if (!val) {
+        const hsInput1 = document.getElementById('form-hs');
+        if (hsInput1) hsInput1.value = '';
+        const hsInput2 = document.getElementById('filter-hscode');
+        if (hsInput2) hsInput2.value = '';
+        return;
+    }
     const parts = val.split('|');
     if (parts.length === 2) {
-        const hsInput = document.getElementById('form-hs');
-        if (hsInput) hsInput.value = parts[0];
+        const hsInput1 = document.getElementById('form-hs');
+        if (hsInput1) hsInput1.value = parts[0];
+        const hsInput2 = document.getElementById('filter-hscode');
+        if (hsInput2) hsInput2.value = parts[0];
     }
 }
 
